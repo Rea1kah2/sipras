@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SIPRAS
 
-## Getting Started
+Sistem peminjaman sarana dan prasarana kampus. Peminjam mengajukan sekali untuk banyak barang dan ruang, sistem mengecek bentrok jadwal secara otomatis, admin mereview dan memverifikasi pengembalian dari dasbor yang sama.
 
-First, run the development server:
+Dibangun dengan Next.js 16 (App Router), React 19, Prisma 7, PostgreSQL, dan Tailwind 4.
+
+---
+
+## Menjalankan di komputer sendiri
+
+**Prasyarat:** Node.js 20 atau lebih baru, dan PostgreSQL yang sudah berjalan.
 
 ```bash
+# 1. Pasang dependensi
+npm install
+
+# 2. Siapkan environment
+cp .env.example .env      # lalu isi nilainya, lihat bagian di bawah
+
+# 3. Buat database dan tabelnya
+npx prisma migrate dev
+
+# 4. Isi data contoh (opsional, tapi disarankan untuk mencoba)
+npm run db:seed
+
+# 5. Jalankan
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka <http://localhost:3000>. Untuk membuka dari HP di jaringan wifi yang sama, pakai alamat Network yang tercetak di terminal saat `npm run dev`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Akun contoh setelah `npm run db:seed`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Peran | Email | Kata sandi |
+| --- | --- | --- |
+| Admin | nilai `EMAIL_REPLY_TO` di `.env` | `admin1234` |
+| Peminjam | `nadia@kampus.ac.id` | `peminjam1234` |
 
-## Learn More
+Akun admin sengaja memakai email asli dari `.env`, bukan alamat karangan. Alasannya ada di bagian Email di bawah.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Isi `.env`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+DATABASE_URL="postgresql://postgres:SANDI@localhost:5432/sipras?schema=public"
 
-## Deploy on Vercel
+# Kunci penandatangan cookie sesi. Generate dengan:
+#   node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+SESSION_SECRET="..."
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Boleh kosong. Lihat bagian Email.
+RESEND_API_KEY=""
+EMAIL_FROM="SIPRAS <onboarding@resend.dev>"
+EMAIL_REPLY_TO="email@kamu.com"
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Ditampilkan sebagai tautan kontak, tanpa API berbayar apa pun
+NEXT_PUBLIC_WA_PETUGAS="08xxxxxxxxxx"
+NEXT_PUBLIC_EMAIL_PETUGAS="email@kamu.com"
+```
+
+---
+
+## Notifikasi
+
+Setiap perubahan status selalu **ditulis dulu ke tabel Notifikasi**, baru dicoba dikirim lewat email. Urutan ini disengaja: notifikasi dalam aplikasi berfungsi penuh sejak awal, dan kegagalan mengirim email tidak pernah menggagalkan aksi admin. Kegagalannya dicatat lengkap dengan alasannya dan bisa dilihat di halaman Notifikasi.
+
+**WhatsApp tidak memakai API.** Nomor petugas hanya ditampilkan sebagai tautan `wa.me`, jadi tidak ada biaya langganan sama sekali.
+
+**Email lewat Resend.** Kalau `RESEND_API_KEY` dikosongkan, sistem otomatis masuk mode konsol: isi email tercetak di terminal dan notifikasi dalam aplikasi tetap jalan. Demo tidak terganggu sama sekali tanpa API key.
+
+Kalau ingin email sungguhan, ambil key gratis di <https://resend.com/api-keys>. Satu batasan yang perlu diketahui: tanpa domain terverifikasi, Resend **hanya mengantar ke alamat email pemilik akun**. Karena itu akun admin memakai `EMAIL_REPLY_TO`, supaya notifikasi ke admin benar benar sampai. Notifikasi ke akun peminjam contoh akan tercatat gagal, dan itu wajar.
+
+---
+
+## Perintah lain
+
+| Perintah | Kegunaan |
+| --- | --- |
+| `npm run build` | Build produksi |
+| `npm run typecheck` | Cek tipe TypeScript |
+| `npm run lint` | ESLint |
+| `npm run db:studio` | Lihat isi database lewat GUI |
+| `npm run db:reset` | Kosongkan lalu isi ulang database |
+| `npm run cek:ketersediaan` | Uji regresi logika bentrok jadwal |
+| `npm run cek:tipografi` | Pastikan tidak ada em dash atau en dash |
+
+---
+
+## Bagian yang paling penting dipahami
+
+### Ketersediaan tidak pernah disimpan
+
+Tidak ada kolom `tersedia` di tabel Aset. Ketersediaan **selalu dihitung** dari pengajuan berstatus `DISETUJUI` atau `DIPINJAM` yang beririsan tanggal. Satu sumber kebenaran, jadi mustahil jadi tidak sinkron.
+
+Untuk barang, yang dihitung adalah **puncak pemakaian harian**, bukan jumlah seluruh pengajuan yang beririsan. Bedanya nyata: dua pengajuan bisa sama sama menyentuh rentang tanggal yang ditanyakan tapi tidak saling beririsan, sehingga tidak pernah dipakai bersamaan. Kalau dijumlahkan begitu saja, pengajuan yang sebenarnya sah akan ditolak. Lihat `puncakPemakaian()` di [src/lib/ketersediaan.ts](src/lib/ketersediaan.ts), dan `npm run cek:ketersediaan` menjaga perilaku ini tetap benar.
+
+### Validasi bentrok dijalankan dua kali
+
+Sekali saat peminjam mengubah tanggal di form, untuk umpan balik cepat. Sekali lagi **di dalam transaksi** sebelum menyimpan, dan yang kedua inilah yang mencegah dua orang merebut ruang yang sama di detik yang sama. Hal serupa berlaku saat admin menyetujui.
+
+### Semua perpindahan status lewat satu pintu
+
+```
+MENUNGGU  ke  DISETUJUI  ke  DIPINJAM  ke  DIKEMBALIKAN  ke  SELESAI
+     ke  DITOLAK
+```
+
+Aturannya ada di `bolehPindah(dari, ke, aktor)` di [src/lib/status.ts](src/lib/status.ts). Peminjam hanya boleh `DIPINJAM` ke `DIKEMBALIKAN`, sisanya milik admin. Setiap perpindahan tercatat di tabel `RiwayatStatus` dan bisa dilihat di halaman rincian pengajuan.
+
+### Server action selalu memeriksa identitasnya sendiri
+
+Server action bisa dipanggil lewat POST langsung, bukan hanya lewat tombol di UI. Karena itu setiap action memverifikasi sesi dan kepemilikan data di dalam dirinya sendiri, tidak bergantung pada tombol yang disembunyikan.
+
+### Data tidak dihapus, hanya dinonaktifkan
+
+Aset dan akun pengguna memakai penanda aktif, bukan penghapusan. Riwayat peminjaman lama tetap bisa menampilkan nama aset dan peminjamnya walaupun keduanya sudah tidak dipakai lagi.
+
+---
+
+## Catatan sebelum deploy
+
+Foto aset disimpan di Supabase Storage lewat [src/lib/unggah.ts](src/lib/unggah.ts), jadi tahan redeploy di Vercel (filesystem-nya sendiri bersifat sementara, tapi foto tidak lagi lewat situ). Perlu dua variabel lingkungan tambahan: `SUPABASE_URL` dan `SUPABASE_SERVICE_ROLE_KEY`, keduanya dari menu Project Settings > API di dashboard Supabase, plus satu bucket publik bernama `aset-foto` dibuat lewat menu Storage.
+
+Sebelum aplikasi dipakai pertama kali di basis data produksi yang masih kosong:
+
+1. `npm run db:deploy` - menjalankan migrasi Prisma secara non interaktif.
+2. `npx tsx -r dotenv/config prisma/buat-admin-produksi.ts -- "Nama Admin" admin@kampus.ac.id "kata-sandi"` - membuat satu akun admin, tanpa data fiktif apa pun. Jangan jalankan `prisma/seed.ts` di basis data produksi, itu mengisi puluhan pengajuan dan pengguna contoh untuk demo.
+
+Setelah masuk pertama kali, ganti kata sandi admin dari halaman profil.

@@ -1,0 +1,313 @@
+// SIPRAS, Sistem Peminjaman Sarana dan Prasarana
+// Prinsip: ketersediaan TIDAK pernah disimpan sebagai kolom. Selalu dihitung
+// dari PengajuanItem yang statusnya DISETUJUI/DIPINJAM dan beririsan tanggal,
+// supaya tidak ada dua sumber kebenaran yang bisa jadi tidak sinkron.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Peran {
+  PEMINJAM
+  ADMIN
+}
+
+enum TipeAset {
+  BARANG
+  RUANG
+}
+
+enum StatusPengajuan {
+  MENUNGGU
+  DISETUJUI
+  DITOLAK
+  DIPINJAM
+  DIKEMBALIKAN
+  SELESAI
+}
+
+enum KondisiKembali {
+  BAIK
+  RUSAK_RINGAN
+  RUSAK_HILANG
+}
+
+enum JenisNotifikasi {
+  IN_APP
+  EMAIL
+}
+
+enum JenisPenutupan {
+  LIBUR // hari libur nasional atau cuti bersama
+  PERAWATAN // perawatan, perbaikan, renovasi
+  LAIN
+}
+
+enum StatusKirim {
+  TERTUNDA
+  TERKIRIM
+  GAGAL
+}
+
+model User {
+  id         String   @id @default(cuid())
+  nama       String
+  email      String   @unique
+  password   String
+  peran      Peran    @default(PEMINJAM)
+  whatsapp   String?
+  identitas  String? // NIM / NIP
+  unit       String? // program studi / unit kerja
+  aktif      Boolean  @default(true)
+  dibuatPada DateTime @default(now())
+
+  // Bahasa jadi milik akun, bukan perangkat. Alasannya konkret: email
+  // dirakit di server saat kejadian, dan saat itu cookie yang tersedia
+  // milik peramban orang yang sedang membuka aplikasi, bukan milik orang
+  // yang akan menerima emailnya. Cookie tetap dipakai untuk tamu yang
+  // belum punya akun untuk ditanya.
+  bahasa     String   @default("id")
+
+  pengajuan     Pengajuan[]     @relation("PemohonPengajuan")
+  riwayatStatus RiwayatStatus[]
+  verifikasi    Pengembalian[]  @relation("AdminVerifikator")
+  notifikasi    Notifikasi[]
+  penutupan     Penutupan[]
+}
+
+model Aset {
+  id         String   @id @default(cuid())
+  nama       String
+  tipe       TipeAset
+  kategori   String
+  deskripsi  String   @default("")
+  foto       String? // path relatif di /public/uploads
+  stok       Int      @default(1) // BARANG: jumlah unit. RUANG: selalu 1.
+  kapasitas  Int? // RUANG: kapasitas orang (0 = terbuka)
+  lokasi     String   @default("")
+  aktif      Boolean  @default(true) // soft delete: riwayat lama tetap terbaca
+  dibuatPada DateTime @default(now())
+  diubahPada DateTime @updatedAt
+
+  items PengajuanItem[]
+
+  @@index([tipe, aktif])
+  @@index([kategori])
+}
+
+model Pengajuan {
+  id             String          @id @default(cuid())
+  kode           String          @unique // PJ-2026-0143
+  pemohonId      String
+  pemohon        User            @relation("PemohonPengajuan", fields: [pemohonId], references: [id])
+  mulai          DateTime        @db.Date
+  selesai        DateTime        @db.Date
+  namaKegiatan   String?
+  keperluan      String
+  kontakWhatsapp String?
+  status         StatusPengajuan @default(MENUNGGU)
+  catatanAdmin   String?
+  diajukanPada   DateTime        @default(now())
+  diubahPada     DateTime        @updatedAt
+
+  // Kapan peminjam terakhir membuka rincian pengajuan ini. Dipakai lencana
+  // di menu Pengajuan saya, yang menghitung pengajuan dengan perubahan
+  // status setelah waktu ini.
+  //
+  // Sengaja TIDAK dibandingkan dengan diubahPada, karena kolom itu bertanda
+  // @updatedAt sehingga ikut berubah saat kita menulis dilihatPada itu
+  // sendiri. Akibatnya menandai sudah dilihat justru langsung menandainya
+  // berubah lagi, dan lencananya tidak akan pernah hilang. Pembandingnya
+  // memakai waktu di RiwayatStatus, yang hanya bertambah saat status
+  // benar benar berpindah.
+  dilihatPada    DateTime?
+
+  items         PengajuanItem[]
+  pengembalian  Pengembalian?
+  riwayatStatus RiwayatStatus[]
+  pengingat     Pengingat[]
+
+  @@index([status])
+  @@index([pemohonId, status])
+  @@index([mulai, selesai])
+}
+
+model PengajuanItem {
+  id          String    @id @default(cuid())
+  pengajuanId String
+  pengajuan   Pengajuan @relation(fields: [pengajuanId], references: [id], onDelete: Cascade)
+  asetId      String
+  aset        Aset      @relation(fields: [asetId], references: [id])
+  jumlah      Int       @default(1)
+  // Nama disalin saat pengajuan dibuat supaya riwayat tetap terbaca walau
+  // aset dinonaktifkan atau namanya diubah admin.
+  namaAset    String
+
+  pengembalianItem PengembalianItem?
+
+  @@unique([pengajuanId, asetId])
+  @@index([asetId])
+}
+
+model Pengembalian {
+  id                String         @id @default(cuid())
+  pengajuanId       String         @unique
+  pengajuan         Pengajuan      @relation(fields: [pengajuanId], references: [id], onDelete: Cascade)
+  tanggalKembali    DateTime       @db.Date
+  kondisiRingkas    KondisiKembali @default(BAIK) // kondisi terburuk dari itemnya
+  catatan           String?
+  foto              String[] // path foto kondisi
+  diverifikasi      Boolean        @default(false)
+  verifikatorId     String?
+  verifikator       User?          @relation("AdminVerifikator", fields: [verifikatorId], references: [id])
+  catatanVerifikasi String?
+  dibuatPada        DateTime       @default(now())
+  diverifikasiPada  DateTime?
+
+  items PengembalianItem[]
+}
+
+model PengembalianItem {
+  id              String         @id @default(cuid())
+  pengembalianId  String
+  pengembalian    Pengembalian   @relation(fields: [pengembalianId], references: [id], onDelete: Cascade)
+  pengajuanItemId String         @unique
+  pengajuanItem   PengajuanItem  @relation(fields: [pengajuanItemId], references: [id], onDelete: Cascade)
+  kondisi         KondisiKembali @default(BAIK)
+  catatan         String?
+}
+
+// Jejak tiap perpindahan status, sumber data untuk garis waktu di kartu
+// pengajuan dan halaman laporan, supaya tidak perlu mengarang data.
+/**
+ * Catatan bahwa satu pengingat sudah pernah dikirim.
+ *
+ * Batasan unik di bawah ini YANG menjadi penjaga duplikat, bukan pengecekan
+ * di aplikasi. Rute pengingat dipanggil terjadwal dan bisa saja terpanggil
+ * dua kali, misalnya karena percobaan ulang atau jadwal yang tumpang tindih.
+ * Kalau penjaganya berupa "cek dulu lalu tulis", dua panggilan bersamaan
+ * bisa lolos berbarengan dan peminjam menerima pengingat dobel. Dengan
+ * batasan unik, penulisan kedua ditolak basis data dan tidak ada celah
+ * waktu di antaranya.
+ *
+ * Satu baris berarti satu peristiwa, dan peristiwa itu mengabari peminjam
+ * sekaligus admin. Jadi tidak ada baris terpisah per penerima.
+ */
+model Pengingat {
+  id          String          @id @default(cuid())
+  pengajuanId String
+  pengajuan   Pengajuan       @relation(fields: [pengajuanId], references: [id], onDelete: Cascade)
+  jenis       JenisPengingat
+  dibuatPada  DateTime        @default(now())
+
+  @@unique([pengajuanId, jenis])
+}
+
+enum JenisPengingat {
+  SEHARI_LAGI
+  HARI_INI
+  TERLAMBAT
+}
+
+/**
+ * Satu hari yang layanan tutup, jadi tidak bisa dipesan sama sekali.
+ *
+ * Disimpan per hari, bukan sebagai rentang, dan itu keputusan sadar. Rentang
+ * memaksa setiap pembacaan menghitung irisan lagi, sementara pertanyaan yang
+ * selalu ditanyakan sistem ini cuma satu: "tanggal ini tutup atau tidak".
+ * Dengan satu baris per hari, jawabannya sekadar pencarian kunci, dan libur
+ * beberapa hari cukup ditulis sebagai beberapa baris sekaligus.
+ *
+ * Batasan unik pada tanggal yang menjadi penjaga duplikat, bukan pengecekan
+ * di aplikasi, alasannya sama dengan model Pengingat: dua admin bisa menandai
+ * tanggal yang sama nyaris bersamaan, dan "cek dulu lalu tulis" punya celah
+ * waktu di antaranya.
+ */
+model Penutupan {
+  id         String         @id @default(cuid())
+  tanggal    DateTime       @unique @db.Date
+  alasan     String
+  jenis      JenisPenutupan @default(LIBUR)
+  olehId     String?
+  oleh       User?          @relation(fields: [olehId], references: [id])
+  dibuatPada DateTime       @default(now())
+
+  @@index([tanggal])
+}
+
+/**
+ * Pengaturan layanan. SELALU satu baris, id-nya dipatok tetap supaya
+ * mustahil ada dua baris yang saling bertentangan.
+ *
+ * hariLayanan berisi hari dalam pekan yang melayani, memakai penomoran
+ * getUTCDay: 0 Minggu sampai 6 Sabtu. Hari yang tidak ada di daftar ini
+ * tertutup setiap pekan, tanpa perlu ditulis satu per satu di Penutupan.
+ *
+ * jamBuka dan jamTutup HANYA keterangan yang ditampilkan ke peminjam, dan
+ * ini penting dipahami: pemesanan di sistem ini bergranularitas tanggal,
+ * bukan jam, karena Pengajuan.mulai dan selesai bertipe Date. Menyimpan jam
+ * lalu berpura pura menegakkannya akan jadi janji yang tidak ditepati kode,
+ * jadi perannya dibatasi sebagai informasi kapan orang bisa datang mengambil
+ * dan mengembalikan barang.
+ */
+model Pengaturan {
+  id          String   @id @default("tunggal")
+  hariLayanan Int[]    @default([1, 2, 3, 4, 5, 6])
+  jamBuka     String   @default("08.00")
+  jamTutup    String   @default("16.00")
+  diubahPada  DateTime @updatedAt
+}
+
+model RiwayatStatus {
+  id          String           @id @default(cuid())
+  pengajuanId String
+  pengajuan   Pengajuan        @relation(fields: [pengajuanId], references: [id], onDelete: Cascade)
+  dari        StatusPengajuan?
+  ke          StatusPengajuan
+  olehId      String?
+  oleh        User?            @relation(fields: [olehId], references: [id])
+  catatan     String?
+  waktu       DateTime         @default(now())
+
+  @@index([pengajuanId, waktu])
+}
+
+// Notifikasi selalu ditulis ke tabel ini lebih dulu, baru dicoba dikirim via
+// email. Gagal kirim tidak boleh menggagalkan aksi admin.
+model Notifikasi {
+  id          String          @id @default(cuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jenis       JenisNotifikasi @default(IN_APP)
+  judul       String
+  isi         String
+  tautan      String?
+
+  // Isi notifikasi disimpan sebagai KUNCI dan DATA, bukan kalimat jadi,
+  // supaya bisa dirender ulang dalam bahasa pembacanya.
+  //
+  // judul dan isi di bawah sengaja dipertahankan sebagai cadangan:
+  //   1. baris lama tidak punya kunci, tanpa cadangan ia tampil kosong
+  //   2. email sudah terlanjur terkirim dengan kalimat tertentu, jadi
+  //      menyimpan kalimat itu apa adanya lebih jujur daripada merender
+  //      ulang jadi kalimat yang berbeda dari yang diterima orangnya
+  //
+  // Nilai di dalam data WAJIB mentah, bukan hasil format. Simpan
+  // "2026-08-14", bukan "14 Agu 2026". Kalau sudah terformat, nama
+  // bulannya ikut beku dan masalahnya cuma pindah satu lapis ke dalam.
+  kunci       String?
+  data        Json?
+
+  dibaca      Boolean         @default(false)
+  statusKirim StatusKirim     @default(TERKIRIM)
+  errorKirim  String?
+  dibuatPada  DateTime        @default(now())
+
+  @@index([userId, dibaca])
+  @@index([userId, dibuatPada])
+}

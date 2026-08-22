@@ -1,26 +1,1657 @@
 @import "tailwindcss";
 
+/* ══════════════════════════════════════════════════════════════════════
+   SIPRAS, design system "Sand Ledger".
+   File ini sumber kebenaran tampilan: retune di sini, jangan bikin
+   warna atau ukuran baru langsung di komponen.
+
+   TIGA PEMBALIKAN yang membedakan palet ini dari empat palet sebelumnya,
+   dan ketiganya soal STRUKTUR, bukan soal warnanya lebih menarik:
+
+   1. KARTU LEBIH GELAP DARI KANVAS. Dulu kartu selalu putih dan menonjol
+      keluar. Sekarang ia menyusut ke dalam, dan kecerahan tertinggi
+      disimpan untuk lapisan yang benar benar melayang.
+
+        melayang  --color-elevated     L* 97.6   modal, dropdown, input
+        kanvas    --color-bg           L* 94.6   latar halaman
+        kartu     --color-surface      L* 90.5   dan --color-neutral-100
+        panel     --color-panel        L* 88.4   sidebar, navigasi bawah
+        garis     --color-divider      L* 82.7   hairline
+
+   2. BATAS LAPISAN DIPEGANG GARIS TIPIS, bukan lompatan terang. Ronde
+      sebelumnya jarak antar lapisan sudah diperlebar dan tetap dinilai
+      membosankan, jadi akar masalahnya memang bukan di jarak.
+
+   3. WARNA AKSEN BERHENTI MENGISI BIDANG BESAR. Tombol utama memakai
+      isian tinta, dan kuningan jadi tanda baca editorial: tautan, label,
+      angka besar.
+
+   CATATAN PALING PENTING SOAL RAMP KUNINGAN. Hue-nya 78 derajat,
+   sementara ramp peringatan amber ada di 46 sampai 96 derajat. Jaraknya
+   cuma 5 sampai 25 derajat, padahal biru yang digantikannya berjarak 165
+   derajat. Yang menjaga keduanya tidak tertukar BUKAN hue, melainkan
+   CHROMA: di kesembilan level, amber selalu minimal 1.8 kali lebih pekat
+   daripada kuningan. Kuningan terbaca cokelat zaitun, amber terbaca emas.
+   Kalau suatu saat ramp ini diretune, batasan itu yang wajib dijaga, dan
+   `npm run cek:warna` yang membuktikannya.
+   ══════════════════════════════════════════════════════════════════════ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-bg: #f4efe4;
+  --color-surface: #ece3d2;
+  --color-text: #1c1712;
+  --color-accent: #725421;
+  --color-accent-2: #3a6930;
+
+  /* Garis hairline, dan ini sekarang warna PEKAT, bukan tinta transparan.
+     Di palet lama batas antar lapisan datang dari selisih terang, jadi
+     garisnya cukup samar. Di sini garisnya yang memegang batas, jadi ia
+     harus punya nilai sendiri yang cukup jauh dari semua permukaan:
+     11.9 L* dari kanvas dan 7.8 L* dari kartu. */
+  --color-divider: #d9cdb1;
+
+  /* Lapisan paling terang. Dipakai untuk yang benar benar melayang, yaitu
+     modal dan menu turun, DAN untuk kotak input.
+
+     Input ikut ke sini karena membetulkan cacat lama: sebelumnya latar
+     input sama dengan latar halaman, jadi di form penyaring yang tidak
+     berada di dalam kartu, kotaknya cuma terlihat dari garis tepinya.
+     Sekarang ia selalu lebih terang dari apa pun yang menopangnya. */
+  --color-elevated: #fbf8f1;
+
+  /* Teks di atas bidang warna pekat (tombol utama, badge solid, lambang).
+     Dulu peran ini dipinjamkan ke --color-neutral-100, padahal token itu
+     juga jadi latar kartu. Begitu mode gelap membalik latar kartu jadi
+     gelap, tombol langsung kehilangan kontras teksnya. Karena itu
+     perannya dipisah, dan nilainya tetap terang di kedua mode. */
+  --color-di-atas-solid: #fdfbf6;
+
+  /* Permukaan struktural: sidebar, navigasi bawah, panel cerita di
+     halaman masuk. Ini lapisan yang memegang kerangka halaman.
+
+     Nilai draf Sand Ledger menaruhnya cuma 3.0 L* dari kanvas dan
+     mengandalkan garis hairline sepenuhnya. Diperdalam jadi 6.1 L* atas
+     permintaan, supaya sidebar langsung terbaca sebagai lapisan sendiri
+     tanpa perlu mata mencari garisnya lebih dulu. Garisnya tetap ada. */
+  --color-panel: #e7ddca;
+
+  /* Teks samar di atas panel, misalnya label peran di sidebar dan
+     cetakan kecil di footer. Punya token sendiri karena kontrasnya
+     berbeda per mode, dan tanpa itu mode gelap ikut bergeser saat mode
+     terang dibetulkan. */
+  --color-panel-samar: #514a42;
+
+  /* Isian kecil yang duduk DI ATAS panel, yaitu lencana hitungan di item
+     nav. Memakai lapisan melayang supaya angka yang menunggu ditangani
+     tidak tenggelam di dalam panel. */
+  --color-panel-isian: #fbf8f1;
+
+  /* Netral pasir. Level 100 WAJIB sama persis dengan --color-surface:
+     56 tempat di kode memakai --color-neutral-100 sebagai latar kartu,
+     sementara kelas .card memakai --color-surface. Keduanya kembar dalam
+     praktik, dan kalau nilainya berbeda halaman jadi campur aduk antara
+     kartu terang dan kartu pasir. cek:warna menjaga keduanya tetap sama. */
+  --color-neutral-100: #ece3d2;
+  --color-neutral-200: #ded5c5;
+  --color-neutral-300: #cec4b3;
+  --color-neutral-400: #afa593;
+  --color-neutral-500: #8d8373;
+  --color-neutral-600: #665e51;
+  --color-neutral-700: #514a42;
+  --color-neutral-800: #36312c;
+  --color-neutral-900: #1f1c19;
+
+  /* Utama: kuningan tua. Intinya di level 700, jadi hover dan active
+     memakai 800 dan 900 supaya arahnya konsisten makin pekat. Chroma
+     sengaja ditahan rendah, lihat catatan di kepala berkas. */
+  --color-accent-100: #fbf7f1;
+  --color-accent-200: #f7efdf;
+  --color-accent-300: #eddec2;
+  --color-accent-400: #dec59b;
+  --color-accent-500: #c9aa77;
+  --color-accent-600: #947139;
+  --color-accent-700: #725421;
+  --color-accent-800: #5f451b;
+  --color-accent-900: #4e3918;
+
+  /* Sukses: tersedia, disetujui, selesai.
+
+     Diretune saat Sand Ledger dipasang. Nilai lamanya (hue OKLCH ~165
+     derajat, mint/emerald condong dingin) sengaja dibiarkan waktu itu
+     karena arti warna status tidak boleh berubah. Tapi "arti tidak
+     berubah" bukan berarti "temponya boleh diam": di tengah palet yang
+     serba hangat, satu satunya elemen dingin di halaman jadi menonjol
+     sendiri dan terlihat seperti sisa palet lama. Sekarang huenya digeser
+     ke 140 derajat, lumut hangat: tetap jelas hijau, tapi seleranya
+     sehangat kuningan dan pasir di sekitarnya. Jaraknya diukur aman dari
+     kuningan aksen (62°) dan dari amber peringatan (44° di tepi
+     terdekat), lihat `npm run cek:warna`. */
+  --color-accent-2-100: #f2fbf0;
+  --color-accent-2-200: #e1f7dc;
+  --color-accent-2-300: #c8edc0;
+  --color-accent-2-400: #aae09e;
+  --color-accent-2-500: #8cca7f;
+  --color-accent-2-600: #76b268;
+  --color-accent-2-700: #3a6930;
+  --color-accent-2-800: #305628;
+  --color-accent-2-900: #294722;
+
+  /* Peringatan dan sorotan: amber. TIDAK disentuh. Inilah ramp yang
+     paling dekat dengan kuningan, dan chromanya yang tinggi itu justru
+     yang membedakan keduanya, jadi menurunkannya akan merusak pembeda. */
+  --color-warn-100: #fffbeb;
+  --color-warn-200: #fef3c7;
+  --color-warn-300: #fde68a;
+  --color-warn-400: #fcd34d;
+  --color-warn-500: #f59e0b;
+  --color-warn-600: #d97706;
+  --color-warn-700: #b45309;
+  --color-warn-800: #92400e;
+  --color-warn-900: #78350f;
+
+  /* Bahaya: ditolak, gagal, bentrok. TIDAK disentuh. */
+  --color-danger-100: #fef2f2;
+  --color-danger-200: #fee2e2;
+  --color-danger-300: #fecaca;
+  --color-danger-400: #fca5a5;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-danger-800: #991b1b;
+  --color-danger-900: #7f1d1d;
+
+  --font-heading: var(--font-caprasimo), system-ui, sans-serif;
+  --font-heading-weight: 400;
+  --font-body: var(--font-figtree), system-ui, sans-serif;
+  --font-mono: ui-monospace, Menlo, monospace;
+
+  --space-1: 4.4px;
+  --space-2: 8.8px;
+  --space-3: 13.2px;
+  --space-4: 17.6px;
+  --space-6: 26.4px;
+  --space-8: 35.2px;
+
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+
+  /* Bayangan dihitung dari tinta HANGAT #1c1712, bukan tinta biru yang
+     lama. Bayangan bertinta biru di atas permukaan pasir terlihat kotor.
+     Nilainya juga ditipiskan, karena di palet ini kartu ditopang garis
+     hairline dan bayangan tebal justru melawan kesan menyusut. */
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #1c1712 7%, transparent);
+  --shadow-md: 0 2px 8px color-mix(in srgb, #1c1712 10%, transparent);
+  --shadow-lg: 0 10px 30px color-mix(in srgb, #1c1712 17%, transparent);
 }
 
+/* ══════════════════════════════════════════════════════════════════════
+   MODE GELAP
+   Ditulis hanya sebagai penimpaan token. Tidak ada satu pun komponen yang
+   perlu tahu soal mode gelap, karena semuanya sudah memakai token.
+
+   Tintanya HANGAT, bukan biru kehitaman seperti palet sebelumnya, supaya
+   sekeluarga dengan pasir dan kuningan di mode terang. Tumpukan lapisannya
+   setangkup dengan mode terang, cuma arahnya terbalik:
+
+     melayang  #322d27  L* 18.8      kanvas    #1c1814  L*  8.6
+     panel     #2b2621  L* 15.5      garis     #47423a  L* 28.2
+     kartu     #27231e  L* 14.0
+
+   Kuncinya: tiap ramp DIBALIK utuh, bukan digelapkan sebagian.
+     tingkat 100 sampai 300  -> latar bertona gelap
+     tingkat 600 sampai 700  -> warna terang untuk isian solid
+     tingkat 800 sampai 900  -> warna paling terang untuk teks
+
+   Ini wajib utuh karena badge solid memasangkan tingkat 700 sebagai latar
+   dengan tingkat 100 sebagai teks. Kalau cuma sebagian yang dibalik,
+   pasangan itu jadi terang di atas terang dan hilang terbaca.
+   ══════════════════════════════════════════════════════════════════════ */
+
+[data-tema="gelap"] {
+  color-scheme: dark;
+
+  --color-bg: #1c1814;
+  --color-surface: #27231e;
+  --color-text: #ebe7e1;
+  --color-accent: #cfb184;
+  --color-accent-2: #a4e196;
+
+  /* Garis hairline versi gelap. Sama seperti di mode terang, ia yang
+     memegang batas lapisan, jadi nilainya pekat dan cukup jauh dari
+     kartu, 14.2 L*, bukan sekadar putih transparan tipis. */
+  --color-divider: #47423a;
+
+  --color-elevated: #322d27;
+
+  /* Tetap satu peran: teks di atas bidang pekat. Karena di mode gelap
+     isian solid justru jadi terang, warnanya ikut membalik jadi tinta. */
+  --color-di-atas-solid: #1c1712;
+
+  --color-panel: #2b2621;
+  --color-panel-samar: #9c958b;
+  --color-panel-isian: #3e3931;
+
+  /* Level 100 sama persis dengan --color-surface, syarat yang sama dengan
+     mode terang dan dijaga oleh cek:warna. */
+  --color-neutral-100: #27231e;
+  --color-neutral-200: #302b25;
+  --color-neutral-300: #3e3931;
+  --color-neutral-400: #534d44;
+  --color-neutral-500: #716a5f;
+  --color-neutral-600: #9c958b;
+  --color-neutral-700: #bbb5ae;
+  --color-neutral-800: #d6d1cb;
+  --color-neutral-900: #ebe7e2;
+
+  /* Chroma tiap level dipatok 0.45 kali chroma amber di level yang sama.
+     Ini BUKAN pilihan estetis, melainkan hasil dari pemeriksa: rancangan
+     pertama memakai chroma yang lebih tinggi dan cek:warna menangkapnya
+     bertabrakan dengan amber di empat level, dengan jarak hue cuma 0
+     sampai 3 derajat. Di mode gelap amber membentang hue 70 sampai 96,
+     jadi kuningan tidak bisa menghindar lewat hue, dan chroma jadi satu
+     satunya tuas yang tersisa. Sekarang amber selalu 2.2 kali lebih pekat. */
+  --color-accent-100: #272017;
+  --color-accent-200: #332a1e;
+  --color-accent-300: #433726;
+  --color-accent-400: #5a4c35;
+  --color-accent-500: #7b6749;
+  --color-accent-600: #b09262;
+  --color-accent-700: #cfb184;
+  --color-accent-800: #e5cfad;
+  --color-accent-900: #f2e7d5;
+
+  /* Diretune bersama pasangan terangnya di atas, skala L* per level
+     dipertahankan sama persis dengan ramp lama supaya kontras yang sudah
+     terverifikasi tidak perlu dihitung ulang dari nol, cuma hue dan
+     chroma yang berubah ke lumut hangat. */
+  --color-accent-2-100: #172813;
+  --color-accent-2-200: #21381b;
+  --color-accent-2-300: #2f4f28;
+  --color-accent-2-400: #416a38;
+  --color-accent-2-500: #5d8c52;
+  --color-accent-2-600: #8fca82;
+  --color-accent-2-700: #a4e196;
+  --color-accent-2-800: #bff1b4;
+  --color-accent-2-900: #dcf9d6;
+
+  --color-warn-100: #2b1d06;
+  --color-warn-200: #3d2a08;
+  --color-warn-300: #563b0b;
+  --color-warn-400: #75510f;
+  --color-warn-500: #9c6b14;
+  --color-warn-600: #f59e0b;
+  --color-warn-700: #fcd34d;
+  --color-warn-800: #fde68a;
+  --color-warn-900: #fef3c7;
+
+  --color-danger-100: #2d1214;
+  --color-danger-200: #401a1d;
+  --color-danger-300: #5a2428;
+  --color-danger-400: #7a3035;
+  --color-danger-500: #a34047;
+  --color-danger-600: #f87171;
+  --color-danger-700: #fca5a5;
+  --color-danger-800: #fecaca;
+  --color-danger-900: #fee2e2;
+
+  /* Bayangan nyaris tidak terlihat di atas gelap, jadi dipertegas. Kartu
+     tetap ditopang garis hairline, sama seperti di mode terang. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 2px 10px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 34px rgba(0, 0, 0, 0.6);
+}
+
+/* Modal ikut diberi garis tepi. Kartu dan kartu statistik TIDAK lagi
+   disebut di sini: keduanya sekarang punya garis di kedua mode, jadi
+   aturan khusus gelap ini akan jadi salinan kedua yang bisa berbeda
+   diam diam saat salah satunya diubah. */
+[data-tema="gelap"] .dialog {
+  border: 1px solid var(--color-divider);
+}
+
+/* Jembatan ke Tailwind: token di atas jadi utility (bg-accent, text-neutral-700,
+   rounded-md, dst) supaya layout bisa pakai Tailwind tanpa hex baru. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--color-bg);
+  --color-panel: var(--color-panel);
+  --color-elevated: var(--color-elevated);
+  --color-panel-samar: var(--color-panel-samar);
+  --color-panel-isian: var(--color-panel-isian);
+  --color-surface: var(--color-surface);
+  --color-text: var(--color-text);
+  --color-divider: var(--color-divider);
+
+  --color-accent: var(--color-accent);
+  --color-accent-100: var(--color-accent-100);
+  --color-accent-200: var(--color-accent-200);
+  --color-accent-300: var(--color-accent-300);
+  --color-accent-400: var(--color-accent-400);
+  --color-accent-500: var(--color-accent-500);
+  --color-accent-600: var(--color-accent-600);
+  --color-accent-700: var(--color-accent-700);
+  --color-accent-800: var(--color-accent-800);
+  --color-accent-900: var(--color-accent-900);
+
+  --color-sage: var(--color-accent-2);
+  --color-sage-100: var(--color-accent-2-100);
+  --color-sage-200: var(--color-accent-2-200);
+  --color-sage-300: var(--color-accent-2-300);
+  --color-sage-400: var(--color-accent-2-400);
+  --color-sage-500: var(--color-accent-2-500);
+  --color-sage-600: var(--color-accent-2-600);
+  --color-sage-700: var(--color-accent-2-700);
+  --color-sage-800: var(--color-accent-2-800);
+  --color-sage-900: var(--color-accent-2-900);
+
+  --color-neutral-100: var(--color-neutral-100);
+  --color-neutral-200: var(--color-neutral-200);
+  --color-neutral-300: var(--color-neutral-300);
+  --color-neutral-400: var(--color-neutral-400);
+  --color-neutral-500: var(--color-neutral-500);
+  --color-neutral-600: var(--color-neutral-600);
+  --color-neutral-700: var(--color-neutral-700);
+  --color-neutral-800: var(--color-neutral-800);
+  --color-neutral-900: var(--color-neutral-900);
+
+  --color-warn-100: var(--color-warn-100);
+  --color-warn-200: var(--color-warn-200);
+  --color-warn-300: var(--color-warn-300);
+  --color-warn-400: var(--color-warn-400);
+  --color-warn-500: var(--color-warn-500);
+  --color-warn-600: var(--color-warn-600);
+  --color-warn-700: var(--color-warn-700);
+  --color-warn-800: var(--color-warn-800);
+  --color-warn-900: var(--color-warn-900);
+
+  --color-danger-100: var(--color-danger-100);
+  --color-danger-200: var(--color-danger-200);
+  --color-danger-300: var(--color-danger-300);
+  --color-danger-400: var(--color-danger-400);
+  --color-danger-500: var(--color-danger-500);
+  --color-danger-600: var(--color-danger-600);
+  --color-danger-700: var(--color-danger-700);
+  --color-danger-800: var(--color-danger-800);
+  --color-danger-900: var(--color-danger-900);
+
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── dasar ─────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 400;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  margin: 0 0 var(--space-2);
+}
+h1 { font-size: 42px; }
+h2 { font-size: 32px; }
+h3 { font-size: 25px; }
+h4 { font-size: 20px; }
+h5 { font-size: 16px; }
+h6 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+p { margin: 0 0 var(--space-3); }
+
+/* TIDAK ADA tautan yang digarisbawahi, di mana pun, dalam keadaan apa pun.
+   Efek hover khusus dipasang lewat kelas .tautan, jadi sifatnya opt-in.
+
+   Ini sengaja dibalik dari pola sebelumnya. Dulu semua <a> digarisbawahi
+   saat hover kecuali yang masuk daftar pengecualian, dan daftar itu sudah
+   dua kali bocor: tab navigasi bawah, lalu kartu daftar review yang seluruh
+   isinya ikut tergaris. Dengan opt-in, tautan baru yang lupa ditandai paling
+   banter kehilangan efek hover, bukan merusak tampilan kartu. */
+a {
+  color: var(--color-accent-700);
+  text-decoration: none;
+  transition: color 0.16s ease;
+}
+
+/* Tautan teks di dalam kalimat. Saat disorot warnanya menua dan muncul
+   latar pil biru muda. Padding dan margin negatif saling meniadakan,
+   jadi tata letak tidak bergeser sedikit pun. */
+.tautan {
+  border-radius: 6px;
+  padding: 1px 4px;
+  margin: -1px -4px;
+  transition: color 0.16s ease, background-color 0.16s ease;
+}
+.tautan:hover,
+.tautan:focus-visible {
+  color: var(--color-accent-900);
+  background: var(--color-accent-100);
+}
+
+img { display: block; max-width: 100%; }
+figure { margin: 0; }
+
+.text-muted { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
+.mono { font-family: var(--font-mono); }
+.washed { filter: saturate(0.6) contrast(0.85) brightness(1.1) opacity(0.94); }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb { background: var(--color-neutral-300); border-radius: 999px; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+.anim-rise { animation: rise 0.25s ease both; }
+.anim-pop { animation: pop 0.18s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-rise, .anim-pop { animation: none; }
+  /* Gerak pada navigasi dan sidebar ikut dimatikan, warna tetap berubah
+     supaya umpan balik hover tidak hilang sama sekali. */
+  .sidebar,
+  .nav-item,
+  .nav-item::before,
+  .tab-item,
+  .tab-item .ikon-nav { transition: none; }
+  .nav-item:hover { transform: none; }
+  .tab-item:hover .ikon-nav,
+  .tab-item:active .ikon-nav { transform: none; }
+}
+
+/* ── tampil menurut lebar layar ─────────────────────────────────────────
+   Sengaja TIDAK memakai utility `hidden` dan `md:hidden` milik Tailwind.
+   Dua bug pernah lahir dari sana: `.btn { display: inline-flex }` punya
+   specificity sama dengan `.hidden` tapi ditulis belakangan sehingga menang,
+   dan `display` di inline style mengalahkan kelas apa pun. Kelas sendiri di
+   bawah ini dipakai bersama komponen yang inline style-nya sudah dibersihkan
+   dari properti `display`.
+
+   Aturannya tegas: di layar besar hanya ada sidebar, di layar kecil hanya
+   ada navigasi bawah. Keduanya tidak pernah muncul bersamaan. */
+/* `!important` disengaja. Utilitas tampil sembunyi memang harus menang atas
+   gaya komponen, persis seperti `.d-none` milik Bootstrap. Tanpa ini,
+   `.btn { display: inline-flex }` yang ditulis lebih bawah di berkas yang
+   sama akan menang lagi, dan burger bocor ke HP untuk kesekian kalinya. */
+.hanya-desktop { display: none !important; }
+.hanya-hp { display: flex !important; }
+
+@media (min-width: 768px) {
+  .hanya-desktop { display: flex !important; }
+  .hanya-hp { display: none !important; }
+}
+
+/* ── sidebar dan rel ikon ───────────────────────────────────────────────
+   Sidebar tidak pernah dilepas dari DOM. Saat ditutup ia menyusut jadi rel
+   selebar 68px yang menyisakan burger dan ikon, karena burger ada di dalam
+   sidebar dan harus tetap bisa ditekan untuk membukanya lagi. */
+.sidebar {
+  width: 236px;
+  flex: none;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  /* Permukaan bertona, bukan putih. Inilah satu perubahan yang paling
+     menentukan: begitu sidebar punya tona sendiri, tiga lapisan halaman
+     langsung terbaca sekaligus, yaitu biru, pasir, lalu kartu putih. */
+  background: var(--color-panel);
+  border-right: 1px solid var(--color-divider);
+  transition: width 0.2s ease;
+  overflow: hidden;
+}
+.sidebar.rel { width: 68px; }
+
+.sidebar-isi {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) 14px;
+  min-height: 0;
+}
+
+.sidebar-kepala {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sidebar.rel .sidebar-kepala { flex-direction: column; gap: 12px; }
+
+.sidebar-burger {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-divider);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+/* Hover memakai accent-200, bukan accent-100.
+
+   Di mode terang: tombol ini berlatar putih dan sekarang duduk di atas panel
+   bertona, jadi terbaca sebagai kontrol yang terangkat. accent-100 cuma 2.6
+   L* dari putih, hovernya nyaris tidak terasa. accent-200 memberi 5.5 L*.
+
+   Ini SATU SATUNYA perubahan yang juga menggeser mode gelap, dan disengaja
+   karena di sana keadaannya lebih parah: accent-100 gelap hanya 1.3 L* dari
+   latar tombol, jadi hovernya praktis tidak pernah bekerja. accent-200
+   menaikkannya ke 8.8 L*. Ini membetulkan kerusakan, bukan mengubah gaya,
+   tapi tetap dicatat di sini karena mode gelap seharusnya tidak disentuh. */
+.sidebar-burger:hover {
+  background: var(--color-accent-200);
+  color: var(--color-accent-800);
+  border-color: var(--color-accent-300);
+}
+
+.sidebar-merek {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  font-family: var(--font-heading);
+  font-size: 17px;
+  /* Caprasimo bulat dan tebal, jadi kapital semua wajib direnggangkan.
+     Panduan logo: 0.1em untuk ukuran 20px ke bawah. */
+  letter-spacing: 0.1em;
+}
+.sidebar-peran {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  /* Label ini pindah ke atas panel bertona, dan ini teks 10px kapital yang
+     paling tidak boleh gagal terbaca. Token panel-samar sudah memegang nilai
+     yang benar untuk tiap mode, jadi tidak perlu diatur per mode di sini. */
+  color: var(--color-panel-samar);
+  padding: 0 10px 6px;
+}
+
+/* Saat menyusut, teksnya disembunyikan tapi aria-label di tautan tetap ada,
+   jadi nama menu tidak hilang bagi pembaca layar. */
+.sidebar.rel .nav-label { display: none; }
+.sidebar.rel .nav-item { justify-content: center; padding-inline: 0; }
+.sidebar.rel .sidebar-merek { justify-content: center; }
+
+.nav-lencana {
+  margin-left: auto;
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+/* Di rel, lencana jadi titik kecil di pojok ikon supaya tetap muat. */
+.nav-lencana.rel {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  margin: 0;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  font-size: 9.5px;
+}
+
+/* ── item navigasi ──────────────────────────────────────────────────────
+   Keadaan aktif ditandai pil berwarna DAN batang di sisi kiri, jadi tidak
+   bergantung pada warna saja. Hover memberi latar tipis dengan transisi
+   singkat supaya terasa hidup tanpa berisik. */
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  font-size: 13.5px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  color: var(--color-neutral-800);
+  transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+/* Bergeser sedikit ke kanan saat disorot. Gerak kecil ini yang membuat menu
+   terasa merespons, tanpa membuat daftarnya terlihat goyang. */
+.nav-item:hover {
+  background: var(--color-accent-100);
+  color: var(--color-accent-800);
+  transform: translateX(2px);
+}
+.nav-item[aria-current="page"] {
+  background: var(--color-accent-100);
+  color: var(--color-accent-900);
+  font-weight: 700;
+}
+/* Batang penanda melebar dari nol, jadi perpindahan halaman mengalir. */
+.nav-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--color-accent-700);
+  transition: width 0.16s ease;
+}
+.nav-item[aria-current="page"]::before { width: 3px; }
+.sidebar.rel .nav-item::before { display: none; }
+
+/* Tab di navigasi bawah. Menu admin ada enam, jadi dibiarkan bisa digeser
+   mendatar daripada memaksa semuanya muat dan jadi tidak terbaca. */
+.tab-bawah {
+  position: sticky;
+  bottom: 0;
+  z-index: 70;
+  gap: 2px;
+  padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+  /* Ini sidebar versi hp, perannya sama persis, jadi tonanya ikut sama.
+     Kalau dibiarkan putih, di hp halaman kembali terasa rata. */
+  background: var(--color-panel);
+  border-top: 1px solid var(--color-divider);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tab-bawah::-webkit-scrollbar { display: none; }
+.tab-item {
+  flex: 1 0 auto;
+  min-width: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 6px;
+  border-radius: 14px;
+  position: relative;
+  color: var(--color-neutral-700);
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+.tab-item .ikon-nav {
+  transition: transform 0.16s ease;
+}
+/* Ikon terangkat dan sedikit membesar saat disorot. Ini yang paling terasa
+   interaktif, baik dengan kursor maupun saat ditekan di layar sentuh. */
+.tab-item:hover {
+  background: var(--color-accent-100);
+  color: var(--color-accent-800);
+}
+.tab-item:hover .ikon-nav,
+.tab-item:active .ikon-nav {
+  transform: translateY(-2px) scale(1.08);
+}
+.tab-item[aria-current="page"] {
+  background: var(--color-accent-100);
+  color: var(--color-accent-900);
+  font-weight: 600;
+}
+.tab-item[aria-current="page"] .ikon-nav {
+  transform: translateY(-1px);
+}
+
+/* ── rules ─────────────────────────────────────────────────────────── */
+.hr {
+  height: 1px;
+  border: 0;
+  margin: var(--space-4) 0;
+  background: var(--color-divider);
+}
+
+/* ── buttons ───────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid transparent;
+  padding: var(--space-2) calc(var(--space-3) * 1.2);
+  border-radius: 999px;
+}
+.btn svg { display: block; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+/* Warna utama sudah gelap, jadi hover dan active memakai langkah 800 dan
+   900 supaya arahnya tetap konsisten makin gelap. */
+/* Tombol utama memakai isian TINTA, bukan isian warna aksen.
+
+   Ini bagian dari prinsip Sand Ledger: warna aksen berhenti mengisi bidang
+   besar dan disimpan jadi tanda baca editorial. Tombol tinta di atas kanvas
+   pasir jadi elemen paling pekat di halaman, dan justru itu yang membuatnya
+   terbaca sebagai aksi utama tanpa perlu warna.
+
+   Arah keadaannya sengaja dibalik dari kebiasaan: disorot jadi lebih TERANG,
+   ditekan jadi paling gelap. Isian dasarnya sudah nyaris hitam, jadi
+   menggelapkannya saat hover tidak akan terlihat sama sekali. */
+.btn-primary { background: var(--color-neutral-900); color: var(--color-di-atas-solid); }
+.btn-primary:hover:not(:disabled) { background: var(--color-neutral-800); color: var(--color-di-atas-solid); }
+.btn-primary:active:not(:disabled) { background: var(--color-text); }
+.btn-secondary { border-color: var(--color-divider); }
+.btn-secondary:hover:not(:disabled) { background: color-mix(in srgb, var(--color-text) 6%, transparent); }
+.btn-secondary:active:not(:disabled) { background: color-mix(in srgb, var(--color-text) 12%, transparent); }
+.btn-ghost { color: var(--color-accent-700); padding-inline: var(--space-1); }
+.btn-ghost:hover:not(:disabled) { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.btn-ghost:active:not(:disabled) { background: color-mix(in srgb, var(--color-text) 13%, transparent); }
+.btn-danger { background: var(--color-danger-700); color: var(--color-di-atas-solid); }
+.btn-danger:hover:not(:disabled) { background: var(--color-danger-800); color: var(--color-di-atas-solid); }
+.btn-icon { width: 36px; height: 36px; padding: 0; }
+
+/* Sakelar bahasa: dua sisi yang selalu terlihat, dengan penanda yang
+   meluncur ke sisi aktif. Kedua kode ditampilkan sekaligus supaya orang
+   tahu pilihan apa yang tersedia, bukan menebak dari satu kode berganti. */
+/* Hanya untuk pembaca layar. Sel kalender dibedakan lewat warna, jadi
+   keadaannya perlu ditulis juga supaya tidak bergantung pada penglihatan. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── grafik laporan ─────────────────────────────────────────────────── */
+.grafik-susun {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-3);
+}
+
+.grafik { margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.grafik-judul {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+.grafik-kosong { font-size: 12.5px; color: var(--color-neutral-600); margin: 0; }
+
+/* ── batang tegak ── */
+.batang-kisi {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 150px;
+}
+.batang-kolom {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+}
+.batang-nilai { font-size: 11.5px; font-weight: 700; }
+/* Jalur mengambil sisa tinggi, jadi tinggi batang di dalamnya berupa persen
+   yang selalu sebanding walau jumlah kolomnya berubah. */
+.batang-jalur {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  background: var(--color-neutral-200);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.batang-isi {
+  width: 100%;
+  background: var(--color-accent-600);
+  border-radius: 6px 6px 0 0;
+  /* Batang bernilai nol tetap menyisakan garis tipis, supaya kolomnya
+     terlihat ada dan tidak disangka hilang. */
+  min-height: 2px;
+}
+.batang-label {
+  font-size: 10.5px;
+  color: var(--color-neutral-600);
+  white-space: nowrap;
+}
+
+/* ── peringkat mendatar ── */
+.peringkat { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+.peringkat-baris {
+  display: grid;
+  grid-template-columns: minmax(0, 9rem) 1fr auto;
+  align-items: center;
+  gap: 9px;
+  font-size: 12.5px;
+}
+.peringkat-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.peringkat-jalur {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--color-neutral-200);
+  overflow: hidden;
+}
+.peringkat-isi {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-accent-600);
+  min-width: 3px;
+}
+.peringkat-nilai { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ── angka besar pendamping ── */
+.grafik-angka { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.grafik-angka-nilai {
+  font-family: var(--font-heading);
+  font-size: 30px;
+  line-height: 1;
+  color: var(--color-accent-800);
+}
+.grafik-angka-label { font-size: 12px; color: var(--color-neutral-700); }
+
+/* ══════════════════════════════════════════════════════════════════════
+   BUKTI PEMINJAMAN SIAP CETAK
+   Tanpa pustaka PDF. Alasannya bukan sekadar hemat: pustaka PDF berarti
+   satu salinan tata letak lagi yang harus ikut diperbarui setiap kali
+   halamannya berubah, dan salinan itu yang biasanya lupa disamakan.
+   ══════════════════════════════════════════════════════════════════════ */
+
+.lembar {
+  background: var(--color-neutral-100);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  padding: clamp(20px, 4vw, 34px);
+  max-width: 760px;
+  color: var(--color-text);
+}
+
+.lembar-kepala {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--color-text);
+  margin-bottom: 18px;
+}
+.lembar-lambang { color: var(--color-accent); flex: none; }
+.lembar-merek {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  letter-spacing: 0.1em;
+  line-height: 1.1;
+}
+.lembar-judul {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 3px 0 0;
+  color: var(--color-neutral-700);
+}
+.lembar-nomor {
+  margin-left: auto;
+  text-align: right;
+  font-size: 11px;
+  color: var(--color-neutral-600);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: none;
+}
+.lembar-nomor b { font-size: 14px; color: var(--color-text); }
+
+.lembar-data { width: 100%; border-collapse: collapse; font-size: 13px; }
+.lembar-data th {
+  text-align: left;
+  font-weight: 400;
+  color: var(--color-neutral-600);
+  width: 32%;
+  padding: 5px 10px 5px 0;
+  vertical-align: top;
+}
+.lembar-data td { padding: 5px 0; vertical-align: top; }
+
+.lembar-sub {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  margin: 22px 0 8px;
+}
+
+.lembar-item { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.lembar-item th,
+.lembar-item td {
+  border: 1px solid var(--color-neutral-400);
+  padding: 7px 9px;
+  text-align: left;
+  vertical-align: top;
+}
+.lembar-item th {
+  background: var(--color-neutral-200);
+  font-size: 11px;
+  font-weight: 700;
+}
+.lembar-lokasi {
+  display: block;
+  font-size: 10.5px;
+  color: var(--color-neutral-600);
+  margin-top: 1px;
+}
+
+.lembar-ttd-baris {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.lembar-kotak-ttd { font-size: 11.5px; }
+.lembar-peran { color: var(--color-neutral-700); margin-bottom: 2px; }
+/* Ruang kosong untuk tanda tangan basah. Tingginya dijaga tetap supaya
+   orang punya tempat menandatangani, bukan sekadar garis rapat. */
+.lembar-ruang-ttd { height: 46px; }
+.lembar-garis {
+  border-top: 1px solid var(--color-neutral-500);
+  padding-top: 3px;
+  margin-top: 12px;
+  color: var(--color-neutral-600);
+  font-size: 10.5px;
+}
+
+.lembar-kaki {
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-divider);
+  font-size: 10.5px;
+  color: var(--color-neutral-600);
+}
+.lembar-kaki p { margin: 4px 0 0; max-width: 70ch; }
+
+/* ── saat benar benar dicetak ───────────────────────────────────────── */
+@media print {
+  /* Kerangka aplikasi tidak ikut tercetak. Sidebar, header, footer, dan
+     navigasi bawah tidak punya arti di atas kertas. */
+  .sidebar,
+  .tab-bawah,
+  header,
+  footer,
+  .tanpa-cetak {
+    display: none !important;
+  }
+
+  /* Warna latar dibuang supaya tidak memboroskan tinta dan tetap terbaca
+     kalau dicetak hitam putih. Mode gelap juga ikut diabaikan di kertas. */
+  body,
+  .lembar {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .lembar {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    max-width: none;
+  }
+  .lembar-item th { background: #f0f0f0 !important; }
+
+  main > div { padding: 0 !important; }
+
+  @page {
+    margin: 16mm;
+  }
+
+  /* Blok tanda tangan tidak boleh terbelah dua halaman. */
+  .lembar-ttd,
+  .lembar-kotak-ttd {
+    break-inside: avoid;
+  }
+}
+
+/* ── kalender gabungan ruang ────────────────────────────────────────── */
+.kisi-bungkus { padding: var(--space-2) var(--space-3); overflow-x: auto; }
+
+.kisi-kalender {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: separate;
+  border-spacing: 3px;
+  font-size: 13px;
+}
+
+.kisi-ruang {
+  text-align: left;
+  font-weight: 400;
+  vertical-align: middle;
+  min-width: 180px;
+  padding: 6px 10px 6px 2px;
+}
+.kisi-lokasi {
+  display: block;
+  font-size: 11px;
+  color: var(--color-neutral-600);
+  margin-top: 1px;
+}
+
+.kisi-hari {
+  width: 11%;
+  padding: 4px 0 8px;
+  font-weight: 400;
+  line-height: 1.15;
+}
+.kisi-nama-hari {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+.kisi-tanggal { display: block; font-size: 14px; font-weight: 600; }
+
+/* Hari ini ditandai batang di bawah kepala kolom, bukan warna latar, supaya
+   tidak bertabrakan arti dengan warna terpakai di sel di bawahnya. */
+.kisi-hari.ini .kisi-tanggal { color: var(--color-accent-800); }
+.kisi-hari.ini {
+  border-bottom: 2px solid var(--color-accent-700);
+}
+
+.kisi-sel {
+  height: 34px;
+  border-radius: 8px;
+  padding: 0;
+}
+.kisi-sel.kosong { background: var(--color-accent-2-200); }
+.kisi-sel.terpakai { background: var(--color-accent-600); }
+.kisi-sel.lewat { background: var(--color-neutral-200); }
+
+/* Hari tutup ditandai CORAK GARIS, bukan sekadar satu warna lagi.
+   Alasannya dua dan keduanya konkret:
+     1. Kisi ini sudah memakai tiga warna untuk kosong, terpakai, dan lewat.
+        Warna keempat akan sulit dibedakan, terutama bagi pengguna buta warna.
+     2. Corak tetap terbaca saat dicetak hitam putih, sama seperti badge status
+        yang sengaja dibedakan lewat isian dan titik, bukan warna saja.
+   Sudutnya juga dipakai untuk kolom kepala, jadi seluruh kolom hari tutup
+   terlihat sebagai satu kesatuan dari atas ke bawah. */
+.kisi-sel.tutup,
+.kisi-hari.tutup {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-neutral-200) 0 4px,
+    var(--color-neutral-300) 4px 8px
+  );
+}
+.kisi-hari.tutup {
+  border-radius: 8px 8px 0 0;
+  color: var(--color-neutral-700);
+}
+.kisi-contoh.tutup {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-neutral-200) 0 3px,
+    var(--color-neutral-400) 3px 6px
+  );
+}
+
+.kisi-contoh {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  flex: none;
+  display: inline-block;
+}
+.kisi-contoh.kosong { background: var(--color-accent-2-200); }
+.kisi-contoh.terpakai { background: var(--color-accent-600); }
+.kisi-contoh.lewat { background: var(--color-neutral-200); }
+
+/* Badan modal. Lebar baris dibatasi karena kalimat akibat di modal harus
+   terbaca sekali jalan, bukan dipindai. Penekanan memakai <b> supaya
+   bagian terpenting menonjol tanpa perlu warna tambahan. */
+.dialog-teks {
+  text-align: center;
+  max-width: 42ch;
+  margin: 0 auto;
+  line-height: 1.6;
+  color: var(--color-neutral-700);
+}
+.dialog-teks b {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* Judul halaman yang juga tombol muat ulang. Dibuat jelas bisa ditekan
+   lewat latar dan ikon yang muncul saat disorot, supaya tidak jadi teks
+   yang diam diam punya fungsi tersembunyi. */
+.judul-halaman {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 5px 10px;
+  margin: -5px -10px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 0.16s ease;
+}
+.judul-halaman:hover:not(:disabled) { background: var(--color-accent-100); }
+.judul-halaman:disabled { cursor: default; }
+
+.judul-baris { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.judul-teks {
+  font-family: var(--font-heading);
+  font-size: 19px;
+  line-height: 1.15;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.judul-sub {
+  font-size: 11.5px;
+  color: var(--color-neutral-600);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.ikon-putar {
+  flex: none;
+  color: var(--color-accent-700);
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+.judul-halaman:hover .ikon-putar,
+.judul-halaman:focus-visible .ikon-putar,
+.ikon-putar.berputar { opacity: 1; }
+
+.ikon-putar.berputar { animation: putar 0.8s linear infinite; }
+@keyframes putar { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ikon-putar.berputar { animation: none; }
+  .judul-halaman, .ikon-putar { transition: none; }
+}
+
+/* Latarnya putih, bukan neutral-200. Sakelar ini satu satunya kendali yang
+   duduk langsung di atas latar halaman, bukan di atas kartu. Begitu latar
+   dipekatkan jadi #f1ece2, ia menyalip neutral-200, jadi jalur sakelar
+   berakhir 1 L* di atas latarnya dan praktis lenyap. Putih memberi 6.5 L*,
+   dan itu juga menyamakan polanya dengan tombol menu akun di sebelahnya
+   yang memang sudah putih di atas header. */
+.sakelar-bahasa {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  height: 36px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+}
+/* Mode gelap dijaga persis seperti sebelumnya. Di sana latar halaman sudah
+   jelas lebih gelap dari neutral-200, jadi masalah di atas tidak ada, dan
+   tampilan yang sudah disetujui tidak boleh ikut bergeser. */
+[data-tema="gelap"] .sakelar-bahasa {
+  background: var(--color-neutral-200);
+}
+.sakelar-penanda {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: var(--color-accent);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sakelar-penanda[data-sisi="en"] { transform: translateX(100%); }
+
+.sakelar-sisi {
+  position: relative;
+  z-index: 1;
+  min-width: 38px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  transition: color 0.22s ease;
+}
+.sakelar-sisi[aria-pressed="true"] { color: var(--color-di-atas-solid); }
+.sakelar-sisi:disabled { cursor: default; }
+.sakelar-sisi:not([aria-pressed="true"]):hover { color: var(--color-accent-800); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sakelar-penanda, .sakelar-sisi { transition: none; }
+}
+.btn-block { width: 100%; margin-top: var(--space-2); }
+
+/* Di HP kontrol minimal 44px supaya nyaman disentuh. */
+@media (max-width: 640px) {
+  .btn { min-height: 44px; }
+  .btn-icon { width: 44px; height: 44px; }
+}
+
+/* ── forms ─────────────────────────────────────────────────────────── */
+.field > label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 5px;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+.input {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-text);
+  caret-color: var(--color-accent);
+  /* Lapisan melayang, jadi input SELALU lebih terang dari apa pun yang
+     menopangnya: 7.1 L* di atas kartu dan 3.0 L* di atas kanvas.
+
+     Dulu latarnya sama dengan latar halaman, dan itu cacat: di form
+     penyaring yang tidak berada di dalam kartu, kotaknya sewarna persis
+     dengan halamannya dan cuma terlihat dari garis tepinya. */
+  background: var(--color-elevated);
+  border: 1px solid var(--color-divider);
+  border-radius: 999px;
+}
+.input:hover { border-color: color-mix(in srgb, var(--color-text) 40%, transparent); }
+.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+.input[aria-invalid="true"] { border-color: var(--color-danger-600); }
+textarea.input { min-height: 90px; resize: vertical; border-radius: var(--radius-lg); }
+select.input { appearance: none; }
+
+@media (max-width: 640px) {
+  .input { min-height: 44px; }
+}
+
+.field-error {
+  font-size: 11.5px;
+  color: var(--color-danger-700);
+  margin-top: 4px;
+}
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.radio input,
+.seg-opt input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.radio .dot {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-divider);
+}
+.radio:hover .dot { border-color: var(--color-accent); }
+.radio input:checked + .dot {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  box-shadow: inset 0 0 0 4px var(--color-bg);
+}
+.radio input:focus-visible + .dot { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.radio .dot-square { border-radius: 6px; }
+
+.seg {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--color-divider);
+  border-radius: 999px;
+}
+.seg-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.seg-opt + .seg-opt { border-left: 1px solid var(--color-divider); }
+.seg-opt:has(input:checked) { background: var(--color-accent); color: var(--color-bg); }
+.seg-opt:not(:has(input:checked)):hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.seg-opt:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+/* ── cards ─────────────────────────────────────────────────────────── */
+/* Kartu ditopang GARIS HAIRLINE, bukan bayangan.
+
+   Ini inti Sand Ledger. Kartu sekarang lebih gelap dari kanvas, jadi ia
+   menyusut ke dalam dan bayangan yang mengangkatnya justru melawan maksud
+   itu. Yang memisahkannya dari kanvas adalah garis 1px yang berjarak 11.9
+   L* dari kanvas, cukup tegas tanpa perlu mengangkat apa pun.
+
+   Berlaku di KEDUA mode. Dulu garis ini cuma dipasang di mode gelap,
+   karena di mode terang kartu putih sudah terpisah sendiri dari latarnya. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: calc(var(--radius-lg) * 1.15);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+}
+.card-kicker {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+.card-title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 17px;
+  line-height: 1.2;
+}
+.card-body { margin: 0; font-size: 13px; opacity: 0.8; flex: 1; }
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+}
+/* Kartu yang seluruhnya bisa diklik, misalnya baris daftar review.
+   Terangkat saat disorot, dan saat terpilih ditandai batang di sisi kiri,
+   bukan garis tepi penuh, supaya bahasanya sama dengan item sidebar dan
+   kartunya tidak terlihat terkurung. */
+.kartu-pilih {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  padding: 13px 15px;
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-100);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text);
+  border: 1px solid var(--color-divider);
+  overflow: hidden;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+}
+.kartu-pilih:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-accent-300);
+}
+.kartu-pilih::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--color-accent-700);
+  transition: width 0.16s ease;
+}
+.kartu-pilih[aria-current="true"] {
+  border-color: var(--color-accent-300);
+  box-shadow: var(--shadow-md);
+}
+.kartu-pilih[aria-current="true"]::before { width: 4px; }
+
+/* Kartu statistik: warna pindah dari seluruh permukaan ke lingkaran ikon
+   saja, jadi tetap menandai arti tanpa membuat halaman terasa blok blok. */
+.kartu-statistik {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-100);
+  border: 1px solid var(--color-divider);
+  box-shadow: var(--shadow-sm);
+}
+.statistik-ikon {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.statistik-angka {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  line-height: 1;
+}
+.statistik-label {
+  font-size: 12px;
+  color: var(--color-neutral-700);
+  margin-top: 3px;
+}
+
+.elev-sm { box-shadow: var(--shadow-sm); }
+.elev-md { box-shadow: var(--shadow-md); }
+.elev-lg { box-shadow: var(--shadow-lg); }
+
+/* ── tags / badge status ───────────────────────────────────────────── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.tag-accent { background: var(--color-accent-200); color: var(--color-accent-800); }
+.tag-accent-2 { background: var(--color-accent-2-200); color: var(--color-accent-2-800); }
+.tag-neutral { background: var(--color-neutral-200); color: var(--color-neutral-800); }
+.tag-warn { background: var(--color-warn-200); color: var(--color-warn-800); }
+.tag-danger { background: var(--color-danger-200); color: var(--color-danger-800); }
+.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
+.tag-dot { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+
+/* ── navigation ────────────────────────────────────────────────────── */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+}
+.nav-brand {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 18px;
+  margin-right: auto;
+}
+.nav a { color: inherit; text-decoration: none; font-size: 14px; }
+.nav a:hover,
+.nav a[aria-current="page"] { color: var(--color-accent); }
+
+/* ── tables ────────────────────────────────────────────────────────── */
+.table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+
+/* Kepala tabel menempel saat isinya digulir. Tabel aset dan pengguna bisa
+   panjang, dan tanpa ini nama kolomnya hilang begitu digulir ke bawah. */
+.table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--color-neutral-100);
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  padding: var(--space-3) var(--space-2);
+  border-bottom: 1px solid var(--color-divider);
+  white-space: nowrap;
+}
+.table td {
+  padding: var(--space-3) var(--space-2);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 7%, transparent);
+  vertical-align: middle;
+}
+.table tbody tr { transition: background-color 0.16s ease; }
+.table tbody tr:hover { background: var(--color-accent-100); }
+.table tbody tr:last-child td { border-bottom: 0; }
+.table-wrap { overflow-x: auto; max-height: 70vh; overflow-y: auto; }
+
+/* ── dialog ────────────────────────────────────────────────────────── */
+
+/* WAJIB ADA. Browser menyembunyikan dialog tertutup lewat
+   `dialog:not([open]) { display: none }`, tapi aturan itu berasal dari
+   stylesheet bawaan browser, sedangkan `.dialog { display: flex }` di bawah
+   adalah CSS kita sendiri. Dalam kaskade, CSS author SELALU menang atas
+   bawaan browser, berapa pun specificity-nya. Tanpa menyatakan ulang aturan
+   ini, semua modal tampil terus walau sedang tertutup. */
+dialog:not([open]) {
+  display: none;
+}
+
+.dialog {
+  width: min(440px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: calc(var(--radius-lg) * 1.15);
+  /* Modal benar benar melayang, jadi ia memakai permukaan paling terang,
+     bukan warna kartu. Inilah satu satunya tempat bayangan tebal masih
+     dipakai di palet ini. */
+  background: var(--color-elevated);
+  box-shadow: var(--shadow-lg);
+}
+.dialog-title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 20px;
+}
+.dialog-body { font-size: 14px; opacity: 0.85; }
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* Varian <dialog> native. showModal() memberi jebakan fokus, latar inert,
+   dan penanganan Escape gratis dari browser, jadi tidak perlu dirakit ulang.
+   Warna latar ditulis literal karena custom property tidak selalu terwarisi
+   ke ::backdrop yang hidup di top layer. */
+dialog.dialog {
+  /* Pemusatan ditulis sendiri, tidak menumpang gaya bawaan browser untuk
+     dialog:modal yang berbeda beda antar mesin. Dengan inset 0 dan margin
+     auto, panel selalu benar benar di tengah layar. */
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  border: 0;
+  color: var(--color-text);
+  max-height: min(86dvh, 100%);
+  overflow: auto;
+}
+dialog.dialog::backdrop {
+  /* Tinta hangat, sekeluarga dengan palet. Tinta biru di belakang
+     permukaan pasir terlihat kotor. */
+  background: rgba(28, 23, 18, 0.62);
+  backdrop-filter: blur(2px);
+}
+dialog.dialog[open] { animation: pop 0.18s ease both; }
+
+/* Selama ada dialog terbuka, halaman di belakangnya dikunci. Elemen
+   <dialog> modal memang sudah membuat latar tidak bisa diklik, tapi
+   halamannya masih bisa digulir, dan itu membuat modal terasa kurang
+   memaksa. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* Tombol silang di pojok panel modal. */
+.dialog-tutup {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-neutral-600);
+  cursor: pointer;
+}
+.dialog-tutup:hover {
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  color: var(--color-text);
+}
+
+/* Drawer navigasi HP sudah dihapus. Di layar kecil sidebar memang
+   ditiadakan dan diganti navigasi bawah, jadi drawer kehilangan alasan
+   keberadaannya. */
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.dialog[open] { animation: none; }
+}
+
+/* Aset tanpa foto sekarang memakai komponen IlustrasiAset, bukan arsiran
+   abu abu. Kelas .foto-kosong yang lama sudah tidak dipakai lagi. */

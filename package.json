@@ -6,21 +6,45 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "db:reset": "prisma migrate reset",
+    "db:studio": "prisma studio",
+    "cek:ketersediaan": "tsx -r dotenv/config prisma/cek-ketersediaan.ts",
+    "cek:penutupan": "tsx -r dotenv/config prisma/cek-penutupan.ts",
+    "cek:alur": "tsx -r dotenv/config prisma/cek-alur.ts",
+    "cek:tipografi": "node skrip/cek-tipografi.mjs",
+    "cek:warna": "node skrip/cek-warna.mjs",
+    "postinstall": "prisma generate",
+    "cek:bahasa": "node skrip/cek-bahasa.mjs"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "@supabase/supabase-js": "^2.112.3",
+    "bcryptjs": "^3.0.3",
+    "jose": "^6.2.8",
     "next": "16.3.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "resend": "^6.19.0",
+    "server-only": "^0.0.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
+    "prisma": "^7.9.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

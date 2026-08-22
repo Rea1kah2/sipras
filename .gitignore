@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# foto aset yang diunggah admin, bukan bagian dari kode
+/public/uploads
+
+# konfigurasi asisten AI, bukan bagian dari aplikasi
+/.claude
+/.agents
+/.windsurf
+skills-lock.json
