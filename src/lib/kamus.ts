@@ -58,9 +58,9 @@ const ID = {
     // Judul dan keterangan yang tampil di tab peramban serta hasil pencarian.
     situsJudul: "SIPRAS: Peminjaman Sarana dan Prasarana",
     situsDeskripsi:
-      "Ajukan peminjaman ruang dan alat kampus sekali jalan, pantau statusnya sampai selesai.",
+      "Ajukan peminjaman ruang dan alat sekolah sekali jalan, pantau statusnya sampai selesai.",
     ringkas:
-      "Sistem peminjaman sarana dan prasarana kampus. Ajukan sekali untuk banyak barang dan ruang, lalu pantau statusnya sampai selesai.",
+      "Sistem peminjaman sarana dan prasarana sekolah. Ajukan sekali untuk banyak barang dan ruang, lalu pantau statusnya sampai selesai.",
   },
 
   peran: {
@@ -116,7 +116,7 @@ const ID = {
     adminJadwal: ["Hari layanan", "Atur hari buka dan tandai tanggal yang tutup"],
     profil: ["Profil saya", "Ubah data diri dan kata sandi"],
     notifikasi: ["Notifikasi", "Semua kabar tentang pengajuan kamu"],
-    umum: ["SIPRAS", "Peminjaman sarana & prasarana kampus"],
+    umum: ["SIPRAS", "Peminjaman sarana & prasarana sekolah"],
   } as Record<string, [string, string]>,
 
   shell: {
@@ -151,7 +151,7 @@ const ID = {
     tautanCepat: "Tautan cepat",
     bantuan: "Butuh bantuan?",
     alur: "Alur peminjaman",
-    lokasi: "Loket Sarpras, lantai 1 Gedung A.",
+    lokasi: "Ruang Guru, gedung utama sekolah.",
     jam: "Senin sampai Jumat, 08.00 hingga 16.00 WIB.",
     whatsapp: "WhatsApp",
     email: "Email",
@@ -509,16 +509,16 @@ const ID = {
 
   profil: {
     petunjukIdentitas:
-      "Email dan NIM tidak bisa diubah sendiri karena dipakai sebagai identitas di riwayat peminjaman. Hubungi petugas Sarpras kalau ada yang keliru.",
+      "Email dan NIP tidak bisa diubah sendiri karena dipakai sebagai identitas di riwayat peminjaman. Hubungi petugas sarpras kalau ada yang keliru.",
     identitas: "Identitas akun",
     email: "Email",
-    nim: "NIM / NIP",
+    nim: "NIP / NUPTK",
     peran: "Peran",
     dataDiri: "Data diri",
     nama: "Nama lengkap",
     whatsapp: "Nomor WhatsApp",
     whatsappBantuan: "Dipakai petugas kalau perlu menghubungi kamu soal pengajuan.",
-    unit: "Unit / program studi",
+    unit: "Kelas / bidang tugas",
     menyimpan: "Menyimpan...",
     simpan: "Simpan perubahan",
     gantiSandi: "Ganti kata sandi",
@@ -611,7 +611,7 @@ const ID = {
     peringatanSatuAdmin:
       "Sistem ini baru punya satu admin aktif. Angkat minimal satu admin lagi supaya pengelolaan tidak berhenti kalau akun ini bermasalah.",
     cari: "Cari pengguna",
-    cariContoh: "Nama, email, NIM, atau unit",
+    cariContoh: "Nama, email, NIP, atau kelas",
     kolomNama: "Nama",
     kolomUnit: "Unit",
     kolomPeran: "Peran",
@@ -667,7 +667,7 @@ const ID = {
 
   review: {
     cari: "Cari pemohon, kode, atau item",
-    cariContoh: "misal: Nadia, PJ-2026, proyektor",
+    cariContoh: "misal: Siti, PJ-2026, proyektor",
     jumlah: "{n} pengajuan ditampilkan",
     kosong: "Tidak ada pengajuan",
     kosongIsi: "Coba ubah kata kunci atau filter status.",
@@ -761,7 +761,7 @@ const ID = {
   },
 
   masuk: {
-    lencana: "Sarana & Prasarana Kampus",
+    lencana: "Sarana & Prasarana Sekolah",
     judulBesar: "Pinjam ruang dan alat tanpa antre di loket.",
     penjelasan:
       "Ajukan sekali, pantau sampai selesai. Admin memverifikasi dari dasbor yang sama, kamu dapat kabarnya lewat notifikasi dan email.",
@@ -769,9 +769,9 @@ const ID = {
     langkah2: "Isi tanggal & keperluan",
     langkah3: "Tunggu kabar admin",
     kartuJudul: "Masuk",
-    kartuSub: "Pakai email kampus kamu.",
+    kartuSub: "Pakai email yang kamu daftarkan.",
     email: "Email",
-    emailContoh: "nama@kampus.ac.id",
+    emailContoh: "nama@gmail.com",
     sandi: "Kata sandi",
     tombol: "Masuk",
     sedang: "Memeriksa...",
@@ -783,21 +783,21 @@ const ID = {
     kembali: "Kembali ke halaman masuk",
     judul: "Daftar akun peminjam",
     penjelasan:
-      "Siapa pun yang punya email kampus bisa mendaftar sendiri. Nomor WhatsApp dipakai kalau petugas perlu menghubungi kamu soal pengajuan.",
+      "Guru dan staf sekolah bisa mendaftar sendiri. Nomor WhatsApp dipakai kalau petugas perlu menghubungi kamu soal pengajuan.",
     nama: "Nama lengkap",
-    namaContoh: "Nadia Rahmawati",
-    identitas: "NIM / NIP",
-    identitasContoh: "21.01.2345",
-    email: "Email kampus",
-    emailContoh: "nadia@kampus.ac.id",
+    namaContoh: "Siti Aminah",
+    identitas: "NIP / NUPTK",
+    identitasContoh: "198504122010012003",
+    email: "Email",
+    emailContoh: "siti@gmail.com",
     whatsapp: "Nomor WhatsApp",
     whatsappContoh: "0812 3456 7890",
     whatsappBantuan: "Dipakai petugas kalau perlu menghubungi kamu.",
     sandi: "Kata sandi",
     sandiContoh: "Minimal 8 karakter",
     ulangSandi: "Ulangi kata sandi",
-    unit: "Unit / program studi",
-    unitContoh: "Teknologi Pangan",
+    unit: "Kelas / bidang tugas",
+    unitContoh: "Guru Kelas 4",
     setuju:
       "Saya bersedia mengembalikan barang dan ruang sesuai jadwal, serta bertanggung jawab atas kerusakan yang terjadi selama masa pinjam.",
     tombol: "Buat akun",
@@ -892,12 +892,12 @@ const EN: Kamus = {
 
   merek: {
     nama: "SIPRAS",
-    panjang: "Campus Facility Booking System",
-    situsJudul: "SIPRAS: Campus Facility Booking",
+    panjang: "School Facility Booking System",
+    situsJudul: "SIPRAS: School Facility Booking",
     situsDeskripsi:
-      "Book campus rooms and equipment in one go, then follow the status through to completion.",
+      "Book school rooms and equipment in one go, then follow the status through to completion.",
     ringkas:
-      "Campus facility and equipment booking system. Request many items and rooms at once, then follow the status through to completion.",
+      "School facility and equipment booking system. Request many items and rooms at once, then follow the status through to completion.",
   },
 
   peran: {
@@ -952,7 +952,7 @@ const EN: Kamus = {
     adminJadwal: ["Service days", "Set the open days and mark the dates you are closed"],
     profil: ["My profile", "Update your details and password"],
     notifikasi: ["Notifications", "Every update about your requests"],
-    umum: ["SIPRAS", "Campus facility booking"],
+    umum: ["SIPRAS", "School facility booking"],
   },
 
   shell: {
@@ -987,11 +987,11 @@ const EN: Kamus = {
     tautanCepat: "Quick links",
     bantuan: "Need help?",
     alur: "How booking works",
-    lokasi: "Facilities desk, ground floor of Building A.",
+    lokasi: "Staff room, main school building.",
     jam: "Monday to Friday, 08.00 to 16.00 WIB.",
     whatsapp: "WhatsApp",
     email: "Email",
-    hakCipta: "Campus Facility Booking System.",
+    hakCipta: "School Facility Booking System.",
     kanalNotif: "Notifications are sent in the app and by email.",
     langkah: [
       "Pick items or rooms from the catalog.",
@@ -1334,16 +1334,16 @@ const EN: Kamus = {
 
   profil: {
     petunjukIdentitas:
-      "Your email and student or staff number cannot be changed here because they identify you in the booking history. Contact the facility desk if something is wrong.",
+      "Your email and staff number cannot be changed here because they identify you in the booking history. Contact the facility desk if something is wrong.",
     identitas: "Account identity",
     email: "Email",
-    nim: "Student or staff ID",
+    nim: "Staff ID",
     peran: "Role",
     dataDiri: "Your details",
     nama: "Full name",
     whatsapp: "WhatsApp number",
     whatsappBantuan: "Used by staff only if they need to reach you about a request.",
-    unit: "Unit / study programme",
+    unit: "Class / duty area",
     menyimpan: "Saving...",
     simpan: "Save changes",
     gantiSandi: "Change password",
@@ -1436,7 +1436,7 @@ const EN: Kamus = {
     peringatanSatuAdmin:
       "This system has only one active admin. Promote at least one more so management does not stop if this account has trouble.",
     cari: "Search users",
-    cariContoh: "Name, email, student ID, or unit",
+    cariContoh: "Name, email, staff ID, or class",
     kolomNama: "Name",
     kolomUnit: "Unit",
     kolomPeran: "Role",
@@ -1492,7 +1492,7 @@ const EN: Kamus = {
 
   review: {
     cari: "Search requester, code, or item",
-    cariContoh: "e.g. Nadia, PJ-2026, projector",
+    cariContoh: "e.g. Siti, PJ-2026, projector",
     jumlah: "{n} requests shown",
     kosong: "No requests",
     kosongIsi: "Try another keyword or status filter.",
@@ -1581,7 +1581,7 @@ const EN: Kamus = {
   },
 
   masuk: {
-    lencana: "Campus Facilities",
+    lencana: "School Facilities",
     judulBesar: "Book rooms and equipment without queueing at the desk.",
     penjelasan:
       "Request once, follow it through to the end. Admins verify from the same dashboard, and you hear back in the app and by email.",
@@ -1589,9 +1589,9 @@ const EN: Kamus = {
     langkah2: "Fill dates & purpose",
     langkah3: "Wait for the admin",
     kartuJudul: "Sign in",
-    kartuSub: "Use your campus email.",
+    kartuSub: "Use the email you registered with.",
     email: "Email",
-    emailContoh: "name@campus.ac.id",
+    emailContoh: "name@gmail.com",
     sandi: "Password",
     tombol: "Sign in",
     sedang: "Checking...",
@@ -1603,21 +1603,21 @@ const EN: Kamus = {
     kembali: "Back to sign in",
     judul: "Create a borrower account",
     penjelasan:
-      "Anyone with a campus email can sign up. Your WhatsApp number is used only if staff need to reach you about a request.",
+      "Teachers and school staff can sign up themselves. Your WhatsApp number is used only if staff need to reach you about a request.",
     nama: "Full name",
-    namaContoh: "Nadia Rahmawati",
-    identitas: "Student or staff ID",
-    identitasContoh: "21.01.2345",
-    email: "Campus email",
-    emailContoh: "nadia@campus.ac.id",
+    namaContoh: "Siti Aminah",
+    identitas: "Staff ID",
+    identitasContoh: "198504122010012003",
+    email: "Email",
+    emailContoh: "siti@gmail.com",
     whatsapp: "WhatsApp number",
     whatsappContoh: "0812 3456 7890",
     whatsappBantuan: "Used by staff only if they need to reach you.",
     sandi: "Password",
     sandiContoh: "At least 8 characters",
     ulangSandi: "Repeat password",
-    unit: "Unit / study programme",
-    unitContoh: "Food Technology",
+    unit: "Class / duty area",
+    unitContoh: "Grade 4 teacher",
     setuju:
       "I agree to return the items and rooms on schedule, and to take responsibility for any damage during the loan.",
     tombol: "Create account",

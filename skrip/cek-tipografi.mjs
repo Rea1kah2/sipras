@@ -4,13 +4,21 @@
  *
  * Jalankan: npm run cek:tipografi
  */
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const AKAR = join(fileURLToPath(import.meta.url), "..", "..");
 const PERIKSA = ["src", "prisma"];
 const EKSTENSI = [".ts", ".tsx", ".css", ".prisma", ".md"];
+
+/**
+ * Berkas di akar proyek yang tidak tertangkap penelusuran direktori di atas,
+ * tapi tetap dibaca orang. `.env.example` sempat menyimpan dua em dash tanpa
+ * ketahuan justru karena ekstensinya tidak cocok dengan satu pun di EKSTENSI,
+ * padahal itu berkas pertama yang dibuka orang saat menyiapkan deploy.
+ */
+const BERKAS_AKAR = [".env.example", "README.md"];
 
 // Hasil generate Prisma ditimpa tiap `prisma generate`, jadi percuma diperbaiki.
 const LEWATI = ["src/generated", "node_modules", ".next"];
@@ -31,17 +39,24 @@ function* berkas(dir) {
 }
 
 const temuan = [];
-for (const dir of PERIKSA) {
-  for (const jalur of berkas(join(AKAR, dir))) {
-    const baris = readFileSync(jalur, "utf8").split("\n");
-    baris.forEach((isi, i) => {
-      for (const { karakter, nama } of TERLARANG) {
-        if (isi.includes(karakter)) {
-          temuan.push({ jalur: relative(AKAR, jalur), baris: i + 1, nama, isi: isi.trim() });
-        }
+
+function periksa(jalur) {
+  const baris = readFileSync(jalur, "utf8").split("\n");
+  baris.forEach((isi, i) => {
+    for (const { karakter, nama } of TERLARANG) {
+      if (isi.includes(karakter)) {
+        temuan.push({ jalur: relative(AKAR, jalur), baris: i + 1, nama, isi: isi.trim() });
       }
-    });
-  }
+    }
+  });
+}
+
+for (const dir of PERIKSA) {
+  for (const jalur of berkas(join(AKAR, dir))) periksa(jalur);
+}
+for (const nama of BERKAS_AKAR) {
+  const jalur = join(AKAR, nama);
+  if (existsSync(jalur)) periksa(jalur);
 }
 
 if (temuan.length === 0) {

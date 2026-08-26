@@ -20,19 +20,22 @@ function hari(offset: number): Date {
 }
 
 const ASET = [
-  { nama: "Proyektor Epson EB-X51", tipe: "BARANG", kategori: "Audio Visual", stok: 8, lokasi: "Gudang Sarpras Lt. 1", deskripsi: "Proyektor 3.800 lumens, sudah termasuk kabel HDMI 5 m, remote, dan tas jinjing. Cocok untuk ruang kelas sampai aula kecil." },
-  { nama: "Sound System Portable", tipe: "BARANG", kategori: "Audio Visual", stok: 3, lokasi: "Gudang Sarpras Lt. 1", deskripsi: "Speaker aktif 15 inci dengan dua mikrofon wireless dan tripod stand. Cukup untuk audiens sekitar 150 orang di ruang tertutup." },
-  { nama: "Kamera Mirrorless A6400", tipe: "BARANG", kategori: "Elektronik", stok: 4, lokasi: "Ruang Media Lt. 2", deskripsi: "Body kamera dengan lensa kit 16-50 mm, dua baterai, dan memory card 64 GB. Wajib dikembalikan lengkap dengan tutup lensa." },
-  { nama: "Tripod Video Fluid Head", tipe: "BARANG", kategori: "Elektronik", stok: 12, lokasi: "Ruang Media Lt. 2", deskripsi: "Tripod aluminium tinggi maksimal 165 cm dengan fluid head untuk panning halus." },
-  { nama: "Kursi Lipat", tipe: "BARANG", kategori: "Furnitur", stok: 120, lokasi: "Gudang Gedung C", deskripsi: "Kursi lipat rangka besi dudukan busa. Peminjaman di atas 50 unit perlu koordinasi petugas untuk pengangkutan." },
-  { nama: "Meja Lipat 120 cm", tipe: "BARANG", kategori: "Furnitur", stok: 30, lokasi: "Gudang Gedung C", deskripsi: "Meja lipat panjang 120 cm, biasa dipakai untuk meja registrasi dan bazar." },
-  { nama: "Microphone Wireless", tipe: "BARANG", kategori: "Audio Visual", stok: 6, lokasi: "Gudang Sarpras Lt. 1", deskripsi: "Mikrofon wireless handheld dengan receiver dan baterai cadangan." },
-  { nama: "Aula Serbaguna", tipe: "RUANG", kategori: "Ruang Pertemuan", kapasitas: 300, lokasi: "Gedung C Lt. 3", deskripsi: "Aula utama dengan panggung, tata suara terpasang, dan pendingin ruangan. Kursi diatur sendiri oleh peminjam." },
-  { nama: "Ruang Rapat Dekanat", tipe: "RUANG", kategori: "Ruang Pertemuan", kapasitas: 25, lokasi: "Gedung A Lt. 2", deskripsi: "Ruang rapat dengan meja oval, layar 65 inci, dan papan tulis. Perlu persetujuan untuk pemakaian di luar jam kerja." },
-  { nama: "Lab Multimedia", tipe: "RUANG", kategori: "Laboratorium", kapasitas: 40, lokasi: "Gedung D Lt. 1", deskripsi: "40 unit komputer dengan perangkat desain dan editing video, tidak boleh dipakai bersamaan dengan jadwal praktikum." },
-  { nama: "Ruang Seminar B2", tipe: "RUANG", kategori: "Ruang Pertemuan", kapasitas: 80, lokasi: "Gedung B Lt. 2", deskripsi: "Ruang seminar berundak dengan proyektor terpasang dan meja pembicara." },
-  { nama: "Studio Podcast", tipe: "RUANG", kategori: "Laboratorium", kapasitas: 6, lokasi: "Gedung D Lt. 2", deskripsi: "Studio kedap suara dengan tiga mikrofon kondensor, mixer, dan lighting dasar." },
-  { nama: "Lapangan Basket", tipe: "RUANG", kategori: "Outdoor", kapasitas: 0, lokasi: "Area Timur", deskripsi: "Lapangan basket outdoor dengan lampu sorot. Pemakaian malam maksimal sampai pukul 22.00." },
+  { nama: "Proyektor InFocus", tipe: "BARANG", kategori: "Audio Visual", stok: 2, lokasi: "Ruang Guru", deskripsi: "Proyektor InFocus lengkap dengan kardus aslinya. Dipakai untuk pembelajaran di kelas dan rapat guru." },
+  { nama: "Sound System Portable", tipe: "BARANG", kategori: "Audio Visual", stok: 1, lokasi: "Ruang Guru", deskripsi: "Speaker aktif dengan dua mikrofon wireless dan tripod stand. Biasa dipakai untuk upacara dan acara di halaman." },
+  { nama: "Microphone Wireless", tipe: "BARANG", kategori: "Audio Visual", stok: 4, lokasi: "Ruang Guru", deskripsi: "Mikrofon wireless handheld dengan receiver dan baterai cadangan." },
+  { nama: "Kursi Plastik Siswa", tipe: "BARANG", kategori: "Furnitur", stok: 120, lokasi: "Ruang Kelas", deskripsi: "Kursi plastik warna oranye, ringan dan mudah dipindah antar ruang." },
+  { nama: "Meja Siswa Kayu", tipe: "BARANG", kategori: "Furnitur", stok: 60, lokasi: "Ruang Kelas", deskripsi: "Meja kayu panjang untuk dua siswa, berlaci di bawah permukaan mejanya." },
+  { nama: "Kursi Lipat", tipe: "BARANG", kategori: "Furnitur", stok: 30, lokasi: "Ruang Guru", deskripsi: "Kursi lipat rangka besi dengan dudukan busa biru. Peminjaman di atas 20 unit perlu koordinasi petugas untuk pengangkutan." },
+  { nama: "Buku Paket Tematik", tipe: "BARANG", kategori: "Buku dan Perpustakaan", stok: 12, lokasi: "Rak Ruang Guru", deskripsi: "Buku paket tematik tersusun per tingkat kelas. Dipinjam per paket kelas, bukan per eksemplar." },
+  { nama: "Laptop Acer", tipe: "BARANG", kategori: "Elektronik", stok: 2, lokasi: "Ruang Guru", deskripsi: "Dua unit laptop Acer beserta adaptornya. Barang bernilai tinggi, jadi pengajuannya wajib disetujui admin lebih dulu seperti aset lain." },
+  { nama: "Raket Bulu Tangkis", tipe: "BARANG", kategori: "Olahraga", stok: 3, lokasi: "Ruang Guru", deskripsi: "Tiga raket bulu tangkis beserta dua tas pelindung. Kok disediakan terpisah." },
+  { nama: "Bola Kaki", tipe: "BARANG", kategori: "Olahraga", stok: 4, lokasi: "Ruang Guru", deskripsi: "Empat bola kaki untuk pelajaran PJOK dan kegiatan lomba di halaman sekolah." },
+  { nama: "Bola Voli", tipe: "BARANG", kategori: "Olahraga", stok: 1, lokasi: "Ruang Guru", deskripsi: "Bola voli merek Mikasa, masih tersimpan dalam kemasan plastik." },
+  { nama: "Ruang Kelas 4", tipe: "RUANG", kategori: "Ruang Kelas", kapasitas: 28, lokasi: "Gedung utama", deskripsi: "Ruang kelas dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan." },
+  { nama: "Ruang Kelas 5", tipe: "RUANG", kategori: "Ruang Kelas", kapasitas: 26, lokasi: "Gedung utama", deskripsi: "Ruang kelas dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan." },
+  { nama: "Ruang Kelas 6", tipe: "RUANG", kategori: "Ruang Kelas", kapasitas: 24, lokasi: "Gedung utama", deskripsi: "Ruang kelas dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan." },
+  { nama: "Ruang Guru", tipe: "RUANG", kategori: "Ruang Kerja dan Rapat", kapasitas: 15, lokasi: "Gedung utama", deskripsi: "Ruang kerja guru sekaligus tempat rapat kecil. Berisi rak buku besar, lemari kaca piala, dan meja panjang bertaplak." },
+  { nama: "Halaman Sekolah", tipe: "RUANG", kategori: "Outdoor", kapasitas: 0, lokasi: "Depan gedung utama", deskripsi: "Halaman tanah luas dengan tiang bendera, dipakai upacara, olahraga, dan kegiatan luar ruang. Tanpa batas kapasitas." },
 ] as const;
 
 async function main() {
@@ -57,7 +60,7 @@ async function main() {
   // Email admin sengaja memakai alamat asli pemilik sistem. Resend paket
   // gratis hanya mengantar ke email pemilik akun, jadi ini satu satunya cara
   // notifikasi email benar benar sampai tanpa memverifikasi domain lebih dulu.
-  const emailAdmin = process.env.EMAIL_REPLY_TO?.trim() || "admin@kampus.ac.id";
+  const emailAdmin = process.env.EMAIL_REPLY_TO?.trim() || "admin@sekolah.sch.id";
 
   const admin = await prisma.user.create({
     data: {
@@ -66,18 +69,18 @@ async function main() {
       password: sandiAdmin,
       peran: "ADMIN",
       whatsapp: process.env.NEXT_PUBLIC_WA_PETUGAS ?? "082214669132",
-      identitas: "19850102",
-      unit: "Bagian Sarana dan Prasarana",
+      identitas: "198501022008011002",
+      unit: "Operator Sarpras",
     },
   });
 
-  const [nadia, bagus, dimas, sari, fajar] = await Promise.all(
+  const [siti, bagus, dimas, sari, fajar] = await Promise.all(
     [
-      { nama: "Nadia Rahmawati", email: "nadia@kampus.ac.id", identitas: "21.01.2345", unit: "Teknologi Pangan", whatsapp: "081234567890" },
-      { nama: "Bagus Prakoso", email: "bagus@kampus.ac.id", identitas: "21.03.1180", unit: "BEM Fakultas Teknik", whatsapp: "081234567891" },
-      { nama: "Dimas Aryo", email: "dimas@kampus.ac.id", identitas: "22.05.0431", unit: "Ilmu Komunikasi", whatsapp: "081234567892" },
-      { nama: "Sari Melati", email: "sari@kampus.ac.id", identitas: "19900311", unit: "Tata Usaha", whatsapp: "081234567893" },
-      { nama: "Fajar Nugroho", email: "fajar@kampus.ac.id", identitas: "20.02.0912", unit: "Teknik Industri", whatsapp: "081234567894" },
+      { nama: "Siti Aminah", email: "siti@gmail.com", identitas: "198504122010012003", unit: "Guru Kelas 4", whatsapp: "081234567890" },
+      { nama: "Bagus Prakoso", email: "bagus@gmail.com", identitas: "198711232011011005", unit: "Guru Kelas 6", whatsapp: "081234567891" },
+      { nama: "Dimas Aryo", email: "dimas@gmail.com", identitas: "199003052014021001", unit: "Guru PJOK", whatsapp: "081234567892" },
+      { nama: "Sari Melati", email: "sari@gmail.com", identitas: "199003112012012004", unit: "Tata Usaha", whatsapp: "081234567893" },
+      { nama: "Fajar Nugroho", email: "fajar@gmail.com", identitas: "199208172015031002", unit: "Guru Kelas 2", whatsapp: "081234567894" },
     ].map((u) => prisma.user.create({ data: { ...u, password: sandiUmum } }))
   );
 
@@ -142,14 +145,14 @@ async function main() {
     const acak = acakBerurut(20260816);
     const ambil = <T,>(a: readonly T[]): T => a[Math.floor(acak() * a.length)];
 
-    const peminjam = [nadia, bagus, dimas, sari, fajar];
+    const peminjam = [siti, bagus, dimas, sari, fajar];
     const barang = ASET.filter((a) => a.tipe === "BARANG").map((a) => a.nama);
     const ruang = ASET.filter((a) => a.tipe === "RUANG").map((a) => a.nama);
     const kegiatan = [
-      "Seminar Jurusan", "Workshop Praktikum", "Rapat Koordinasi", "Kuliah Tamu",
-      "Pelatihan Software", "Bazar Kewirausahaan", "Lomba Debat", "Pentas Seni",
-      "Sosialisasi Beasiswa", "Rapat Evaluasi", "Dokumentasi Wisuda",
-      "Pengabdian Masyarakat", "Diskusi Panel", "Pemutaran Film Edukasi",
+      "Rapat Wali Murid", "Lomba Kebersihan Kelas", "Rapat Guru", "Senam Bersama",
+      "Pelatihan Kurikulum", "Bazar Hari Guru", "Class Meeting", "Pentas Seni Siswa",
+      "Sosialisasi Kesehatan Gigi", "Rapat Evaluasi", "Pembagian Rapor",
+      "Kunjungan Pengawas", "Peringatan Maulid", "Pemutaran Film Edukasi",
     ];
 
     const keluar: Benih[] = [];
@@ -183,7 +186,7 @@ async function main() {
         selesai,
         diajukan,
         namaKegiatan: nama,
-        keperluan: `${nama} yang diselenggarakan ${orang.unit}.`,
+        keperluan: `${nama} yang diajukan ${orang.unit}.`,
         status: ditolak ? "DITOLAK" : "SELESAI",
         items: item,
         catatanAdmin: ditolak
@@ -206,78 +209,78 @@ async function main() {
 
   const benih: Benih[] = [
     {
-      kode: "PJ-2026-0142", pemohonId: nadia.id, mulai: 1, selesai: 3, diajukan: -2,
-      namaKegiatan: "Seminar Nasional Teknologi Pangan",
-      keperluan: "Seminar nasional dengan sekitar 120 peserta, butuh proyektor dan ruang seminar.",
+      kode: "PJ-2026-0142", pemohonId: siti.id, mulai: 1, selesai: 3, diajukan: -2,
+      namaKegiatan: "Rapat Wali Murid Kelas 4",
+      keperluan: "Pertemuan wali murid kelas 4 membahas persiapan ujian, butuh proyektor dan ruang kelas.",
       status: "MENUNGGU",
-      items: [{ nama: "Proyektor Epson EB-X51", jumlah: 2 }, { nama: "Ruang Seminar B2", jumlah: 1 }],
+      items: [{ nama: "Proyektor InFocus", jumlah: 1 }, { nama: "Ruang Kelas 4", jumlah: 1 }],
     },
     {
       kode: "PJ-2026-0141", pemohonId: bagus.id, mulai: 0, selesai: 1, diajukan: -2,
-      namaKegiatan: "Malam Keakraban Mahasiswa Baru",
-      keperluan: "Acara malam keakraban di lapangan, butuh sound system dan mikrofon.",
+      namaKegiatan: "Latihan Upacara Bendera",
+      keperluan: "Latihan petugas upacara di halaman sekolah, butuh sound system dan mikrofon.",
       status: "MENUNGGU",
       items: [{ nama: "Sound System Portable", jumlah: 1 }, { nama: "Microphone Wireless", jumlah: 2 }],
     },
     {
-      kode: "PJ-2026-0138", pemohonId: nadia.id, mulai: 7, selesai: 8, diajukan: -5,
-      namaKegiatan: "Pelatihan Keamanan Pangan",
-      keperluan: "Pelatihan sehari penuh untuk 200 peserta di aula, butuh kursi tambahan.",
+      kode: "PJ-2026-0138", pemohonId: siti.id, mulai: 7, selesai: 8, diajukan: -5,
+      namaKegiatan: "Peringatan Hari Kemerdekaan",
+      keperluan: "Lomba dan pentas seni di halaman sekolah, butuh kursi tambahan untuk tamu undangan.",
       status: "DISETUJUI",
-      catatanAdmin: "Disetujui. Ambil kunci di petugas gedung H-1 dan kembalikan kursi ke gudang Gedung C.",
-      items: [{ nama: "Aula Serbaguna", jumlah: 1 }, { nama: "Kursi Lipat", jumlah: 80 }],
+      catatanAdmin: "Disetujui. Kursi diambil di ruang guru dan dikembalikan ke tempat semula setelah acara.",
+      items: [{ nama: "Halaman Sekolah", jumlah: 1 }, { nama: "Kursi Lipat", jumlah: 25 }],
     },
     {
-      kode: "PJ-2026-0135", pemohonId: nadia.id, mulai: -5, selesai: 1, diajukan: -8,
-      namaKegiatan: "Dokumentasi Praktikum Lapangan",
-      keperluan: "Dokumentasi foto dan video praktikum lapangan selama sepekan.",
+      kode: "PJ-2026-0135", pemohonId: siti.id, mulai: -5, selesai: 1, diajukan: -8,
+      namaKegiatan: "Pembelajaran Tematik Kelas 4",
+      keperluan: "Pemakaian buku paket tematik dan proyektor untuk pembelajaran sepekan.",
       status: "DIPINJAM",
-      catatanAdmin: "Disetujui, mohon jaga kelengkapan aksesori.",
-      items: [{ nama: "Kamera Mirrorless A6400", jumlah: 1 }, { nama: "Tripod Video Fluid Head", jumlah: 1 }],
+      catatanAdmin: "Disetujui, mohon buku dikembalikan lengkap.",
+      items: [{ nama: "Buku Paket Tematik", jumlah: 1 }, { nama: "Proyektor InFocus", jumlah: 1 }],
     },
     {
-      kode: "PJ-2026-0131", pemohonId: nadia.id, mulai: -8, selesai: -7, diajukan: -11,
-      namaKegiatan: "Workshop Desain Poster Ilmiah",
-      keperluan: "Workshop desain poster untuk 35 mahasiswa di lab multimedia.",
+      kode: "PJ-2026-0131", pemohonId: siti.id, mulai: -8, selesai: -7, diajukan: -11,
+      namaKegiatan: "Pelatihan Kurikulum Merdeka",
+      keperluan: "Pelatihan sehari untuk seluruh guru di ruang guru.",
       status: "DIKEMBALIKAN",
       catatanAdmin: "Disetujui.",
-      items: [{ nama: "Lab Multimedia", jumlah: 1 }],
-      retur: { offset: -7, kondisi: "BAIK", catatan: "Semua komputer sudah dimatikan, kursi ditata ulang." },
+      items: [{ nama: "Ruang Guru", jumlah: 1 }],
+      retur: { offset: -7, kondisi: "BAIK", catatan: "Ruang sudah dirapikan dan kursi ditata ulang." },
     },
     {
       kode: "PJ-2026-0118", pemohonId: fajar.id, mulai: -4, selesai: -3, diajukan: -7,
-      namaKegiatan: "Bazar Kewirausahaan",
-      keperluan: "Bazar produk mahasiswa, butuh meja dan kursi untuk stan.",
+      namaKegiatan: "Bazar Hari Guru",
+      keperluan: "Bazar makanan siswa di halaman, butuh meja dan kursi untuk stan.",
       status: "DIKEMBALIKAN",
       catatanAdmin: "Disetujui.",
-      items: [{ nama: "Meja Lipat 120 cm", jumlah: 6 }, { nama: "Kursi Lipat", jumlah: 24 }],
-      retur: { offset: -3, kondisi: "RUSAK_RINGAN", catatan: "Satu meja lipat engselnya agak kendur." },
+      items: [{ nama: "Meja Siswa Kayu", jumlah: 6 }, { nama: "Kursi Lipat", jumlah: 12 }],
+      retur: { offset: -3, kondisi: "RUSAK_RINGAN", catatan: "Satu kursi lipat engselnya agak kendur." },
     },
     {
-      kode: "PJ-2026-0128", pemohonId: nadia.id, mulai: -12, selesai: -11, diajukan: -14,
-      namaKegiatan: "Rapat Koordinasi Himpunan",
-      keperluan: "Rapat koordinasi pengurus himpunan mahasiswa.",
+      kode: "PJ-2026-0128", pemohonId: siti.id, mulai: -12, selesai: -11, diajukan: -14,
+      namaKegiatan: "Rapat Koordinasi Guru",
+      keperluan: "Rapat koordinasi guru membahas jadwal pelajaran semester baru.",
       status: "SELESAI",
       catatanAdmin: "Selesai, alat lengkap.",
-      items: [{ nama: "Proyektor Epson EB-X51", jumlah: 1 }],
+      items: [{ nama: "Proyektor InFocus", jumlah: 1 }],
       retur: { offset: -11, kondisi: "BAIK", catatan: "Alat lengkap dan berfungsi normal.", diverifikasi: true },
     },
     {
       kode: "PJ-2026-0120", pemohonId: sari.id, mulai: -16, selesai: -16, diajukan: -19,
       namaKegiatan: "Rapat Evaluasi Semester",
-      keperluan: "Rapat evaluasi semester untuk dosen dan tenaga kependidikan.",
+      keperluan: "Rapat evaluasi semester untuk guru dan tenaga kependidikan.",
       status: "SELESAI",
       catatanAdmin: "Selesai tanpa catatan.",
-      items: [{ nama: "Ruang Rapat Dekanat", jumlah: 1 }],
+      items: [{ nama: "Ruang Guru", jumlah: 1 }],
       retur: { offset: -16, kondisi: "BAIK", catatan: "Ruang bersih.", diverifikasi: true },
     },
     {
       kode: "PJ-2026-0126", pemohonId: dimas.id, mulai: -10, selesai: -9, diajukan: -15,
-      namaKegiatan: "Rekaman Podcast Tugas Mata Kuliah",
-      keperluan: "Rekaman podcast untuk tugas mata kuliah produksi siaran.",
+      namaKegiatan: "Latihan Senam Kesegaran Jasmani",
+      keperluan: "Latihan senam bersama siswa di halaman sekolah.",
       status: "DITOLAK",
-      catatanAdmin: "Studio dipakai jadwal praktikum di tanggal tersebut. Silakan ajukan ulang untuk pekan depan.",
-      items: [{ nama: "Studio Podcast", jumlah: 1 }],
+      catatanAdmin: "Halaman dipakai kegiatan lain di tanggal tersebut. Silakan ajukan ulang untuk pekan depan.",
+      items: [{ nama: "Halaman Sekolah", jumlah: 1 }],
     },
     ...riwayatEnamBulan(),
   ];
@@ -399,20 +402,20 @@ async function main() {
   await prisma.notifikasi.createMany({
     data: [
       {
-        userId: nadia.id,
+        userId: siti.id,
         judul: "Pengajuan PJ-2026-0138 disetujui",
-        isi: "Pemakaian 20 Agu 2026 - 21 Agu 2026 disetujui. Ambil kunci Aula di petugas gedung H-1.",
+        isi: "Pemakaian 20 Agu 2026 - 21 Agu 2026 disetujui. Kursi diambil di ruang guru.",
         kunci: "review.disetujui",
         data: {
           kode: "PJ-2026-0138",
           mulai: "2026-08-20",
           selesai: "2026-08-21",
-          catatan: "Ambil kunci Aula di petugas gedung H-1.",
+          catatan: "Kursi diambil di ruang guru.",
         },
         tautan: "/pengajuan",
       },
       {
-        userId: nadia.id,
+        userId: siti.id,
         judul: "Pengembalian PJ-2026-0131 terkirim",
         isi: "Menunggu admin memeriksa kondisi fisiknya. Kamu akan dikabari begitu pengajuan ditutup.",
         kunci: "kembali.terkirim",
@@ -422,9 +425,9 @@ async function main() {
       {
         userId: admin.id,
         judul: "Pengajuan baru menunggu review",
-        isi: "PJ-2026-0142 dari Nadia Rahmawati (Teknologi Pangan) menunggu review.",
+        isi: "PJ-2026-0142 dari Siti Aminah (Guru Kelas 4) menunggu review.",
         kunci: "ajukan.adminBaru",
-        data: { kode: "PJ-2026-0142", nama: "Nadia Rahmawati", unit: "Teknologi Pangan" },
+        data: { kode: "PJ-2026-0142", nama: "Siti Aminah", unit: "Guru Kelas 4" },
         tautan: "/admin/review",
       },
       {
@@ -443,7 +446,7 @@ async function main() {
   console.log(`✅ Selesai: 6 pengguna, ${jumlahAset} aset, ${jumlahPengajuan} pengajuan.`);
   console.log("\n   Akun demo:");
   console.log(`   • Admin    → ${emailAdmin} / admin1234`);
-  console.log("   • Peminjam → nadia@kampus.ac.id / peminjam1234\n");
+  console.log("   • Peminjam → siti@gmail.com / peminjam1234\n");
 }
 
 main()

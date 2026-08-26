@@ -83,14 +83,15 @@ function nilaiKamus(penanda) {
  * diterjemahkan karena itu data, bukan antarmuka.
  */
 const DATA_SEED = [
-  "Nadia Rahmawati", "Teknologi Pangan", "Audio Visual", "Elektronik",
-  "Furnitur", "Gudang Sarpras Lt. 1", "Gudang Gedung C", "Ruang Media Lt. 2",
-  "21.01.2345", "nadia@kampus.ac.id", "Ilmu Komunikasi", "Tata Usaha",
-  "Teknik Industri", "BEM Fakultas Teknik",
+  "Siti Aminah", "Audio Visual", "Elektronik", "Furnitur", "Olahraga",
+  "Buku dan Perpustakaan", "Ruang Kelas", "Ruang Kerja dan Rapat",
+  "Ruang Guru", "Rak Ruang Guru", "Gedung utama", "Depan gedung utama",
+  "198504122010012003", "siti@gmail.com", "Tata Usaha", "Operator Sarpras",
+  "Guru Kelas 4", "Guru Kelas 6", "Guru Kelas 2", "Guru PJOK",
   // Nama kegiatan di data contoh. Kebetulan sama persis dengan contoh
   // placeholder di form pengajuan, jadi tanpa baris ini pencacah akan
   // menuduh data seed sebagai kebocoran antarmuka.
-  "Seminar Nasional Teknologi Pangan",
+  "Rapat Wali Murid Kelas 4",
 ];
 
 const NILAI_ID = nilaiKamus("const ID = {");

@@ -11,6 +11,7 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
+    "db:aset": "tsx -r dotenv/config prisma/isi-aset-sekolah.ts",
     "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
     "cek:ketersediaan": "tsx -r dotenv/config prisma/cek-ketersediaan.ts",

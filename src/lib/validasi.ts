@@ -27,13 +27,13 @@ const iso = z
 export const daftarSchema = z
   .object({
     nama: z.string().trim().min(3, "Nama minimal 3 karakter").max(80),
-    identitas: z.string().trim().min(3, "NIM / NIP wajib diisi").max(30),
+    identitas: z.string().trim().min(3, "NIP / NUPTK wajib diisi").max(30),
     email: z.email("Format email tidak valid").toLowerCase(),
     whatsapp: z
       .string()
       .trim()
       .regex(/^[0-9+\s-]{9,20}$/, "Nomor WhatsApp tidak valid"),
-    unit: z.string().trim().min(2, "Unit / program studi wajib diisi").max(80),
+    unit: z.string().trim().min(2, "Kelas / bidang tugas wajib diisi").max(80),
     sandi: sandiBaru,
     ulangiSandi: z.string(),
     setuju: z.literal(true, {
@@ -185,7 +185,7 @@ export const profilSchema = z.object({
     .string()
     .trim()
     .regex(/^[0-9+\s-]{9,20}$/, "Nomor WhatsApp tidak valid"),
-  unit: z.string().trim().min(2, "Unit / program studi wajib diisi").max(80),
+  unit: z.string().trim().min(2, "Kelas / bidang tugas wajib diisi").max(80),
 });
 
 export const sandiSchema = z

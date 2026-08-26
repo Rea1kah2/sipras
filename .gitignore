@@ -32,6 +32,11 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# Kecuali contohnya. Isinya cuma nama variabel dan nilai contoh, tanpa satu
+# pun rahasia, dan justru berkas inilah yang memberitahu variabel apa saja
+# yang harus diisi saat deploy. Tanpa baris ini pola .env* di atas ikut
+# menelannya sehingga repo tidak punya dokumentasi konfigurasi sama sekali.
+!.env.example
 
 # vercel
 .vercel

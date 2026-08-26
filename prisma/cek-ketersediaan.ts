@@ -34,9 +34,13 @@ const PENGAJUAN_UJI: string[] = [];
 const ASET_UJI: string[] = [];
 
 async function main() {
-  const nadia = await prisma.user.findFirstOrThrow({
-    where: { email: "nadia@kampus.ac.id" },
-  });
+  // Dicari lewat PERAN, bukan lewat email tertentu. Semula berupa email keras
+  // milik satu pengguna contoh, dan itu patah begitu data contoh berganti:
+  // findFirstOrThrow melempar di baris pertama sehingga keempat belas
+  // pemeriksaan di bawah tidak satu pun sempat berjalan, sementara laporannya
+  // tetap terlihat wajar karena cuma berbunyi "0 lolos, 0 gagal". Peran jauh
+  // lebih stabil daripada nama atau alamat surel siapa pun.
+  const peminjam = await prisma.user.findFirstOrThrow({ where: { peran: "PEMINJAM" } });
 
   const buatAset = async (nama: string, tipe: "BARANG" | "RUANG", stok: number) => {
     const a = await prisma.aset.create({
@@ -57,7 +61,7 @@ async function main() {
     const p = await prisma.pengajuan.create({
       data: {
         kode: `UJI-${Math.random().toString(36).slice(2, 10)}`,
-        pemohonId: nadia.id,
+        pemohonId: peminjam.id,
         status,
         mulai: hari(dari),
         selesai: hari(sampai),
@@ -170,5 +174,18 @@ main()
     await bersihkan();
     console.log(`\n${lolos} lolos, ${gagal} gagal`);
     if (gagal > 0) process.exitCode = 1;
+    // Nol di kedua sisi BUKAN berarti semuanya lulus, tapi berarti tidak satu
+    // pun pemeriksaan sempat berjalan, biasanya karena main() melempar sebelum
+    // sampai ke pemeriksaan pertama. Tanpa penjaga ini kegagalan seperti itu
+    // tampak persis seperti laporan normal bagi siapa pun yang cuma membaca
+    // baris terakhir.
+    if (lolos + gagal === 0) {
+      console.log(
+        "TIDAK ADA pemeriksaan yang berjalan. Ini kegagalan, bukan kelulusan.\n" +
+          "Biasanya main() melempar sebelum pemeriksaan pertama, misalnya karena\n" +
+          "data yang dicarinya tidak ada di basis data. Jalankan npm run db:seed."
+      );
+      process.exitCode = 1;
+    }
     await prisma.$disconnect();
   });

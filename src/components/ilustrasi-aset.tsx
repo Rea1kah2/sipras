@@ -83,6 +83,38 @@ const KATA_KUNCI: { cocok: RegExp; motif: () => Motif }[] = [
     }),
   },
   {
+    // Papan tulis dan satu meja siswa di depannya.
+    cocok: /kelas|belajar/i,
+    motif: () => ({
+      latar: "var(--color-neutral-200)",
+      tinta: "var(--color-neutral-800)",
+      gambar: (
+        <>
+          <rect x="12" y="12" width="40" height="22" rx="2" />
+          <path d="M18 42h28" />
+          <path d="M23 42v10" />
+          <path d="M41 42v10" />
+        </>
+      ),
+    }),
+  },
+  {
+    // Tiga buku berdiri di atas rak.
+    cocok: /buku|perpustakaan|pustaka/i,
+    motif: () => ({
+      latar: "var(--color-neutral-100)",
+      tinta: "var(--color-neutral-700)",
+      gambar: (
+        <>
+          <rect x="15" y="20" width="9" height="26" rx="1" />
+          <rect x="27" y="15" width="9" height="31" rx="1" />
+          <rect x="39" y="24" width="9" height="22" rx="1" />
+          <path d="M10 50h44" />
+        </>
+      ),
+    }),
+  },
+  {
     cocok: /lab|studio|multimedia|podcast/i,
     motif: () => ({
       latar: "var(--color-neutral-100)",
@@ -94,6 +126,23 @@ const KATA_KUNCI: { cocok: RegExp; motif: () => Motif }[] = [
           <path d="M32 40v6" />
           <path d="M22 24h20" />
           <path d="M22 31h12" />
+        </>
+      ),
+    }),
+  },
+  {
+    // Bola dengan garis panel melengkung, terbaca sebagai bola voli maupun
+    // bola kaki tanpa memihak salah satunya.
+    cocok: /olahraga|bola|raket/i,
+    motif: () => ({
+      latar: "var(--color-neutral-200)",
+      tinta: "var(--color-neutral-700)",
+      gambar: (
+        <>
+          <circle cx="32" cy="32" r="20" />
+          <path d="M14 24c12 2 24 2 36 0" />
+          <path d="M14 40c12-2 24-2 36 0" />
+          <path d="M32 12c-6 12-6 28 0 40" />
         </>
       ),
     }),

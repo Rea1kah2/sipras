@@ -19,6 +19,12 @@ type Props = {
 export function Footer({ peran = null, t }: Props) {
   const wa = process.env.NEXT_PUBLIC_WA_PETUGAS ?? "";
   const email = process.env.NEXT_PUBLIC_EMAIL_PETUGAS ?? "";
+  /* Nama lembaga sengaja TIDAK ditaruh di kamus. Nilainya sama persis di
+     kedua bahasa, dan cek:bahasa menandai nilai kamus identik dua kata atau
+     lebih sebagai terjemahan yang tertinggal. Selain itu aplikasinya jadi
+     terikat satu sekolah. Kosong berarti footer tampil tanpa nama lembaga,
+     jadi tidak ada yang rusak saat variabelnya belum diisi. */
+  const instansi = process.env.NEXT_PUBLIC_NAMA_INSTANSI?.trim() ?? "";
   const waLink = `https://wa.me/${wa.replace(/\D/g, "").replace(/^0/, "62")}`;
   const tahun = new Date().getFullYear();
 
@@ -156,6 +162,7 @@ export function Footer({ peran = null, t }: Props) {
       >
         <span>
           &copy; {tahun} {t.merek.nama}. {t.footer.hakCipta}
+          {instansi ? ` ${instansi}.` : ""}
         </span>
         <span>{t.footer.kanalNotif}</span>
       </div>
