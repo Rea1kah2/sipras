@@ -125,6 +125,15 @@ Foto aset disimpan di Supabase Storage lewat [src/lib/unggah.ts](src/lib/unggah.
 Sebelum aplikasi dipakai pertama kali di basis data produksi yang masih kosong:
 
 1. `npm run db:deploy` - menjalankan migrasi Prisma secara non interaktif.
-2. `npx tsx -r dotenv/config prisma/buat-admin-produksi.ts -- "Nama Admin" admin@kampus.ac.id "kata-sandi"` - membuat satu akun admin, tanpa data fiktif apa pun. Jangan jalankan `prisma/seed.ts` di basis data produksi, itu mengisi puluhan pengajuan dan pengguna contoh untuk demo.
+2. `npx tsx -r dotenv/config prisma/buat-admin-produksi.ts -- "Nama Admin" admin@sekolah.sch.id "kata-sandi"` - membuat satu akun admin, tanpa data fiktif apa pun. Jangan jalankan `prisma/seed.ts` di basis data produksi, itu mengisi puluhan pengajuan dan pengguna contoh untuk demo.
+3. `npm run db:aset` - mengisi daftar sarana dan prasarana sekolah. Skrip ini tidak pernah menghapus apa pun dan aman dijalankan berulang: aset yang sudah ada diperbarui, bukan diduplikasi, dan foto yang sudah dipasang admin tidak ikut tertimpa.
 
 Setelah masuk pertama kali, ganti kata sandi admin dari halaman profil.
+
+### Stok yang masih berupa taksiran
+
+Sebagian aset di [prisma/isi-aset-sekolah.ts](prisma/isi-aset-sekolah.ts) ditandai `perkiraan: true`, artinya jumlahnya belum pernah dihitung langsung di sekolah. Aset itu tetap bisa dipinjam, dan `npm run db:aset` mencetak daftarnya tiap kali dijalankan.
+
+Angka barang sengaja ditaksir rendah. Stok yang kelebihan membuat sistem menyetujui peminjaman barang yang sebenarnya tidak ada, dan petugas baru menyadarinya saat guru datang mengambil. Stok yang kekurangan hanya menolak lebih cepat dari perlunya, dan itu cukup dinaikkan admin lewat halaman Kelola aset tanpa menyentuh kode.
+
+Kapasitas ruang tidak ikut ditaksir rendah karena sifatnya berbeda: nilainya hanya ditampilkan sebagai keterangan dan tidak pernah menjadi dasar penolakan, sebab tiap ruang selalu berstok 1.

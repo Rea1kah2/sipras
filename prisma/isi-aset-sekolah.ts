@@ -33,10 +33,21 @@ const prisma = new PrismaClient({
  * jumlah = stok untuk BARANG, kapasitas orang untuk RUANG (0 berarti
  * terbuka, dipakai halaman dan lapangan).
  *
- * Nilai null berarti BELUM DIKONFIRMASI sekolah. Skrip menolak jalan selama
- * masih ada yang null, dan itu disengaja: menebak jumlah kursi atau daya
- * tampung kelas berarti mengisi basis data sungguhan dengan karangan, persis
- * hal yang ingin dihindari dengan meminta data nyata.
+ * `perkiraan: true` menandai angka yang BELUM dihitung langsung di sekolah.
+ * Angka itu tetap dipasang supaya asetnya bisa langsung dipinjam, tapi
+ * ditaksir RENDAH dengan sengaja. Alasannya bukan kehati hatian umum:
+ * stok yang kelebihan membuat sistem menyetujui peminjaman 30 kursi padahal
+ * yang tersedia 20, dan petugas baru menyadarinya saat guru datang mengambil.
+ * Stok yang kekurangan cuma menolak lebih cepat dari perlunya, dan itu bisa
+ * dinaikkan admin lewat halaman Kelola aset dalam hitungan detik. Dari dua
+ * arah kesalahan, yang satu gagal di depan pengguna, yang satu tidak.
+ *
+ * Kapasitas RUANG tidak ikut ditaksir rendah karena sifatnya beda: nilainya
+ * cuma ditampilkan sebagai keterangan dan tidak pernah menjadi dasar
+ * penolakan, sebab tiap ruang selalu berstok 1.
+ *
+ * Nilai null tetap didukung untuk aset yang ditambahkan nanti: barisnya
+ * dilewati, bukan diisi nol diam diam.
  *
  * Deskripsi ditulis dari apa yang benar benar tampak di foto lokasi, bukan
  * dari bayangan umum tentang sekolah dasar.
@@ -46,6 +57,8 @@ type Baris = {
   tipe: "BARANG" | "RUANG";
   kategori: string;
   jumlah: number | null;
+  /** Angka belum diverifikasi sekolah, wajib dicek petugas setelah deploy. */
+  perkiraan?: boolean;
   lokasi: string;
   deskripsi: string;
 };
@@ -56,7 +69,8 @@ const ASET: Baris[] = [
     nama: "Ruang Kelas 1",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: null,
+    jumlah: 24,
+    perkiraan: true,
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
@@ -65,7 +79,8 @@ const ASET: Baris[] = [
     nama: "Ruang Kelas 2",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: null,
+    jumlah: 24,
+    perkiraan: true,
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
@@ -74,7 +89,8 @@ const ASET: Baris[] = [
     nama: "Ruang Kelas 3",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: null,
+    jumlah: 24,
+    perkiraan: true,
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
@@ -83,7 +99,8 @@ const ASET: Baris[] = [
     nama: "Ruang Kelas 4",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: null,
+    jumlah: 24,
+    perkiraan: true,
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
@@ -92,7 +109,8 @@ const ASET: Baris[] = [
     nama: "Ruang Kelas 5",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: null,
+    jumlah: 24,
+    perkiraan: true,
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
@@ -101,7 +119,8 @@ const ASET: Baris[] = [
     nama: "Ruang Kelas 6",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: null,
+    jumlah: 24,
+    perkiraan: true,
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
@@ -110,7 +129,8 @@ const ASET: Baris[] = [
     nama: "Ruang Guru",
     tipe: "RUANG",
     kategori: "Ruang Kerja dan Rapat",
-    jumlah: null,
+    jumlah: 12,
+    perkiraan: true,
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kerja guru sekaligus tempat rapat kecil. Berisi rak buku besar, lemari kaca piala, dan meja panjang bertaplak.",
@@ -130,7 +150,8 @@ const ASET: Baris[] = [
     nama: "Kursi Plastik Siswa",
     tipe: "BARANG",
     kategori: "Furnitur",
-    jumlah: null,
+    jumlah: 60,
+    perkiraan: true,
     lokasi: "Ruang Kelas",
     deskripsi: "Kursi plastik warna oranye, ringan dan mudah dipindah antar ruang.",
   },
@@ -138,7 +159,8 @@ const ASET: Baris[] = [
     nama: "Meja Siswa Kayu",
     tipe: "BARANG",
     kategori: "Furnitur",
-    jumlah: null,
+    jumlah: 48,
+    perkiraan: true,
     lokasi: "Ruang Kelas",
     deskripsi: "Meja kayu panjang untuk dua siswa, berlaci di bawah permukaan mejanya.",
   },
@@ -146,7 +168,8 @@ const ASET: Baris[] = [
     nama: "Lemari Kayu",
     tipe: "BARANG",
     kategori: "Furnitur",
-    jumlah: null,
+    jumlah: 6,
+    perkiraan: true,
     lokasi: "Ruang Kelas",
     deskripsi:
       "Lemari kayu berdaun dua untuk menyimpan berkas dan alat peraga. Berat, perlu dua orang untuk memindahkannya.",
@@ -155,7 +178,8 @@ const ASET: Baris[] = [
     nama: "Kursi Lipat",
     tipe: "BARANG",
     kategori: "Furnitur",
-    jumlah: null,
+    jumlah: 20,
+    perkiraan: true,
     lokasi: "Ruang Guru",
     deskripsi:
       "Kursi lipat rangka besi dengan dudukan busa biru. Biasa dipakai untuk rapat dan acara di halaman.",
@@ -164,7 +188,8 @@ const ASET: Baris[] = [
     nama: "Meja Panjang",
     tipe: "BARANG",
     kategori: "Furnitur",
-    jumlah: null,
+    jumlah: 6,
+    perkiraan: true,
     lokasi: "Ruang Guru",
     deskripsi: "Meja panjang untuk rapat dan meja registrasi acara.",
   },
@@ -172,7 +197,8 @@ const ASET: Baris[] = [
     nama: "Buku Paket Tematik",
     tipe: "BARANG",
     kategori: "Buku dan Perpustakaan",
-    jumlah: null,
+    jumlah: 6,
+    perkiraan: true,
     lokasi: "Rak Ruang Guru",
     deskripsi:
       "Buku paket tematik tersusun per tingkat kelas di rak ruang guru. Dipinjam per paket kelas, bukan per eksemplar.",
@@ -291,6 +317,26 @@ async function main() {
         "\nterduplikasi, cuma diperbarui."
     );
   }
+
+  // Daftar ini yang membuat sifat sementara angkanya tidak hilang begitu
+  // skripnya selesai. Tanpa dicetak di sini, taksiran akan terbaca sebagai
+  // hasil hitungan sungguhan oleh siapa pun yang membuka katalog nanti.
+  const perkiraan = ASET.filter((a) => a.perkiraan && a.jumlah !== null);
+  if (perkiraan.length > 0) {
+    console.log(`\nPERLU DICEK PETUGAS. ${perkiraan.length} aset memakai angka taksiran,`);
+    console.log("bukan hasil hitungan langsung di sekolah:\n");
+    for (const a of perkiraan) {
+      const satuan = a.tipe === "RUANG" ? "orang" : "unit";
+      console.log(`  ${a.nama.padEnd(22)} ${String(a.jumlah).padStart(3)} ${satuan}`);
+    }
+    console.log(
+      "\nSemuanya sudah bisa dipinjam sekarang. Angka barang sengaja ditaksir" +
+        "\nRENDAH: stok kelebihan membuat sistem menyetujui peminjaman barang yang" +
+        "\ntidak ada, sedangkan stok kekurangan cuma menolak lebih cepat dari" +
+        "\nperlunya. Betulkan lewat halaman Kelola aset, tanpa menyentuh kode."
+    );
+  }
+
   console.log("\nFoto tiap aset dipasang sendiri lewat halaman Kelola aset.");
 }
 
