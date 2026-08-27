@@ -1,22 +1,21 @@
 import "server-only";
-import { createClient } from "@supabase/supabase-js";
+import { put } from "@vercel/blob";
 import { randomUUID } from "node:crypto";
 
 /**
- * Penyimpanan foto aset di Supabase Storage.
+ * Penyimpanan foto aset di Vercel Blob.
  *
  * DULU disimpan di folder lokal /public/uploads. Itu cukup untuk demo di
  * satu server, tapi tidak untuk Vercel: filesystem-nya sementara, jadi
  * foto hilang tiap deploy ulang. Dipindah ke object storage supaya
  * bertahan lintas deploy.
  *
- * Bucket-nya WAJIB publik (baca), karena foto ditampilkan langsung lewat
- * <img src> tanpa proses otorisasi apa pun, sama seperti dulu saat masih
- * di /public/uploads. Kunci peran layanan dipakai untuk menulis karena
- * unggahan terjadi di server action, tidak pernah sampai ke klien.
+ * Diaktifkan lewat menu Storage di dashboard proyek Vercel. Setelah
+ * disambungkan, BLOB_READ_WRITE_TOKEN terisi otomatis ke environment
+ * proyek tanpa perlu disalin manual, beda dengan kunci layanan pihak
+ * ketiga yang harus dipindahkan tangan lewat dashboard yang terpisah.
  */
 
-const BUCKET = "aset-foto";
 const MAKS_BYTE = 4 * 1024 * 1024;
 
 // Daftar putih, bukan daftar hitam: hanya tipe yang memang kita niatkan.
@@ -30,19 +29,6 @@ const TIPE_SAH: Record<string, string> = {
 export type HasilUnggah =
   | { ok: true; jalur: string | null }
   | { ok: false; pesan: string };
-
-/**
- * Klien dibuat sekali lalu dipakai ulang, bukan dibuat ulang tiap
- * pemanggilan. Diambil dari fungsi, bukan level modul, supaya kalau kunci
- * belum diisi, kegagalannya muncul saat benar benar dipakai dengan pesan
- * yang jelas, bukan saat modul dimuat dan meruntuhkan seluruh server.
- */
-function klien() {
-  const url = process.env.SUPABASE_URL;
-  const kunci = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !kunci) return null;
-  return createClient(url, kunci);
-}
 
 /**
  * Simpan satu berkas gambar, kembalikan URL publiknya.
@@ -68,15 +54,14 @@ export async function simpanFoto(berkas: unknown): Promise<HasilUnggah> {
     };
   }
 
-  const supabase = klien();
-  if (!supabase) {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
     // Sama prinsipnya dengan PENGINGAT_SECRET di api/pengingat/route.ts:
     // lebih baik gagal jelas daripada diam diam menulis ke tempat yang
     // salah atau berpura pura berhasil padahal fotonya tidak tersimpan
     // di mana pun.
     return {
       ok: false,
-      pesan: "Penyimpanan foto belum disambungkan (SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY belum diisi).",
+      pesan: "Penyimpanan foto belum disambungkan (Vercel Blob belum diaktifkan untuk proyek ini).",
     };
   }
 
@@ -84,20 +69,17 @@ export async function simpanFoto(berkas: unknown): Promise<HasilUnggah> {
   // pengguna. Ini menutup jalan path traversal dan tabrakan nama sekaligus.
   const nama = `${randomUUID()}.${ekstensi}`;
 
-  const { error } = await supabase.storage
-    .from(BUCKET)
-    .upload(nama, Buffer.from(await berkas.arrayBuffer()), {
-      contentType: berkas.type,
-      cacheControl: "31536000", // setahun, nama berkasnya sudah unik permanen
+  try {
+    const hasil = await put(nama, berkas, {
+      access: "public",
+      // Nama berkasnya sudah unik permanen lewat randomUUID, jadi menambah
+      // sufiks acak lagi cuma memperpanjang URL tanpa manfaat.
+      addRandomSuffix: false,
+      cacheControlMaxAge: 31536000, // setahun
     });
-
-  if (error) {
-    return {
-      ok: false,
-      pesan: `Foto gagal diunggah ke penyimpanan: ${error.message}`,
-    };
+    return { ok: true, jalur: hasil.url };
+  } catch (e) {
+    const pesan = e instanceof Error ? e.message : String(e);
+    return { ok: false, pesan: `Foto gagal diunggah ke penyimpanan: ${pesan}` };
   }
-
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(nama);
-  return { ok: true, jalur: data.publicUrl };
 }

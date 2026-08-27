@@ -120,7 +120,7 @@ Aset dan akun pengguna memakai penanda aktif, bukan penghapusan. Riwayat peminja
 
 ## Catatan sebelum deploy
 
-Foto aset disimpan di Supabase Storage lewat [src/lib/unggah.ts](src/lib/unggah.ts), jadi tahan redeploy di Vercel (filesystem-nya sendiri bersifat sementara, tapi foto tidak lagi lewat situ). Perlu dua variabel lingkungan tambahan: `SUPABASE_URL` dan `SUPABASE_SERVICE_ROLE_KEY`, keduanya dari menu Project Settings > API di dashboard Supabase, plus satu bucket publik bernama `aset-foto` dibuat lewat menu Storage.
+Foto aset disimpan di Vercel Blob lewat [src/lib/unggah.ts](src/lib/unggah.ts), jadi tahan redeploy (filesystem proyek sendiri bersifat sementara, tapi foto tidak lagi lewat situ). Diaktifkan dari menu **Storage** di dashboard proyek Vercel, dan variabel `BLOB_READ_WRITE_TOKEN` terisi otomatis ke environment proyek begitu diaktifkan, tidak perlu disalin manual.
 
 Sebelum aplikasi dipakai pertama kali di basis data produksi yang masih kosong:
 
