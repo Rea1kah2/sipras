@@ -172,9 +172,20 @@
   --space-6: 26.4px;
   --space-8: 35.2px;
 
+  /* Tangga radius. Semula cuma tiga token, dan akibatnya nilai yang tidak
+     punya rumah ditulis mentah: 4px, 6px, 12px, dan 14px tersebar di tiga
+     puluh tempat sementara tokennya sendiri nyaris tidak terpakai. Tangganya
+     dilengkapi supaya tiap kebutuhan punya nama, karena token yang tidak
+     memuat kebutuhan nyata akan selalu kalah oleh angka mentah.
+
+     Aturan memilih: elemen kendali dan item kecil membulat ke bawah,
+     wadah konten membulat ke atas. `50%` untuk lingkaran sengaja tetap
+     mentah, sebab itu menyatakan bentuk, bukan pelunakan sudut. */
+  --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 28px;
+  --radius-pill: 999px;
 
   /* Bayangan dihitung dari tinta HANGAT #1c1712, bukan tinta biru yang
      lama. Bayangan bertinta biru di atas permukaan pasir terlihat kotor.
@@ -378,9 +389,16 @@
   --font-body: var(--font-body);
   --font-mono: var(--font-mono);
 
+  /* --radius-xs BENTROK dengan bawaan Tailwind 4 yang bernilai .125rem.
+     Nilai kita menang karena kebetulan ditulis belakangan, dan bergantung
+     pada urutan sumber itu jebakan: sekali urutannya bergeser, sudutnya
+     mengecil diam diam tanpa ada yang gagal. Didaftarkan di sini supaya
+     penimpaannya menjadi keputusan yang terbaca, bukan kecelakaan. */
+  --radius-xs: var(--radius-xs);
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
 
   --shadow-sm: var(--shadow-sm);
   --shadow-md: var(--shadow-md);
@@ -438,7 +456,7 @@ a {
    latar pil biru muda. Padding dan margin negatif saling meniadakan,
    jadi tata letak tidak bergeser sedikit pun. */
 .tautan {
-  border-radius: 6px;
+  border-radius: var(--radius-xs);
   padding: 1px 4px;
   margin: -1px -4px;
   transition: color 0.16s ease, background-color 0.16s ease;
@@ -461,7 +479,7 @@ figure { margin: 0; }
 ::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
 
 ::-webkit-scrollbar { width: 9px; height: 9px; }
-::-webkit-scrollbar-thumb { background: var(--color-neutral-300); border-radius: 999px; }
+::-webkit-scrollbar-thumb { background: var(--color-neutral-300); border-radius: var(--radius-pill); }
 
 @keyframes rise {
   from { opacity: 0; transform: translateY(8px); }
@@ -554,7 +572,7 @@ figure { margin: 0; }
   display: grid;
   place-items: center;
   border: 1px solid var(--color-divider);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   background: var(--color-surface);
   color: var(--color-neutral-700);
   cursor: pointer;
@@ -612,7 +630,7 @@ figure { margin: 0; }
   min-width: 20px;
   height: 20px;
   padding: 0 6px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 10.5px;
   font-weight: 700;
 }
@@ -640,7 +658,7 @@ figure { margin: 0; }
   width: 100%;
   font-size: 13.5px;
   padding: 9px 12px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   color: var(--color-neutral-800);
   transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
 }
@@ -665,7 +683,7 @@ figure { margin: 0; }
   transform: translateY(-50%);
   width: 0;
   height: 18px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--color-accent-700);
   transition: width 0.16s ease;
 }
@@ -696,7 +714,7 @@ figure { margin: 0; }
   align-items: center;
   gap: 4px;
   padding: 7px 6px;
-  border-radius: 14px;
+  border-radius: var(--radius-md);
   position: relative;
   color: var(--color-neutral-700);
   transition: background-color 0.16s ease, color 0.16s ease;
@@ -747,7 +765,7 @@ figure { margin: 0; }
   background: transparent;
   border: 1px solid transparent;
   padding: var(--space-2) calc(var(--space-3) * 1.2);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 .btn svg { display: block; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
@@ -835,13 +853,13 @@ figure { margin: 0; }
   display: flex;
   align-items: flex-end;
   background: var(--color-neutral-200);
-  border-radius: 6px;
+  border-radius: var(--radius-xs);
   overflow: hidden;
 }
 .batang-isi {
   width: 100%;
   background: var(--color-accent-600);
-  border-radius: 6px 6px 0 0;
+  border-radius: var(--radius-xs) var(--radius-xs) 0 0;
   /* Batang bernilai nol tetap menyisakan garis tipis, supaya kolomnya
      terlihat ada dan tidak disangka hilang. */
   min-height: 2px;
@@ -868,14 +886,14 @@ figure { margin: 0; }
 }
 .peringkat-jalur {
   height: 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--color-neutral-200);
   overflow: hidden;
 }
 .peringkat-isi {
   display: block;
   height: 100%;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--color-accent-600);
   min-width: 3px;
 }
@@ -1099,7 +1117,7 @@ figure { margin: 0; }
 
 .kisi-sel {
   height: 34px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   padding: 0;
 }
 .kisi-sel.kosong { background: var(--color-accent-2-200); }
@@ -1123,7 +1141,7 @@ figure { margin: 0; }
   );
 }
 .kisi-hari.tutup {
-  border-radius: 8px 8px 0 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
   color: var(--color-neutral-700);
 }
 .kisi-contoh.tutup {
@@ -1137,7 +1155,7 @@ figure { margin: 0; }
 .kisi-contoh {
   width: 12px;
   height: 12px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   flex: none;
   display: inline-block;
 }
@@ -1173,7 +1191,7 @@ figure { margin: 0; }
   padding: 5px 10px;
   margin: -5px -10px;
   border: 0;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   background: transparent;
   font: inherit;
   text-align: left;
@@ -1232,7 +1250,7 @@ figure { margin: 0; }
   flex: none;
   height: 36px;
   padding: 3px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--color-surface);
   border: 1px solid var(--color-divider);
 }
@@ -1248,7 +1266,7 @@ figure { margin: 0; }
   bottom: 3px;
   left: 3px;
   width: calc(50% - 3px);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--color-accent);
   box-shadow: var(--shadow-sm);
   transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1262,7 +1280,7 @@ figure { margin: 0; }
   padding: 0 12px;
   border: 0;
   background: transparent;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font: inherit;
   font-size: 12px;
   font-weight: 700;
@@ -1309,7 +1327,7 @@ figure { margin: 0; }
      dengan halamannya dan cuma terlihat dari garis tepinya. */
   background: var(--color-elevated);
   border: 1px solid var(--color-divider);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 .input:hover { border-color: color-mix(in srgb, var(--color-text) 40%, transparent); }
 .input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
@@ -1356,13 +1374,13 @@ select.input { appearance: none; }
   box-shadow: inset 0 0 0 4px var(--color-bg);
 }
 .radio input:focus-visible + .dot { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-.radio .dot-square { border-radius: 6px; }
+.radio .dot-square { border-radius: var(--radius-xs); }
 
 .seg {
   display: inline-flex;
   overflow: hidden;
   border: 1px solid var(--color-divider);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 .seg-opt {
   display: inline-flex;
@@ -1499,7 +1517,7 @@ select.input { appearance: none; }
   font-size: 11px;
   letter-spacing: 0.02em;
   padding: 3px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 .tag-accent { background: var(--color-accent-200); color: var(--color-accent-800); }
 .tag-accent-2 { background: var(--color-accent-2-200); color: var(--color-accent-2-800); }

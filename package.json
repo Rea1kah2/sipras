@@ -20,7 +20,8 @@
     "cek:tipografi": "node skrip/cek-tipografi.mjs",
     "cek:warna": "node skrip/cek-warna.mjs",
     "postinstall": "prisma generate",
-    "cek:bahasa": "node skrip/cek-bahasa.mjs"
+    "cek:bahasa": "node skrip/cek-bahasa.mjs",
+    "env:dorong": "node skrip/dorong-env-vercel.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",

@@ -122,6 +122,22 @@ Aset dan akun pengguna memakai penanda aktif, bukan penghapusan. Riwayat peminja
 
 Foto aset disimpan di Vercel Blob lewat [src/lib/unggah.ts](src/lib/unggah.ts), jadi tahan redeploy (filesystem proyek sendiri bersifat sementara, tapi foto tidak lagi lewat situ). Diaktifkan dari menu **Storage** di dashboard proyek Vercel, dan variabel `BLOB_READ_WRITE_TOKEN` terisi otomatis ke environment proyek begitu diaktifkan, tidak perlu disalin manual.
 
+### Mengisi variabel lingkungan di Vercel
+
+Jangan menyalin satu per satu lewat dashboard. Cara itu sudah gagal dua kali di proyek ini, dan dua duanya baru ketahuan setelah situsnya error di depan pengguna: pertama `DATABASE_URL`, lalu `SESSION_SECRET`. Pakai:
+
+```
+npx vercel login     # sekali saja
+npx vercel link      # sekali saja, sambungkan folder ini ke proyeknya
+npm run env:dorong
+```
+
+Skrip itu membaca `.env` lokal dan mendorong isinya ke Production, Preview, dan Development sekaligus. Yang sengaja tidak ikut didorong tetap dicetak beserta alasannya, jadi yang dilewati terlihat, bukan hilang diam diam: `DATABASE_URL` dan `BLOB_READ_WRITE_TOKEN` sudah diisi otomatis oleh integrasi Vercel, sedangkan `NEXT_PUBLIC_APP_URL` dan `EMAIL_UJI_KE` ditanyakan ulang karena nilainya di produksi memang berbeda dari lokal.
+
+Variabel baru tidak otomatis dipakai deployment yang sudah ada. Setelah mendorong, buka tab Deployments, klik titik tiga di deployment teratas, pilih Redeploy, dan jangan centang "Use existing Build Cache".
+
+### Menyiapkan basis data
+
 Sebelum aplikasi dipakai pertama kali di basis data produksi yang masih kosong:
 
 1. `npm run db:deploy` - menjalankan migrasi Prisma secara non interaktif.

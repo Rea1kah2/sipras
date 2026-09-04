@@ -306,5 +306,64 @@ periksaMode("MODE GELAP", GELAP, [
   }
 }
 
+/* ── RADIUS: angka mentah ditolak ─────────────────────────────────────
+ *
+ * Sekali waktu berkas ini punya tiga token radius yang nyaris tidak dipakai
+ * (4 dari 34 deklarasi), sementara sudutnya ditulis mentah dengan tujuh
+ * tangga berbeda: 4, 6, 8, 12, 14, di samping 16 dan 28 milik token.
+ * Tangganya tidak pernah diputuskan siapa pun, ia cuma tumbuh.
+ *
+ * Pemeriksa ini menahan pertumbuhan itu. `50%` dibiarkan karena menyatakan
+ * bentuk lingkaran, bukan pelunakan sudut, dan `0` jelas bukan angka ajaib.
+ */
+{
+  console.log("\n── RADIUS (src/app/globals.css) ──");
+  const baris = css.split("\n");
+  const mentah = [];
+  baris.forEach((isi, i) => {
+    const m = isi.match(/border-radius:\s*([^;]+);/);
+    if (!m) return;
+    const nilai = m[1].trim();
+    if (nilai === "0" || nilai === "50%") return;
+    // Setiap potongan wajib token atau nol. Sudut majemuk ikut diperiksa.
+    for (const bagian of nilai.split(/\s+/)) {
+      if (bagian === "0") continue;
+      if (/^var\(--radius-[a-z]+\)$/.test(bagian)) continue;
+      if (/^calc\(/.test(nilai)) return; // turunan token, sudah bernama
+      mentah.push({ baris: i + 1, nilai });
+      return;
+    }
+  });
+  for (const t of mentah) {
+    cek(`radius memakai token di baris ${t.baris}`, false, `"${t.nilai}" masih angka mentah`);
+  }
+  cek(
+    `tidak ada radius mentah di globals.css`,
+    mentah.length === 0,
+    mentah.length ? `${mentah.length} ditemukan` : ""
+  );
+}
+
+/* ── CATATAN: pasangan permukaan yang SENGAJA tidak diuji ──────────────
+ *
+ * Ditelusuri dan diputuskan, bukan terlewat. `surface` dan `panel` cuma
+ * berselisih 2.1 L* di mode terang dan 1.5 L* di mode gelap, di bawah ambang
+ * 3.5 yang dipakai berkas ini. Terlihat seperti cacat, ternyata bukan:
+ * keduanya TIDAK PERNAH bersentuhan di layar.
+ *
+ * `panel` hanya mengecat .sidebar, .tab-bawah, dan footer, yaitu kerangka
+ * halaman yang menempel ke kanvas. `surface` mengecat kartu yang hidup di
+ * area konten. Keduanya berada di sisi berlawanan dari kanvas, jadi mata
+ * tidak pernah membandingkan langsung.
+ *
+ * Pasangan yang benar benar bersentuhan sudah diuji di periksaMode():
+ * kanvas vs panel dan kanvas vs kartu, keduanya jauh di atas ambang.
+ * Permukaan `elevated` dipakai popover ber-shadow-lg yang melayang, jadi
+ * pemisahnya bayangan, bukan selisih terang.
+ *
+ * Kalau suatu saat kartu dipasang DI DALAM sidebar atau footer, catatan ini
+ * batal dan pasangan surface vs panel wajib mulai diuji.
+ */
+
 console.log(`\n${lolos} lolos, ${gagal} gagal`);
 process.exit(gagal > 0 ? 1 : 0);

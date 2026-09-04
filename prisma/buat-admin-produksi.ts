@@ -8,15 +8,28 @@ import { hash } from "bcryptjs";
  * pengguna contoh untuk demo.
  *
  * Pakai:
- *   npx tsx -r dotenv/config prisma/buat-admin-produksi.ts -- "Nama Admin" admin@sekolah.sch.id "kata-sandi"
+ *   npx tsx -r dotenv/config prisma/buat-admin-produksi.ts "Nama Admin" admin@sekolah.sch.id "kata-sandi"
  */
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) throw new Error("DATABASE_URL belum diisi di .env");
 
-const [nama, email, sandi] = process.argv.slice(2);
+// Tanda "--" dibuang kalau ada. Ia WAJIB dipakai lewat `npm run` supaya npm
+// meneruskan argumennya, tapi jadi argumen biasa kalau dipanggil lewat npx.
+// Tanpa baris ini, memanggil dengan "--" menggeser semuanya satu langkah dan
+// membuat akun bernama "--" beralamat surel "Nama Admin". Sudah pernah
+// terjadi, dan diamnya kegagalan itu yang berbahaya: skripnya melapor sukses.
+const argumen = process.argv.slice(2).filter((a) => a !== "--");
+
+const [nama, email, sandi] = argumen;
 if (!nama || !email || !sandi) {
-  console.error("Pakai: tsx prisma/buat-admin-produksi.ts -- \"Nama Admin\" admin@sekolah.sch.id \"kata-sandi\"");
+  console.error(
+    'Pakai: npx tsx -r dotenv/config prisma/buat-admin-produksi.ts "Nama Admin" admin@sekolah.sch.id "kata-sandi"'
+  );
+  process.exit(1);
+}
+if (!email.includes("@")) {
+  console.error(`"${email}" bukan alamat surel. Urutannya: nama, email, kata sandi.`);
   process.exit(1);
 }
 if (sandi.length < 8) {
