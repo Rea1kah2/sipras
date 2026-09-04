@@ -193,15 +193,24 @@ const ASET: Baris[] = [
     lokasi: "Ruang Guru",
     deskripsi: "Meja panjang untuk rapat dan meja registrasi acara.",
   },
+  // Semula "Buku Paket Tematik" berupa BARANG berstok 6. Diubah jadi RUANG
+  // atas permintaan sekolah, dan perubahannya masuk akal: yang sebenarnya
+  // dipakai bersama adalah sudut bacanya, bukan paket bukunya yang berpindah
+  // tangan. Kategorinya sengaja dipertahankan supaya kata kunci ilustrasi
+  // /buku|perpustakaan|pustaka/ di ilustrasi-aset.tsx tetap cocok.
+  //
+  // Baris lama TIDAK ikut terhapus oleh skrip ini, karena skrip ini memang
+  // tidak pernah menghapus apa pun. Menonaktifkannya dikerjakan sekali lewat
+  // halaman Kelola aset.
   {
-    nama: "Buku Paket Tematik",
-    tipe: "BARANG",
+    nama: "Perpustakaan",
+    tipe: "RUANG",
     kategori: "Buku dan Perpustakaan",
-    jumlah: 6,
+    jumlah: 10,
     perkiraan: true,
-    lokasi: "Rak Ruang Guru",
+    lokasi: "Ruang Guru",
     deskripsi:
-      "Buku paket tematik tersusun per tingkat kelas di rak ruang guru. Dipinjam per paket kelas, bukan per eksemplar.",
+      "Sudut baca dengan rak buku besar berisi buku paket tersusun per tingkat kelas, bersebelahan dengan lemari piala di ruang guru.",
   },
 
   // ── olahraga dan elektronik ──────────────────────────────────────────

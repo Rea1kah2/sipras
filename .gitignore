@@ -50,6 +50,13 @@ next-env.d.ts
 # foto aset yang diunggah admin, bukan bagian dari kode
 /public/uploads
 
+# Foto sumber aset sekolah. Bukan kode, dan sudah tersimpan permanen di
+# Vercel Blob setelah diunggah, jadi tidak perlu membebani repositori.
+/foto-aset
+
+# Hasil `vercel env pull`, berisi kunci produksi sungguhan.
+.env.vercel
+
 # konfigurasi asisten AI, bukan bagian dari aplikasi
 /.claude
 /.agents

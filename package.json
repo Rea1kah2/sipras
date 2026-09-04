@@ -21,7 +21,8 @@
     "cek:warna": "node skrip/cek-warna.mjs",
     "postinstall": "prisma generate",
     "cek:bahasa": "node skrip/cek-bahasa.mjs",
-    "env:dorong": "node skrip/dorong-env-vercel.mjs"
+    "env:dorong": "node skrip/dorong-env-vercel.mjs",
+    "foto:unggah": "node -r dotenv/config skrip/unggah-foto-aset.mjs dotenv_config_path=.env.vercel"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
