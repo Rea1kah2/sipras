@@ -76,8 +76,18 @@ function bacaEnv(jalur) {
   return hasil;
 }
 
+/**
+ * Vercel CLI menulis penanda sambungan dengan DUA nama berbeda, tergantung
+ * cara proyeknya tersambung:
+ *   project.json  saat folder disambungkan langsung ke satu proyek
+ *   repo.json     saat proyeknya tersambung lewat repositori git
+ *
+ * Semula hanya `project.json` yang diperiksa, dan akibatnya `vercel link`
+ * yang jelas jelas berhasil tetap dianggap gagal. Pesan penolakannya pun
+ * menyuruh mengulang perintah yang sudah benar, jadi salahnya berputar.
+ */
 function sudahTersambung() {
-  return existsSync(".vercel/project.json");
+  return existsSync(".vercel/project.json") || existsSync(".vercel/repo.json");
 }
 
 /** Satu variabel, satu lingkungan. Nilai dikirim lewat stdin, bukan argumen,
