@@ -1,5 +1,6 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import { efektifMulai } from "@/lib/ketersediaan";
 import { STATUS_MEMAKAI_ASET } from "@/lib/status";
 import { dariISO, keISO } from "@/lib/waktu";
 
@@ -51,8 +52,9 @@ export async function jadwalRuang(
       asetId: { in: ruang.map((r) => r.id) },
       pengajuan: {
         status: { in: STATUS_MEMAKAI_ASET },
-        // Irisan rentang, sama persis dengan puncakPemakaian.
-        mulai: { lte: selesai },
+        // Irisan rentang, sama persis dengan puncakPemakaian, termasuk sisi
+        // diserahkanPada supaya serah terima lebih awal ikut ketemu.
+        OR: [{ mulai: { lte: selesai } }, { diserahkanPada: { lte: selesai } }],
         selesai: { gte: mulai },
       },
     },
@@ -63,6 +65,7 @@ export async function jadwalRuang(
           kode: true,
           mulai: true,
           selesai: true,
+          diserahkanPada: true,
           pemohon: { select: { nama: true } },
         },
       },
@@ -80,7 +83,8 @@ export async function jadwalRuang(
     };
 
     // Isi hari per hari, tapi hanya yang jatuh di dalam rentang yang diminta.
-    let t = Math.max(b.pengajuan.mulai.getTime(), mulai.getTime());
+    const mulaiEfektif = efektifMulai(b.pengajuan.mulai, b.pengajuan.diserahkanPada);
+    let t = Math.max(mulaiEfektif.getTime(), mulai.getTime());
     const habis = Math.min(b.pengajuan.selesai.getTime(), selesai.getTime());
     while (t <= habis) {
       peta.set(new Date(t).toISOString().slice(0, 10), slot);

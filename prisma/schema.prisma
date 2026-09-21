@@ -107,6 +107,21 @@ model Pengajuan {
   pemohon        User            @relation("PemohonPengajuan", fields: [pemohonId], references: [id])
   mulai          DateTime        @db.Date
   selesai        DateTime        @db.Date
+
+  // Tanggal serah terima SUNGGUHAN, cuma terisi begitu admin menyatakan
+  // barangnya sudah diserahkan lewat /admin/serah. Serah terima sebelum
+  // tanggal mulai sengaja diizinkan (orang wajar mengambil barang sore hari
+  // sebelum acara pagi), tapi begitu diizinkan begitu saja tanpa dicatat,
+  // ketersediaan masih dihitung dari `mulai` yang diajukan, bukan dari hari
+  // barangnya benar benar berpindah tangan. Akibatnya aset itu bisa terlihat
+  // "tersedia" di hari yang sama padahal sudah ada di tangan orang lain.
+  //
+  // Dipakai lib/ketersediaan.ts dan lib/kalender.ts lewat efektifMulai():
+  // yang lebih awal antara ini dan `mulai` itulah yang dihitung sebagai
+  // awal terpakai. Kosong berarti belum pernah diserahkan lebih awal, jadi
+  // `mulai` yang dipakai apa adanya, sama seperti sebelum kolom ini ada.
+  diserahkanPada DateTime?       @db.Date
+
   namaKegiatan   String?
   keperluan      String
   kontakWhatsapp String?

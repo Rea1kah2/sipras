@@ -31,6 +31,23 @@ type BarisPemakaian = {
 };
 
 /**
+ * Tanggal efektif mulai terpakai: yang lebih awal antara tanggal yang
+ * diajukan dan tanggal serah terima sungguhan.
+ *
+ * Serah terima sebelum tanggal mulai sengaja diizinkan di /admin/serah,
+ * tapi kalau ketersediaan tetap dihitung dari tanggal yang diajukan, aset
+ * yang sudah di tangan peminjam bisa terlihat "tersedia" di hari yang sama
+ * ia diserahkan. Fungsi ini yang menutup celah itu, dipakai baik oleh
+ * puncakPemakaian/hariTerisi di sini maupun jadwalRuang di lib/kalender.ts.
+ */
+export function efektifMulai(mulai: Date, diserahkanPada: Date | null): Date {
+  if (diserahkanPada && diserahkanPada.getTime() < mulai.getTime()) {
+    return diserahkanPada;
+  }
+  return mulai;
+}
+
+/**
  * Puncak pemakaian tiap aset di dalam rentang yang diminta.
  *
  * Menjumlahkan seluruh pengajuan yang beririsan itu SALAH: dua pengajuan bisa
@@ -53,8 +70,11 @@ export async function puncakPemakaian(
       asetId: { in: asetIds },
       pengajuan: {
         status: { in: STATUS_MEMAKAI_ASET },
-        // Irisan rentang: mulaiA <= selesaiB && mulaiB <= selesaiA
-        mulai: { lte: selesai },
+        // Irisan rentang: mulaiA <= selesaiB && mulaiB <= selesaiA. Sisi
+        // "mulaiA" memakai OR dengan diserahkanPada, supaya pengajuan yang
+        // diserahkan lebih awal dari tanggal yang diajukan tetap ketemu
+        // walau tanggal yang diajukan sendiri belum menyentuh rentang ini.
+        OR: [{ mulai: { lte: selesai } }, { diserahkanPada: { lte: selesai } }],
         selesai: { gte: mulai },
         ...(kecualiPengajuanId ? { id: { not: kecualiPengajuanId } } : {}),
       },
@@ -62,7 +82,7 @@ export async function puncakPemakaian(
     select: {
       asetId: true,
       jumlah: true,
-      pengajuan: { select: { mulai: true, selesai: true } },
+      pengajuan: { select: { mulai: true, selesai: true, diserahkanPada: true } },
     },
   });
 
@@ -72,7 +92,7 @@ export async function puncakPemakaian(
     daftar.push({
       asetId: b.asetId,
       jumlah: b.jumlah,
-      mulai: b.pengajuan.mulai,
+      mulai: efektifMulai(b.pengajuan.mulai, b.pengajuan.diserahkanPada),
       selesai: b.pengajuan.selesai,
     });
     perAset.set(b.asetId, daftar);
@@ -289,16 +309,17 @@ export async function hariTerisi(
       asetId,
       pengajuan: {
         status: { in: STATUS_MEMAKAI_ASET },
-        mulai: { lte: akhir },
+        OR: [{ mulai: { lte: akhir } }, { diserahkanPada: { lte: akhir } }],
         selesai: { gte: awal },
       },
     },
-    select: { pengajuan: { select: { mulai: true, selesai: true } } },
+    select: { pengajuan: { select: { mulai: true, selesai: true, diserahkanPada: true } } },
   });
 
   const terisi = new Set<string>();
   for (const b of baris) {
-    let t = Math.max(b.pengajuan.mulai.getTime(), awal.getTime());
+    const mulaiEfektif = efektifMulai(b.pengajuan.mulai, b.pengajuan.diserahkanPada);
+    let t = Math.max(mulaiEfektif.getTime(), awal.getTime());
     const habis = Math.min(b.pengajuan.selesai.getTime(), akhir.getTime());
     while (t <= habis) {
       terisi.add(new Date(t).toISOString().slice(0, 10));

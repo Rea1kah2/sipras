@@ -8,7 +8,7 @@ import { alasanTolakPindah, bolehPindah } from "@/lib/status";
 import { kirimNotifikasi } from "@/lib/notifikasi";
 import { teksItem } from "@/lib/pengajuan";
 import { gagal } from "@/lib/validasi";
-import { keISO } from "@/lib/waktu";
+import { dariISO, hariIniISO, keISO } from "@/lib/waktu";
 import type { HasilAksi } from "@/lib/validasi";
 
 export type StatusSerah = HasilAksi<null> | null;
@@ -23,9 +23,12 @@ export type StatusSerah = HasilAksi<null> | null;
  * sedang dipinjam padahal tidak pernah ada yang mengambilnya.
  *
  * Serah terima SEBELUM tanggal mulai sengaja diizinkan, karena orang wajar
- * mengambil barang sore hari sebelum acara pagi. Ini aman bagi hitungan
- * ketersediaan sebab STATUS_MEMAKAI_ASET memperlakukan DISETUJUI dan DIPINJAM
- * sama persis, jadi jumlah aset yang tertahan tidak berubah sedikit pun.
+ * mengambil barang sore hari sebelum acara pagi. Tanggal serah terima
+ * sungguhannya dicatat di `diserahkanPada`, dan begitu lebih awal dari
+ * `mulai`, itulah yang dipakai lib/ketersediaan.ts (lewat efektifMulai())
+ * sebagai awal terpakai — bukan tanggal yang diajukan. Tanpa ini, aset yang
+ * sudah di tangan peminjam masih bisa terlihat "tersedia" di hari yang sama
+ * ia diserahkan, dan peminjam lain bisa lolos mengajukan aset yang sama.
  */
 export async function aksiSerahkan(
   _sebelum: StatusSerah,
@@ -63,7 +66,7 @@ export async function aksiSerahkan(
   await prisma.$transaction(async (tx) => {
     await tx.pengajuan.update({
       where: { id: pengajuan.id },
-      data: { status: "DIPINJAM" },
+      data: { status: "DIPINJAM", diserahkanPada: dariISO(hariIniISO()) },
     });
     await tx.riwayatStatus.create({
       data: {
