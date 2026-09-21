@@ -62,6 +62,12 @@ export function FormMasuk() {
         />
       </div>
 
+      <p style={{ marginTop: 8, textAlign: "right" }}>
+        <Link href="/lupa-sandi" className="tautan" style={{ fontSize: 12.5 }}>
+          {t.masuk.lupaSandi}
+        </Link>
+      </p>
+
       <div style={{ marginTop: "var(--space-4)" }}>
         <TombolKirim sedang={t.masuk.sedang}>{t.masuk.tombol}</TombolKirim>
       </div>

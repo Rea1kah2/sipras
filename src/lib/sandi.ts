@@ -117,6 +117,51 @@ export function cukupKuat(sandi: string): boolean {
   return nilaiKekuatan(sandi).tingkat !== "lemah";
 }
 
+const HURUF_KECIL = "abcdefghijkmnopqrstuvwxyz"; // tanpa 'l', mirip '1'
+const HURUF_BESAR = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // tanpa 'I', 'O'
+const ANGKA = "23456789"; // tanpa '0', '1'
+const SIMBOL = "!@#%^&*-_=+";
+
+/**
+ * Bilangan acak [0, maks) tanpa bias modulo, pakai Web Crypto API lewat
+ * `globalThis.crypto`. Dipilih ketimbang `node:crypto`, karena berkas ini
+ * sengaja murni dan dipakai juga dari komponen klien (lihat catatan di
+ * atas), dan `node:crypto` tidak bisa dibundel untuk peramban.
+ */
+function acakIndeks(maks: number): number {
+  const batas = Math.floor(0x1_0000_0000 / maks) * maks;
+  const larik = new Uint32Array(1);
+  let n: number;
+  do {
+    globalThis.crypto.getRandomValues(larik);
+    n = larik[0];
+  } while (n >= batas);
+  return n % maks;
+}
+
+/**
+ * Kata sandi acak yang dijamin "kuat" oleh konstruksi, bukan dicoba lalu
+ * dicek. Dipakai admin mereset sandi pengguna lain: satu karakter dari
+ * tiap kelompok diambil lebih dulu supaya jenis karakternya pasti
+ * terpenuhi, sisanya diisi acak dari gabungan semuanya, lalu urutannya
+ * dikocok.
+ */
+export function buatSandiAcak(panjang = 14): string {
+  const semua = HURUF_KECIL + HURUF_BESAR + ANGKA + SIMBOL;
+  const acak = (set: string) => set[acakIndeks(set.length)];
+
+  const karakter = [acak(HURUF_KECIL), acak(HURUF_BESAR), acak(ANGKA), acak(SIMBOL)];
+  for (let i = karakter.length; i < panjang; i++) {
+    karakter.push(acak(semua));
+  }
+
+  for (let i = karakter.length - 1; i > 0; i--) {
+    const j = acakIndeks(i + 1);
+    [karakter[i], karakter[j]] = [karakter[j], karakter[i]];
+  }
+  return karakter.join("");
+}
+
 /**
  * Dipakai skema validasi Zod, yang dirakit sekali saat modul dimuat sehingga
  * belum tahu bahasa pembacanya. Sengaja dibiarkan memakai teks bawaan, dan

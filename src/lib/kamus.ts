@@ -336,6 +336,8 @@ const ID = {
     "review.disetujui.isi": "Pemakaian {mulai} sampai {selesai} disetujui. {catatan}",
     "review.ditolak.judul": "Pengajuan {kode} ditolak",
     "review.ditolak.isi": "{catatan}",
+    "review.siapDiserahkan.judul": "{kode} siap diserahkan",
+    "review.siapDiserahkan.isi": "{nama} sudah disetujui, tunggu diambil di loket sarpras.",
 
     "kembali.terkirim.judul": "Pengembalian {kode} terkirim",
     "kembali.terkirim.isi":
@@ -367,6 +369,16 @@ const ID = {
     "ingat.adminTerlambat.judul": "{kode} terlambat {n} hari",
     "ingat.adminTerlambat.judul.satu": "{kode} terlambat 1 hari",
     "ingat.adminTerlambat.isi": "{item} belum dikembalikan, jatuh tempo {selesai}.",
+
+    "lupaSandi.diminta.judul": "Tautan reset kata sandi",
+    "lupaSandi.diminta.isi":
+      "Klik tombol di bawah untuk membuat kata sandi baru. Tautan ini berlaku 20 menit dan hanya bisa dipakai sekali. Kalau kamu tidak meminta ini, abaikan saja email ini.",
+    "lupaSandi.selesai.judul": "Kata sandi kamu sudah diganti",
+    "lupaSandi.selesai.isi":
+      "Kata sandi akun kamu baru saja diganti lewat tautan lupa kata sandi. Kalau ini bukan kamu, segera hubungi petugas Sarpras.",
+    "pengguna.sandiDireset.judul": "Kata sandi kamu direset admin",
+    "pengguna.sandiDireset.isi":
+      "Admin baru saja mengganti kata sandi akunmu. Hubungi admin untuk mendapatkan kata sandi barumu.",
   } as Record<string, string>,
 
   cetak: {
@@ -554,6 +566,7 @@ const ID = {
     stokCatatan: "Dihitung dari stok dikurangi yang sedang dipinjam hari ini.",
     bukaReviewItem: "Buka dan review",
     verifikasiItem: "Verifikasi pengembalian",
+    serahkanItem: "Serahkan barang",
   },
 
   aset: {
@@ -773,10 +786,38 @@ const ID = {
     email: "Email",
     emailContoh: "nama@gmail.com",
     sandi: "Kata sandi",
+    lupaSandi: "Lupa kata sandi?",
     tombol: "Masuk",
     sedang: "Memeriksa...",
     belumPunya: "Belum punya akun?",
     daftarSekarang: "Daftar sekarang",
+  },
+
+  lupaSandi: {
+    kembali: "Kembali ke halaman masuk",
+    judul: "Lupa kata sandi",
+    penjelasan:
+      "Masukkan email akunmu. Kalau terdaftar, kami kirim tautan untuk membuat kata sandi baru.",
+    email: "Email",
+    emailContoh: "nama@gmail.com",
+    tombol: "Kirim tautan reset",
+    sedang: "Mengirim...",
+    sukses:
+      "Kalau email itu terdaftar, tautan reset kata sandi sudah dikirim. Belum sampai? Hubungi petugas Sarpras lewat WhatsApp.",
+    masukSekarang: "Kembali ke halaman masuk",
+
+    resetJudul: "Buat kata sandi baru",
+    resetPenjelasan: "Pilih kata sandi baru untuk akunmu.",
+    sandiBaru: "Kata sandi baru",
+    ulangiSandi: "Ulangi kata sandi baru",
+    resetTombol: "Simpan kata sandi baru",
+    resetSedang: "Menyimpan...",
+    resetSukses:
+      "Kata sandi kamu berhasil diganti. Silakan masuk dengan kata sandi barumu.",
+    masukDenganSandiBaru: "Masuk sekarang",
+    tokenTidakValid:
+      "Tautan ini tidak valid atau sudah kedaluwarsa. Minta tautan baru dari halaman lupa kata sandi.",
+    mintaLagi: "Minta tautan baru",
   },
 
   daftar: {
@@ -833,6 +874,14 @@ const ID = {
     tanyaAktifIsi:
       "{nama} bisa langsung masuk lagi dan mengajukan peminjaman seperti sebelumnya.",
     tanyaAktifLanjut: "Ya, aktifkan",
+
+    resetSandi: "Reset sandi",
+    tidakBisaResetDiri: "Gunakan halaman Profil untuk mengganti kata sandimu sendiri",
+
+    tanyaResetJudul: "Reset kata sandi {nama}?",
+    tanyaResetIsi:
+      "Kata sandi {nama} yang sekarang langsung tidak berlaku. Sistem membuat kata sandi baru secara acak, tampil sekali di layar ini untuk kamu salin dan sampaikan sendiri ke {nama}.",
+    tanyaResetLanjut: "Ya, reset kata sandi",
   },
 
   // Nama bulan dan hari untuk pemformat tanggal di lib/waktu.ts. Bentuknya
@@ -1161,6 +1210,8 @@ const EN: Kamus = {
     "review.disetujui.isi": "Use from {mulai} to {selesai} is approved. {catatan}",
     "review.ditolak.judul": "Request {kode} declined",
     "review.ditolak.isi": "{catatan}",
+    "review.siapDiserahkan.judul": "{kode} is ready for handover",
+    "review.siapDiserahkan.isi": "{nama} was approved, waiting to collect at the facility desk.",
 
     "kembali.terkirim.judul": "Return for {kode} submitted",
     "kembali.terkirim.isi":
@@ -1192,6 +1243,16 @@ const EN: Kamus = {
     "ingat.adminTerlambat.judul": "{kode} is {n} days late",
     "ingat.adminTerlambat.judul.satu": "{kode} is 1 day late",
     "ingat.adminTerlambat.isi": "{item} has not been returned, due {selesai}.",
+
+    "lupaSandi.diminta.judul": "Password reset link",
+    "lupaSandi.diminta.isi":
+      "Click the button below to set a new password. This link is valid for 20 minutes and can only be used once. If you did not request this, just ignore this email.",
+    "lupaSandi.selesai.judul": "Your password was changed",
+    "lupaSandi.selesai.isi":
+      "Your account password was just changed using the forgot-password link. If this was not you, contact the Sarpras staff right away.",
+    "pengguna.sandiDireset.judul": "Your password was reset by an admin",
+    "pengguna.sandiDireset.isi":
+      "An admin just reset your account password. Contact them to get your new password.",
   },
 
   cetak: {
@@ -1379,6 +1440,7 @@ const EN: Kamus = {
     stokCatatan: "Counted from stock minus what is on loan today.",
     bukaReviewItem: "Open and review",
     verifikasiItem: "Verify the return",
+    serahkanItem: "Hand over",
   },
 
   aset: {
@@ -1593,10 +1655,37 @@ const EN: Kamus = {
     email: "Email",
     emailContoh: "name@gmail.com",
     sandi: "Password",
+    lupaSandi: "Forgot your password?",
     tombol: "Sign in",
     sedang: "Checking...",
     belumPunya: "No account yet?",
     daftarSekarang: "Create one now",
+  },
+
+  lupaSandi: {
+    kembali: "Back to sign in",
+    judul: "Forgot password",
+    penjelasan:
+      "Enter your account email. If it's registered, we'll send a link to set a new password.",
+    email: "Email",
+    emailContoh: "name@gmail.com",
+    tombol: "Send reset link",
+    sedang: "Sending...",
+    sukses:
+      "If that email is registered, a password reset link has been sent. Hasn't arrived? Contact the Sarpras staff on WhatsApp.",
+    masukSekarang: "Back to sign in",
+
+    resetJudul: "Set a new password",
+    resetPenjelasan: "Choose a new password for your account.",
+    sandiBaru: "New password",
+    ulangiSandi: "Repeat new password",
+    resetTombol: "Save new password",
+    resetSedang: "Saving...",
+    resetSukses: "Your password has been changed. Sign in with your new password.",
+    masukDenganSandiBaru: "Sign in now",
+    tokenTidakValid:
+      "This link is invalid or has expired. Request a new one from the forgot password page.",
+    mintaLagi: "Request a new link",
   },
 
   daftar: {
@@ -1653,6 +1742,14 @@ const EN: Kamus = {
     tanyaAktifIsi:
       "{nama} will be able to sign in again right away and request bookings as before.",
     tanyaAktifLanjut: "Yes, reactivate",
+
+    resetSandi: "Reset password",
+    tidakBisaResetDiri: "Use the Profile page to change your own password",
+
+    tanyaResetJudul: "Reset {nama}'s password?",
+    tanyaResetIsi:
+      "{nama}'s current password stops working immediately. The system generates a new random password, shown once on this screen for you to copy and pass on to {nama} yourself.",
+    tanyaResetLanjut: "Yes, reset password",
   },
 
   bulanPendek: [

@@ -27,7 +27,7 @@ export default async function DasborAdmin() {
       prisma.pengajuan.count({ where: { status: "DIPINJAM" } }),
       prisma.aset.count({ where: { aktif: true } }),
       prisma.pengajuan.findMany({
-        where: { status: { in: ["MENUNGGU", "DIKEMBALIKAN"] } },
+        where: { status: { in: ["MENUNGGU", "DISETUJUI", "DIKEMBALIKAN"] } },
         orderBy: [{ status: "asc" }, { diajukanPada: "asc" }],
         take: 5,
         select: PILIH_PENGAJUAN,
@@ -147,11 +147,21 @@ export default async function DasborAdmin() {
                 {fmtRentang(p.mulai, p.selesai, t)} · {hitungHari(p.mulai, p.selesai)} {t.umum.hari}
               </div>
               <Link
-                href={p.status === "DIKEMBALIKAN" ? "/admin/verifikasi" : `/admin/review?p=${p.id}`}
+                href={
+                  p.status === "DIKEMBALIKAN"
+                    ? "/admin/verifikasi"
+                    : p.status === "DISETUJUI"
+                      ? "/admin/serah"
+                      : `/admin/review?p=${p.id}`
+                }
                 className="btn btn-primary"
                 style={{ alignSelf: "flex-start", fontSize: 12.5, marginTop: 4 }}
               >
-                {p.status === "DIKEMBALIKAN" ? t.admin.verifikasiItem : t.admin.bukaReviewItem}
+                {p.status === "DIKEMBALIKAN"
+                  ? t.admin.verifikasiItem
+                  : p.status === "DISETUJUI"
+                    ? t.admin.serahkanItem
+                    : t.admin.bukaReviewItem}
               </Link>
             </div>
           ))}

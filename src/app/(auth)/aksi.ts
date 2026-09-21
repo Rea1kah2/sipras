@@ -2,8 +2,23 @@
 
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { buatSesi, cocokSandi, hapusSesi, hashSandi } from "@/lib/auth";
-import { daftarSchema, errorField, gagal, masukSchema } from "@/lib/validasi";
+import {
+  buatSesi,
+  buatTokenResetSandi,
+  cocokSandi,
+  hapusSesi,
+  hashSandi,
+  verifikasiTokenResetSandi,
+} from "@/lib/auth";
+import { kirimNotifikasi } from "@/lib/notifikasi";
+import {
+  daftarSchema,
+  errorField,
+  gagal,
+  lupaSandiSchema,
+  masukSchema,
+  resetSandiSchema,
+} from "@/lib/validasi";
 import type { HasilAksi } from "@/lib/validasi";
 
 export type StatusForm = HasilAksi<null> | null;
@@ -102,4 +117,101 @@ export async function aksiDaftar(
 export async function aksiKeluar(): Promise<void> {
   await hapusSesi();
   redirect("/masuk?sambut=keluar");
+}
+
+// ── lupa kata sandi ────────────────────────────────────────────────────
+// Kunci kamus dan waktu cooldown dipakai dua kali (kirim dan cek), jadi
+// ditulis sekali di sini supaya tidak bisa mencar beda.
+const KUNCI_LUPA_SANDI_DIMINTA = "lupaSandi.diminta";
+const COOLDOWN_LUPA_SANDI_MS = 60_000;
+
+export async function aksiMintaResetSandi(
+  _sebelum: StatusForm,
+  data: FormData
+): Promise<StatusForm> {
+  const hasil = lupaSandiSchema.safeParse({ email: data.get("email") });
+  if (!hasil.success) {
+    return gagal("Periksa lagi isian kamu.", errorField(hasil.error));
+  }
+
+  // Balasan SELALU sama, ada akunnya atau tidak, aktif atau tidak, kena
+  // cooldown atau tidak. Prinsipnya sama dengan aksiMasuk: kalau balasannya
+  // beda beda, itu sendiri sudah bocor jadi alat menebak email terdaftar.
+  const pesanSukses =
+    "Kalau email itu terdaftar, tautan reset kata sandi sudah dikirim.";
+
+  const user = await prisma.user.findUnique({
+    where: { email: hasil.data.email },
+    select: { id: true, password: true, aktif: true },
+  });
+
+  if (user && user.aktif) {
+    const kenaCooldown = await prisma.notifikasi.findFirst({
+      where: {
+        userId: user.id,
+        kunci: KUNCI_LUPA_SANDI_DIMINTA,
+        dibuatPada: { gte: new Date(Date.now() - COOLDOWN_LUPA_SANDI_MS) },
+      },
+      select: { id: true },
+    });
+
+    if (!kenaCooldown) {
+      const token = await buatTokenResetSandi(user.id, user.password);
+      await kirimNotifikasi({
+        userId: user.id,
+        judul: "Tautan reset kata sandi",
+        isi: "Klik tautan di email untuk membuat kata sandi baru. Tautan ini berlaku 20 menit dan hanya bisa dipakai sekali. Kalau kamu tidak meminta ini, abaikan saja email ini.",
+        kunci: KUNCI_LUPA_SANDI_DIMINTA,
+        tautan: `/reset-sandi?token=${token}`,
+        email: true,
+      });
+    }
+  }
+
+  return { ok: true, data: null, pesan: pesanSukses };
+}
+
+export async function aksiResetSandi(
+  _sebelum: StatusForm,
+  data: FormData
+): Promise<StatusForm> {
+  const hasil = resetSandiSchema.safeParse({
+    token: data.get("token"),
+    sandiBaru: data.get("sandiBaru"),
+    ulangiSandi: data.get("ulangiSandi"),
+  });
+  if (!hasil.success) {
+    return gagal("Periksa lagi isian kamu.", errorField(hasil.error));
+  }
+
+  // Pesan yang sama untuk kedaluwarsa, rusak, ATAU sudah pernah dipakai:
+  // membedakannya cuma membocorkan detail yang tidak berguna bagi pemilik
+  // akun yang sah, dan berguna bagi yang bukan.
+  const diverifikasi = await verifikasiTokenResetSandi(hasil.data.token);
+  if (!diverifikasi) {
+    return gagal(
+      "Tautan ini tidak valid atau sudah kedaluwarsa. Minta tautan baru dari halaman lupa kata sandi."
+    );
+  }
+
+  await prisma.user.update({
+    where: { id: diverifikasi.userId },
+    data: { password: await hashSandi(hasil.data.sandiBaru) },
+  });
+
+  // In-app saja, bukan email: pemilik akun sedang berada tepat di alur ini,
+  // notifikasi lewat lonceng cukup untuk transparansi kalau bukan dia yang
+  // memintanya.
+  await kirimNotifikasi({
+    userId: diverifikasi.userId,
+    judul: "Kata sandi kamu sudah diganti",
+    isi: "Kata sandi akun kamu baru saja diganti lewat tautan lupa kata sandi. Kalau ini bukan kamu, segera hubungi petugas Sarpras.",
+    kunci: "lupaSandi.selesai",
+  });
+
+  return {
+    ok: true,
+    data: null,
+    pesan: "Kata sandi kamu berhasil diganti. Silakan masuk dengan kata sandi barumu.",
+  };
 }

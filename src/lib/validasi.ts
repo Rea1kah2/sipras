@@ -50,6 +50,21 @@ export const masukSchema = z.object({
   sandi: z.string().min(1, "Kata sandi wajib diisi"),
 });
 
+export const lupaSandiSchema = z.object({
+  email: z.email("Format email tidak valid").toLowerCase(),
+});
+
+export const resetSandiSchema = z
+  .object({
+    token: z.string().min(1),
+    sandiBaru,
+    ulangiSandi: z.string(),
+  })
+  .refine((d) => d.sandiBaru === d.ulangiSandi, {
+    path: ["ulangiSandi"],
+    message: "Ulangi kata sandi belum sama",
+  });
+
 export const asetSchema = z
   .object({
     nama: z.string().trim().min(3, "Nama aset minimal 3 karakter").max(120),
@@ -211,6 +226,10 @@ export const peranSchema = z.object({
 export const aktifSchema = z.object({
   userId: z.string().min(1),
   aktif: z.enum(["ya", "tidak"]),
+});
+
+export const resetSandiAdminSchema = z.object({
+  userId: z.string().min(1),
 });
 
 export const verifikasiSchema = z.object({

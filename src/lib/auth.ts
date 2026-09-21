@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { hash, compare } from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
+import { createHash } from "node:crypto";
 import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 import type { Peran } from "@/generated/prisma/enums";
@@ -88,6 +89,67 @@ export const bacaSesi = cache(async (): Promise<Sesi | null> => {
     return null;
   }
 });
+
+// ── reset kata sandi ───────────────────────────────────────────────────
+const PENERBIT_RESET = "sipras-reset-sandi";
+const UMUR_TOKEN_RESET = "20m";
+
+/** Sidik jari pendek dari hash sandi saat ini, bukan hash itu sendiri. */
+function sidikSandi(hashSandi: string): string {
+  return createHash("sha256").update(hashSandi).digest("hex").slice(0, 16);
+}
+
+/**
+ * Token reset kata sandi. Sengaja terpisah dari token sesi: klaim `purpose`
+ * dan `issuer`-nya berbeda supaya satu jenis token mustahil dipakai sebagai
+ * jenis yang lain walau kuncinya sama.
+ *
+ * Tidak ada tabel atau kolom baru untuk menyimpan token ini. Klaim `fp`
+ * adalah sidik jari hash sandi PENGGUNA SAAT TOKEN DIBUAT. Begitu sandinya
+ * berubah, sidik jarinya ikut berubah, dan token lama otomatis gagal
+ * diverifikasi lagi, persis seperti token yang sudah dipakai. Jadi token
+ * ini otomatis sekali pakai tanpa perlu daftar token yang sudah terpakai.
+ */
+export async function buatTokenResetSandi(
+  userId: string,
+  hashSandiSaatIni: string
+): Promise<string> {
+  return new SignJWT({ fp: sidikSandi(hashSandiSaatIni) })
+    .setProtectedHeader({ alg: "HS256" })
+    .setSubject(userId)
+    .setIssuer(PENERBIT_RESET)
+    .setIssuedAt()
+    .setExpirationTime(UMUR_TOKEN_RESET)
+    .sign(kunci());
+}
+
+/**
+ * Verifikasi token reset. Selalu mengambil ulang pengguna dari basis data
+ * supaya sidik jari dicocokkan dengan hash sandi yang BENAR BENAR berlaku
+ * sekarang, bukan yang tersimpan di dalam token.
+ */
+export async function verifikasiTokenResetSandi(
+  token: string
+): Promise<{ userId: string } | null> {
+  try {
+    const { payload } = await jwtVerify(token, kunci(), { issuer: PENERBIT_RESET });
+    const userId = payload.sub;
+    const fp = payload.fp;
+    if (!userId || typeof fp !== "string") return null;
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { password: true, aktif: true },
+    });
+    if (!user || !user.aktif) return null;
+    if (sidikSandi(user.password) !== fp) return null;
+
+    return { userId };
+  } catch {
+    // Token kedaluwarsa, tanda tangannya tidak cocok, atau issuer beda.
+    return null;
+  }
+}
 
 /**
  * Pengguna yang sedang login, diambil ulang dari database. Dipakai kalau

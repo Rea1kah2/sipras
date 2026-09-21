@@ -2,8 +2,16 @@
 
 import { refresh } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { wajibAdmin } from "@/lib/auth";
-import { aktifSchema, errorField, gagal, peranSchema } from "@/lib/validasi";
+import { hashSandi, wajibAdmin } from "@/lib/auth";
+import { buatSandiAcak } from "@/lib/sandi";
+import { kirimNotifikasi } from "@/lib/notifikasi";
+import {
+  aktifSchema,
+  errorField,
+  gagal,
+  peranSchema,
+  resetSandiAdminSchema,
+} from "@/lib/validasi";
 import type { HasilAksi } from "@/lib/validasi";
 
 export type StatusPengguna = HasilAksi<null> | null;
@@ -117,6 +125,73 @@ export async function aksiUbahAktif(
     ok: true,
     data: null,
     pesan: aktif ? "Akun diaktifkan kembali." : "Akun dinonaktifkan.",
+  };
+}
+
+/**
+ * Reset kata sandi pengguna lain. Sistem yang membuat sandi barunya secara
+ * acak, bukan admin yang mengetik, supaya tidak bergantung pada admin
+ * mengarang sandi yang cukup kuat. Sandinya cuma tampil SEKALI di layar
+ * admin lewat pesan sukses aksi ini, admin yang menyampaikannya sendiri ke
+ * pengguna (lewat WhatsApp misalnya) karena email tidak bisa diandalkan
+ * sampai ke sembarang alamat (lihat catatan EMAIL_UJI_KE di README).
+ *
+ * Target diri sendiri sengaja ditolak: sudah ada jalur self-service di
+ * halaman Profil yang mewajibkan sandi lama, dan membiarkan dua jalur
+ * ganti sandi yang berbeda untuk akun yang sama hanya menambah kebingungan.
+ */
+export async function aksiResetSandiPengguna(
+  _sebelum: StatusPengguna,
+  data: FormData
+): Promise<StatusPengguna> {
+  const admin = await wajibAdmin();
+
+  const hasil = resetSandiAdminSchema.safeParse({ userId: data.get("userId") });
+  if (!hasil.success) {
+    return gagal("Data tidak valid.", errorField(hasil.error));
+  }
+  const { userId } = hasil.data;
+
+  if (userId === admin.id) {
+    return gagal("Gunakan halaman Profil untuk mengganti kata sandimu sendiri.");
+  }
+
+  const sandiBaru = buatSandiAcak();
+  let namaTarget = "";
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      const target = await tx.user.findUnique({
+        where: { id: userId },
+        select: { id: true, nama: true },
+      });
+      if (!target) throw new TolakError("Pengguna tidak ditemukan.");
+      namaTarget = target.nama;
+
+      await tx.user.update({
+        where: { id: userId },
+        data: { password: await hashSandi(sandiBaru) },
+      });
+    });
+  } catch (e) {
+    if (e instanceof TolakError) return gagal(e.message);
+    throw e;
+  }
+
+  // In-app saja, tanpa sandi plaintext-nya: pengguna perlu tahu sandinya
+  // baru saja diganti, tapi sandi barunya disampaikan admin di luar sistem.
+  await kirimNotifikasi({
+    userId,
+    judul: "Kata sandi kamu direset admin",
+    isi: "Admin baru saja mengganti kata sandi akunmu. Hubungi admin untuk mendapatkan kata sandi barumu.",
+    kunci: "pengguna.sandiDireset",
+  });
+
+  refresh();
+  return {
+    ok: true,
+    data: null,
+    pesan: `Kata sandi ${namaTarget} diganti jadi: ${sandiBaru}`,
   };
 }
 

@@ -22,6 +22,7 @@ const FILTER: { kunci: string; status?: StatusPengajuan }[] = [
   { kunci: "SEMUA" },
   { kunci: "MENUNGGU", status: "MENUNGGU" },
   { kunci: "DISETUJUI", status: "DISETUJUI" },
+  { kunci: "DIPINJAM", status: "DIPINJAM" },
   { kunci: "DITOLAK", status: "DITOLAK" },
 ];
 
@@ -52,7 +53,7 @@ export default async function Review(props: PageProps<"/admin/review">) {
       ...cocok,
       status: aktifFilter.status
         ? aktifFilter.status
-        : { in: ["MENUNGGU", "DISETUJUI", "DITOLAK"] },
+        : { in: ["MENUNGGU", "DISETUJUI", "DIPINJAM", "DITOLAK"] },
     },
     orderBy: [{ status: "asc" }, { diajukanPada: "asc" }],
     select: PILIH_PENGAJUAN,

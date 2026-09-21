@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { wajibAdmin } from "@/lib/auth";
 import { alasanTolakPindah, bolehPindah } from "@/lib/status";
 import { cekBentrok } from "@/lib/ketersediaan";
-import { kirimNotifikasi } from "@/lib/notifikasi";
+import { kabariAdmin, kirimNotifikasi } from "@/lib/notifikasi";
 import { errorField, gagal, reviewSchema } from "@/lib/validasi";
 import { fmtRentang , keISO} from "@/lib/waktu";
 import type { HasilAksi } from "@/lib/validasi";
@@ -39,6 +39,7 @@ export async function aksiReview(
       mulai: true,
       selesai: true,
       pemohonId: true,
+      pemohon: { select: { nama: true } },
       items: { select: { asetId: true, jumlah: true } },
     },
   });
@@ -125,6 +126,19 @@ export async function aksiReview(
     tautan: "/pengajuan",
     email: true,
   });
+
+  // Admin lain (dan admin yang sama, di perangkat lain) perlu tahu ada yang
+  // siap diserahkan, bukan cuma mengandalkan admin yang menyetujui tadi
+  // ingat sendiri untuk membuka /admin/serah.
+  if (setuju) {
+    await kabariAdmin({
+      judul: `${pengajuan.kode} siap diserahkan`,
+      isi: `${pengajuan.pemohon.nama} sudah disetujui, tunggu diambil di loket sarpras.`,
+      kunci: "review.siapDiserahkan",
+      data: { kode: pengajuan.kode, nama: pengajuan.pemohon.nama },
+      tautan: "/admin/serah",
+    });
+  }
 
   refresh();
   return { ok: true, data: null, pesan: setuju ? "Pengajuan disetujui." : "Pengajuan ditolak." };

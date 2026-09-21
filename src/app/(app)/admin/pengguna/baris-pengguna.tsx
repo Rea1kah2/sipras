@@ -1,7 +1,12 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { aksiUbahAktif, aksiUbahPeran, type StatusPengguna } from "./aksi";
+import {
+  aksiResetSandiPengguna,
+  aksiUbahAktif,
+  aksiUbahPeran,
+  type StatusPengguna,
+} from "./aksi";
 import { PesanGagal, PesanSukses, TombolKirim } from "@/components/form";
 import { ModalKonfirmasi } from "@/components/modal";
 import { useKamus } from "@/components/kamus-provider";
@@ -40,16 +45,23 @@ export function AksiPengguna({ u }: { u: Pengguna }) {
     aksiUbahAktif,
     null
   );
+  const [reset, kirimReset] = useActionState<StatusPengguna, FormData>(
+    aksiResetSandiPengguna,
+    null
+  );
 
   const [tanyaPeran, setTanyaPeran] = useState(false);
   const [tanyaAktif, setTanyaAktif] = useState(false);
+  const [tanyaReset, setTanyaReset] = useState(false);
 
   const kabarGagal =
     (peran && !peran.ok ? peran.pesan : undefined) ??
-    (aktif && !aktif.ok ? aktif.pesan : undefined);
+    (aktif && !aktif.ok ? aktif.pesan : undefined) ??
+    (reset && !reset.ok ? reset.pesan : undefined);
   const kabarSukses =
     (peran && peran.ok ? peran.pesan : undefined) ??
-    (aktif && aktif.ok ? aktif.pesan : undefined);
+    (aktif && aktif.ok ? aktif.pesan : undefined) ??
+    (reset && reset.ok ? reset.pesan : undefined);
 
   const jadiAdmin = u.peran !== "ADMIN";
   const akanNonaktif = u.aktif;
@@ -105,6 +117,17 @@ export function AksiPengguna({ u }: { u: Pengguna }) {
         >
           {u.aktif ? p.nonaktifkan : p.aktifkan}
         </button>
+
+        <button
+          type="button"
+          className="btn btn-secondary"
+          style={{ fontSize: 12, padding: "5px 12px" }}
+          disabled={u.diriSendiri}
+          title={u.diriSendiri ? p.tidakBisaResetDiri : undefined}
+          onClick={() => setTanyaReset(true)}
+        >
+          {p.resetSandi}
+        </button>
       </div>
 
       {kabarGagal && (
@@ -159,6 +182,25 @@ export function AksiPengguna({ u }: { u: Pengguna }) {
         }
       >
 {isiBadan(akanNonaktif ? p.tanyaNonaktifIsi : p.tanyaAktifIsi)}
+      </ModalKonfirmasi>
+
+      {/* ── konfirmasi reset kata sandi ─────────────────────────────── */}
+      <ModalKonfirmasi
+        terbuka={tanyaReset}
+        rupa="bahaya"
+        judul={isiJudul(p.tanyaResetJudul)}
+        labelBatal={t.umum.batal}
+        onBatal={() => setTanyaReset(false)}
+        lanjut={
+          <form action={kirimReset} onSubmit={() => setTanyaReset(false)}>
+            <input type="hidden" name="userId" value={u.id} />
+            <TombolKirim className="btn btn-danger" sedang={t.umum.memuat}>
+              {p.tanyaResetLanjut}
+            </TombolKirim>
+          </form>
+        }
+      >
+{isiBadan(p.tanyaResetIsi)}
       </ModalKonfirmasi>
     </div>
   );
