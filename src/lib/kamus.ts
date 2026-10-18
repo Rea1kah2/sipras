@@ -222,6 +222,9 @@ const ID = {
     pemohon: "Pemohon",
     kirim: "Kirim pengajuan",
     mengirim: "Mengirim...",
+    tanyaKirim: "Kirim pengajuan sekarang?",
+    tanyaKirimIsi:
+      "Pengajuan akan masuk antrean review admin. Pastikan barang, tanggal, keperluan, dan kontak sudah benar.",
     belumDiisi: "Belum diisi",
     semuaTersedia: "Semua item tersedia di tanggal ini. Pengajuan bisa dikirim.",
     pernyataan:
@@ -251,6 +254,9 @@ const ID = {
     catatanContoh: "Misal: lensa proyektor sedikit berdebu, sudah dibersihkan.",
     mengirim: "Mengirim...",
     kirim: "Kirim konfirmasi pengembalian",
+    tanyaKirim: "Kirim konfirmasi pengembalian?",
+    tanyaKirimIsi:
+      "Status pengajuan akan berubah menjadi menunggu verifikasi admin. Pastikan tanggal dan kondisi setiap item sudah benar.",
     pengajuan: "Pengajuan",
   },
 
@@ -567,6 +573,8 @@ const ID = {
     bukaReviewItem: "Buka dan review",
     verifikasiItem: "Verifikasi pengembalian",
     serahkanItem: "Serahkan barang",
+    handoverBanner: "{n} pengajuan menunggu serah terima.",
+    handoverBannerLink: "Buka antrean serah terima",
   },
 
   aset: {
@@ -696,6 +704,12 @@ const ID = {
     catatanPetunjuk:
       "Catatan ini ikut terkirim di notifikasi dan email peminjam. Kalau dikosongkan, sistem memakai kalimat baku.",
     tolak: "Tolak",
+    tanyaSetujui: "Setujui pengajuan ini?",
+    tanyaTolak: "Tolak pengajuan ini?",
+    konfirmasiSetujui:
+      "Pengajuan akan dikunci dan peminjam akan diberi tahu. Kamu masih bisa melanjutkan ke serah terima setelah barang siap.",
+    konfirmasiTolak:
+      "Pengajuan akan ditolak dan peminjam akan menerima catatan keputusan ini.",
   },
 
   serah: {
@@ -773,6 +787,27 @@ const ID = {
       "Kata sandi terlalu lemah. Minimal 8 karakter dan campur huruf dengan angka atau simbol.",
   },
 
+  auth: {
+    kicker: "Sarana & Prasarana Sekolah",
+    title: "Pinjam ruang dan alat tanpa antre di loket.",
+    description:
+      "Ajukan sekali, pantau sampai selesai. Admin memverifikasi dari dasbor yang sama, dan kabar penting masuk lewat aplikasi serta email.",
+    requestTitle: "Lab Komputer 03 & 2x Proyektor Epson",
+    requestApplicant: "Pemohon: Nadia (Ilmu Komputer)",
+    requestSchedule: "18 Okt - 20 Okt 2026",
+    requestReady: "Siap diambil",
+    featureConflict: "Cek bentrok",
+    featureConflictDescription: "Validasi jadwal otomatis",
+    featureMulti: "Multi-item",
+    featureMultiDescription: "Ajukan banyak aset sekaligus",
+    featureNotice: "Notifikasi",
+    featureNoticeDescription: "Kabar lewat aplikasi & email",
+    footerUnit: "Unit Layanan Sarpras",
+    footerTagline: "Ruang dan barang lebih tertata.",
+    footerPrivacy: "Data kamu tetap privat.",
+    footerHelp: "Butuh bantuan WhatsApp?",
+  },
+
   masuk: {
     lencana: "Sarana & Prasarana Sekolah",
     judulBesar: "Pinjam ruang dan alat tanpa antre di loket.",
@@ -787,6 +822,9 @@ const ID = {
     emailContoh: "nama@gmail.com",
     sandi: "Kata sandi",
     lupaSandi: "Lupa kata sandi?",
+    demoJudul: "Akun demo (klik untuk mengisi)",
+    demoAdmin: "Admin Sarpras",
+    demoPeminjam: "Peminjam (Guru)",
     tombol: "Masuk",
     sedang: "Memeriksa...",
     belumPunya: "Belum punya akun?",
@@ -839,6 +877,10 @@ const ID = {
     ulangSandi: "Ulangi kata sandi",
     unit: "Kelas / bidang tugas",
     unitContoh: "Guru Kelas 4",
+    bagianIdentitas: "1. Identitas akun",
+    bagianKontak: "2. Kontak & unit",
+    bagianKeamanan: "3. Keamanan sandi",
+    bagianPersetujuan: "Persetujuan peminjaman",
     setuju:
       "Saya bersedia mengembalikan barang dan ruang sesuai jadwal, serta bertanggung jawab atas kerusakan yang terjadi selama masa pinjam.",
     tombol: "Buat akun",
@@ -1107,6 +1149,9 @@ const EN: Kamus = {
     pemohon: "Requested by",
     kirim: "Send request",
     mengirim: "Sending...",
+    tanyaKirim: "Send this request now?",
+    tanyaKirimIsi:
+      "The request will enter the admin review queue. Make sure the items, dates, purpose, and contact are correct.",
     belumDiisi: "Not filled in",
     semuaTersedia: "Everything is available on these dates. You can send the request.",
     pernyataan:
@@ -1136,6 +1181,9 @@ const EN: Kamus = {
     catatanContoh: "e.g. the projector lens was dusty, already cleaned.",
     mengirim: "Sending...",
     kirim: "Send return confirmation",
+    tanyaKirim: "Send this return confirmation?",
+    tanyaKirimIsi:
+      "The request will move to waiting for admin verification. Make sure the date and condition of every item are correct.",
     pengajuan: "Request",
   },
 
@@ -1441,6 +1489,8 @@ const EN: Kamus = {
     bukaReviewItem: "Open and review",
     verifikasiItem: "Verify the return",
     serahkanItem: "Hand over",
+    handoverBanner: "{n} request(s) are waiting for handover.",
+    handoverBannerLink: "Open handover queue",
   },
 
   aset: {
@@ -1570,6 +1620,12 @@ const EN: Kamus = {
     catatanPetunjuk:
       "This note is included in the notification and email sent to the borrower. If you leave it empty, the system uses a standard sentence.",
     tolak: "Decline",
+    tanyaSetujui: "Approve this request?",
+    tanyaTolak: "Decline this request?",
+    konfirmasiSetujui:
+      "The request will reserve the assets and notify the borrower. You can continue to handover once the items are ready.",
+    konfirmasiTolak:
+      "The request will be declined and the borrower will receive the decision note.",
   },
 
   serah: {
@@ -1642,6 +1698,27 @@ const EN: Kamus = {
       "That password is too weak. Use at least 8 characters and mix letters with numbers or symbols.",
   },
 
+  auth: {
+    kicker: "School Facilities",
+    title: "Book rooms and equipment without queueing at the desk.",
+    description:
+      "Request once, follow it through to the end. Admins verify from the same dashboard, and important updates arrive in the app and by email.",
+    requestTitle: "Computer Lab 03 & 2 Epson Projectors",
+    requestApplicant: "Requested by Nadia (Computer Science)",
+    requestSchedule: "18 Oct - 20 Oct 2026",
+    requestReady: "Ready for pickup",
+    featureConflict: "Conflict check",
+    featureConflictDescription: "Automatic schedule validation",
+    featureMulti: "Multi-item",
+    featureMultiDescription: "Request several assets at once",
+    featureNotice: "Notifications",
+    featureNoticeDescription: "Updates in-app and by email",
+    footerUnit: "Facilities Service Unit",
+    footerTagline: "Rooms and equipment, organized.",
+    footerPrivacy: "Your data stays private.",
+    footerHelp: "Need WhatsApp help?",
+  },
+
   masuk: {
     lencana: "School Facilities",
     judulBesar: "Book rooms and equipment without queueing at the desk.",
@@ -1656,6 +1733,9 @@ const EN: Kamus = {
     emailContoh: "name@gmail.com",
     sandi: "Password",
     lupaSandi: "Forgot your password?",
+    demoJudul: "Demo accounts (click to fill)",
+    demoAdmin: "Facilities admin",
+    demoPeminjam: "Borrower (teacher)",
     tombol: "Sign in",
     sedang: "Checking...",
     belumPunya: "No account yet?",
@@ -1707,6 +1787,10 @@ const EN: Kamus = {
     ulangSandi: "Repeat password",
     unit: "Class / duty area",
     unitContoh: "Grade 4 teacher",
+    bagianIdentitas: "1. Account identity",
+    bagianKontak: "2. Contact & unit",
+    bagianKeamanan: "3. Password security",
+    bagianPersetujuan: "Borrowing agreement",
     setuju:
       "I agree to return the items and rooms on schedule, and to take responsibility for any damage during the loan.",
     tombol: "Create account",

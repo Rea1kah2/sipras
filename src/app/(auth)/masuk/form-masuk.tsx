@@ -6,6 +6,7 @@ import { aksiMasuk, type StatusForm } from "../aksi";
 import { Field, PesanGagal, TombolKirim } from "@/components/form";
 import { FieldSandi } from "@/components/kata-sandi";
 import { useKamus } from "@/components/kamus-provider";
+import { LambangSipras } from "@/components/logo";
 
 export function FormMasuk() {
   const t = useKamus();
@@ -19,18 +20,70 @@ export function FormMasuk() {
   const pesanUmum =
     status && !status.ok && !status.error ? status.pesan : undefined;
 
+  function isiDemo(e: string, p: string) {
+    setEmail(e);
+    setSandi(p);
+  }
+
   return (
     <form action={kirim} noValidate>
-      <h3 style={{ marginBottom: 4 }}>{t.masuk.kartuJudul}</h3>
-      <p
+      <div className="flex items-center gap-3" style={{ marginBottom: 16 }}>
+        <LambangSipras ukuran={32} />
+        <div>
+          <h3 style={{ margin: 0, fontSize: 18, lineHeight: 1.2 }}>{t.masuk.kartuJudul}</h3>
+          <p
+            style={{
+              fontSize: 12.5,
+              color: "var(--color-neutral-600)",
+              margin: 0,
+            }}
+          >
+            {t.masuk.kartuSub}
+          </p>
+        </div>
+      </div>
+
+      {/* Akun Uji Cepat (Demo Chips) */}
+      <div
         style={{
-          fontSize: 13,
-          color: "var(--color-neutral-600)",
+          padding: "10px 12px",
+          background: "var(--color-bg)",
+          borderRadius: "var(--radius-md)",
+          border: "1px solid var(--color-divider)",
           marginBottom: "var(--space-4)",
         }}
       >
-        {t.masuk.kartuSub}
-      </p>
+        <div
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            textTransform: "uppercase",
+            letterSpacing: "0.04em",
+            color: "var(--color-neutral-600)",
+            marginBottom: 6,
+          }}
+        >
+          {t.masuk.demoJudul}:
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => isiDemo("admin@sekolah.sch.id", "admin1234")}
+            className="btn btn-secondary"
+            style={{ fontSize: 11.5, padding: "4px 10px", minHeight: 28 }}
+          >
+            {t.masuk.demoAdmin}
+          </button>
+          <button
+            type="button"
+            onClick={() => isiDemo("siti@gmail.com", "peminjam1234")}
+            className="btn btn-secondary"
+            style={{ fontSize: 11.5, padding: "4px 10px", minHeight: 28 }}
+          >
+            {t.masuk.demoPeminjam}
+          </button>
+        </div>
+      </div>
 
       <PesanGagal pesan={pesanUmum} />
 

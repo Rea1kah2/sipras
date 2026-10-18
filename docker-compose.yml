@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sipras-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sipras
+      POSTGRES_USER: sipras
+      POSTGRES_PASSWORD: sipras_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - sipras-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  sipras-postgres-data:

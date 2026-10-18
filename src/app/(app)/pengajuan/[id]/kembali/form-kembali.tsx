@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { aksiKirimPengembalian, type StatusKembali } from "./aksi";
 import { FieldArea, PesanGagal, TombolKirim } from "@/components/form";
 import { useKamus } from "@/components/kamus-provider";
+import { ModalKonfirmasi } from "@/components/modal";
 
 export type BarisItem = {
   id: string;
@@ -23,6 +24,7 @@ export function FormKembali({
   opsiKondisi: { nilai: string; label: string }[];
 }) {
   const t = useKamus();
+  const [konfirmasi, setKonfirmasi] = useState(false);
   const [status, kirim] = useActionState<StatusKembali, FormData>(
     aksiKirimPengembalian,
     null
@@ -111,9 +113,23 @@ export function FormKembali({
         error={error?.catatan}
       />
 
-      <TombolKirim sedang={t.kembali.mengirim}>
+      <button type="button" className="btn btn-primary" onClick={() => setKonfirmasi(true)}>
         {t.kembali.kirim}
-      </TombolKirim>
+      </button>
+
+      <ModalKonfirmasi
+        terbuka={konfirmasi}
+        judul={t.kembali.tanyaKirim}
+        labelBatal={t.umum.batal}
+        onBatal={() => setKonfirmasi(false)}
+        lanjut={
+          <TombolKirim className="btn btn-primary" sedang={t.kembali.mengirim}>
+            {t.kembali.kirim}
+          </TombolKirim>
+        }
+      >
+        {t.kembali.tanyaKirimIsi}
+      </ModalKonfirmasi>
     </form>
   );
 }

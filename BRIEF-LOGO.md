@@ -47,7 +47,8 @@ Profesional, elegan, modern, humanis, dan menarik perhatian, tapi **tidak berleb
 | Hangat organik (krem, terakota, sage) | Terlalu berwarna, warnanya jadi hiasan dan berhenti menandai apa apa |
 | Grafit minimal (hampir hitam putih) | Terlalu suram, terasa tidak ramah dan tidak menarik |
 | Indigo cerah di atas putih dingin | Terlalu pudar dan kurang bersemangat, terlihat pastel |
-| **Biru laut di atas pasir hangat** | **Dipakai sekarang** |
+| **Biru laut di atas pasir hangat** | **Riwayat sebelumnya** |
+| **Coastal Glass: indigo di atas slate** | **Dipakai sekarang** |
 
 Pelajaran yang bisa dipakai: klien menyukai **warna pekat yang tegas** di atas **latar hangat**, dan menolak apa pun yang terasa pucat, kelabu, atau ramai.
 
@@ -63,13 +64,13 @@ Salin persis. Ini nilai yang sedang berjalan di aplikasi.
 | Biru laut pekat | `#075985` | Hover, bayangan warna |
 | Biru laut sangat muda | `#f0f9ff` | Latar lembut |
 | Hijau (berhasil) | `#047857` | Status disetujui dan selesai |
-| Kuningan (peringatan) | `#b45309` | Status sedang dipinjam |
+| Cyan kebiruan (peringatan) | `#147895` | Status sedang dipinjam |
 | Merah (bahaya) | `#b91c1c` | Status ditolak |
-| **Pasir hangat (latar aplikasi)** | `#f7f5f0` | Latar seluruh halaman |
-| Putih (kartu) | `#ffffff` | Latar kartu dan sidebar |
-| **Tinta (teks)** | `#14212b` | Warna teks utama |
+| **Slate Coastal Glass (latar aplikasi)** | `#eef4f8` | Latar seluruh halaman |
+| Surface blue-gray (kartu) | `#dce8f2` | Latar kartu dan sidebar |
+| **Deep navy (teks)** | `#142338` | Warna teks utama |
 
-**Aturan warna untuk logo:** pakai **biru laut sebagai warna utama lambang**. Hijau, kuningan, dan merah **tidak boleh dipakai di logo**, karena ketiganya sudah punya arti khusus sebagai penanda status di dalam aplikasi. Logo berwarna hijau akan membuat orang salah membaca.
+**Aturan warna untuk logo:** pakai **indigo sebagai warna utama lambang**. Hijau, cyan, dan merah **tidak boleh dipakai di logo**, karena ketiganya sudah punya arti khusus sebagai penanda status di dalam aplikasi. Logo berwarna hijau akan membuat orang salah membaca.
 
 ---
 
@@ -106,7 +107,7 @@ Menggabungkan gagasan **ruang** (bidang, pintu, denah) dan **barang** (kotak, ku
 **Wajib:**
 - Terbaca sebagai bentuk utuh di **16 x 16 px**
 - Punya **versi satu warna** (untuk cetak hitam putih dan dokumen laporan)
-- Berfungsi di atas **putih `#ffffff`** maupun **pasir `#f7f5f0`**
+- Berfungsi di atas **elevated `#f8fbff`** maupun **slate `#eef4f8`**
 - Diserahkan sebagai **SVG** dengan `viewBox` rapi dan tanpa teks yang belum di-outline
 - Bentuk lambang cocok dimasukkan ke **lingkaran**, karena itu wadahnya di sidebar dan footer sekarang
 
@@ -148,7 +149,7 @@ Daftar periksa untuk memilih di antara tiga konsep:
 - [ ] Diperkecil ke 16px, masih terbaca sebagai bentuk yang sama?
 - [ ] Dicetak hitam putih, masih punya karakter?
 - [ ] Ditaruh di samping tulisan SIPRAS berhuruf Caprasimo, terasa satu keluarga?
-- [ ] Ditaruh di atas pasir `#f7f5f0`, masih cukup kontras?
+- [ ] Ditaruh di atas slate `#eef4f8`, masih cukup kontras?
 - [ ] Bisa dijelaskan maknanya dalam satu kalimat tanpa terdengar dipaksakan?
 - [ ] Tidak mirip logo sistem kampus lain yang umum?
 - [ ] Kalau ditempel di sidebar yang menyusut jadi rel, tetap jelas tanpa tulisan pendampingnya?

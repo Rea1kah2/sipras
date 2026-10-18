@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { penggunaSaatIni } from "@/lib/auth";
-import { Footer } from "@/components/footer";
-import { BarTamu } from "@/components/bar-tamu";
-import { PenyediaKamus } from "@/components/kamus-provider";
+import { AuthShell } from "@/components/auth-shell";
 import { bacaPreferensi, teks } from "@/lib/preferensi-server";
 import { kamus } from "@/lib/kamus";
 import { FormResetSandi } from "./form-reset-sandi";
@@ -25,18 +23,8 @@ export default async function HalamanResetSandi(props: PageProps<"/reset-sandi">
   const t = kamus(bahasa);
 
   return (
-    <PenyediaKamus nilai={t}>
-      <div
-        className="anim-rise"
-        style={{
-          position: "relative",
-          display: "flex",
-          justifyContent: "center",
-          padding: "clamp(24px,4vw,56px) 22px",
-        }}
-      >
-        <BarTamu tema={tema} bahasa={bahasa} t={t} />
-        <div style={{ width: "min(440px,100%)" }}>
+    <AuthShell tema={tema} bahasa={bahasa} t={t}>
+      <div className="anim-rise">
           <Link href="/masuk" className="tautan" style={{ fontSize: 13 }}>
             ← {t.lupaSandi.kembali}
           </Link>
@@ -52,16 +40,8 @@ export default async function HalamanResetSandi(props: PageProps<"/reset-sandi">
             {t.lupaSandi.resetPenjelasan}
           </p>
 
-          <div
-            className="card elev-md"
-            style={{ padding: "var(--space-6)", background: "var(--color-neutral-100)" }}
-          >
-            <FormResetSandi token={token} />
-          </div>
-        </div>
+          <FormResetSandi token={token} />
       </div>
-
-      <Footer t={t} />
-    </PenyediaKamus>
+    </AuthShell>
   );
 }

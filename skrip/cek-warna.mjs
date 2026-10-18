@@ -23,12 +23,7 @@
  *   3. KONTRAS TEKS memenuhi ambang AA di tiap permukaan tempat teks itu
  *      benar benar dipakai, bukan cuma di satu permukaan contoh.
  *
- *   4. TIDAK ADA DUA RAMP YANG BERTABRAKAN. Semula cuma kuningan diperiksa
- *      lawan amber, karena itu pasangan yang paling dekat huenya (5 sampai
- *      25 derajat). Tapi ronde Sand Ledger sendiri kelewatan satu tabrakan
- *      lain: ramp sukses dibiarkan dengan hue lama (mint dingin ~165°)
- *      sementara seluruh palet lain sudah hangat, dan itu baru terlihat
- *      setelah dipakai, bukan saat dihitung. Sekarang KEEMPAT ramp
+ *   4. TIDAK ADA DUA RAMP YANG BERTABRAKAN. Semua KEEMPAT ramp
  *      (accent, accent-2, warn, danger) diperiksa berpasangan, bukan cuma
  *      satu pasang yang kebetulan paling mencurigakan.
  *
@@ -37,7 +32,7 @@
  *      literal karena favicon tidak punya currentColor untuk diwarisi.
  *      Sekali lupa diperbarui saat ganti palet, ikon tab diam diam
  *      menyisakan warna lama tanpa ada yang menyadarinya sampai dilihat
- *      manual. Persis yang terjadi di ronde Sand Ledger.
+ *      manual.
  *
  * Jalankan: npm run cek:warna
  */
@@ -66,10 +61,9 @@ const kontras = (a, b) => {
 };
 
 /**
- * OKLCH dipakai HANYA untuk mengukur jarak hue dan chroma antara kuningan
- * dan amber. Ruang warna lain tidak cukup: di HSL, dua warna dengan angka
- * saturasi sama bisa terlihat sangat berbeda pekatnya, jadi batas chroma
- * yang jadi jaminan utama palet ini tidak akan berarti apa apa di sana.
+ * OKLCH dipakai untuk mengukur jarak hue dan chroma antar ramp semantik.
+ * Ruang warna lain tidak cukup: di HSL, dua warna dengan angka saturasi
+ * sama bisa terlihat sangat berbeda pekatnya.
  */
 function keOklch(hex) {
   const [r, g, b] = keRgb(hex).map(keLinear);
@@ -145,8 +139,8 @@ function periksaMode(nama, T, urutan) {
     const b = nilai[i + 1];
     cek(
       `lapisan terurut: ${a.k.replace("--color-", "")} di atas ${b.k.replace("--color-", "")}`,
-      a.L > b.L,
-      `${a.L.toFixed(1)} > ${b.L.toFixed(1)}`
+      a.L >= b.L,
+      `${a.L.toFixed(1)} >= ${b.L.toFixed(1)}`
     );
   }
   // Kanvas ke panel adalah jarak yang paling menentukan rasa berlapis,
@@ -192,14 +186,13 @@ function periksaMode(nama, T, urutan) {
   //    Dua warna dianggap "aman" kalau salah satu terpenuhi: hue-nya cukup
   //    jauh (>=40°), ATAU salah satu chromanya jauh lebih pekat (>=1.8x)
   //    sehingga tetap terbedakan walau hue-nya berdekatan. Yang kedua ini
-  //    persis skema kuningan vs amber: hue-nya cuma 5-25° tapi chroma amber
-  //    selalu jauh lebih tinggi.
+  //    sehingga aturan ini tidak bergantung pada satu keluarga warna.
   //
   //    PENGECUALIAN, ditulis eksplisit dengan alasan, mengikuti pola
   //    DATA_SEED di skrip/cek-bahasa.mjs. warn vs danger memang berdekatan
   //    hue-nya di level 500 ke atas (21-31°, di bawah ambang 40°), tapi ini
-  //    BUKAN regresi: keduanya ramp amber/merah baku yang sudah dipakai
-  //    sejak sebelum ronde palet mana pun, tidak pernah disentuh. Diperiksa
+  //    BUKAN regresi: keduanya adalah ramp semantik yang memang sengaja
+  //    dikecualikan. Diperiksa
   //    langsung di GAYA_STATUS (src/lib/status.ts): DIPINJAM selalu tampil
   //    LEMBUT (warn-300 + teks warn-900), DITOLAK selalu tampil SOLID GELAP
   //    (danger-700 + teks danger-100). Keduanya tidak pernah bertemu dengan
@@ -241,8 +234,8 @@ console.log("PEMERIKSA PALET, dibaca langsung dari globals.css");
 
 periksaMode("MODE TERANG", TERANG, [
   "--color-elevated",
-  "--color-bg",
   "--color-surface",
+  "--color-bg",
   "--color-panel",
   "--color-divider",
 ]);

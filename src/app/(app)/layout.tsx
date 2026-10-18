@@ -83,11 +83,16 @@ async function hitungLencana(
   admin: boolean
 ): Promise<Record<string, number>> {
   if (admin) {
-    const [review, verifikasi] = await Promise.all([
+    const [review, verifikasi, serah] = await Promise.all([
       prisma.pengajuan.count({ where: { status: "MENUNGGU" } }),
       prisma.pengajuan.count({ where: { status: "DIKEMBALIKAN" } }),
+      prisma.pengajuan.count({ where: { status: "DISETUJUI" } }),
     ]);
-    return { "/admin/review": review, "/admin/verifikasi": verifikasi };
+    return {
+      "/admin/review": review,
+      "/admin/serah": serah,
+      "/admin/verifikasi": verifikasi,
+    };
   }
 
   // Lencana peminjam adalah penanda KABAR BARU, bukan jumlah pengajuan aktif.

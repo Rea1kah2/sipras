@@ -55,7 +55,7 @@ export function Footer({ peran = null, t }: Props) {
         /* Permukaan bertona, sekelas dengan sidebar dan navigasi bawah.
            Ketiganya kerangka halaman, bukan isi, jadi tonanya disamakan.
            Hasilnya halaman terkurung biru di kiri dan di bawah, dengan
-           pasir di tengah dan kartu putih di atasnya. */
+           slate di tengah dan kartu elevated di atasnya. */
         background: "var(--color-panel)",
         padding: "var(--space-8) clamp(18px,3vw,40px) var(--space-6)",
         marginTop: "var(--space-8)",

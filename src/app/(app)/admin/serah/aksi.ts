@@ -26,7 +26,7 @@ export type StatusSerah = HasilAksi<null> | null;
  * mengambil barang sore hari sebelum acara pagi. Tanggal serah terima
  * sungguhannya dicatat di `diserahkanPada`, dan begitu lebih awal dari
  * `mulai`, itulah yang dipakai lib/ketersediaan.ts (lewat efektifMulai())
- * sebagai awal terpakai — bukan tanggal yang diajukan. Tanpa ini, aset yang
+ * sebagai awal terpakai, bukan tanggal yang diajukan. Tanpa ini, aset yang
  * sudah di tangan peminjam masih bisa terlihat "tersedia" di hari yang sama
  * ia diserahkan, dan peminjam lain bisa lolos mengajukan aset yang sama.
  */

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ══════════════════════════════════════════════════════════════════════
-   SIPRAS, design system "Sand Ledger".
+   SIPRAS, design system "Coastal Glass".
    File ini sumber kebenaran tampilan: retune di sini, jangan bikin
    warna atau ukuran baru langsung di komponen.
 
@@ -12,120 +12,79 @@
       keluar. Sekarang ia menyusut ke dalam, dan kecerahan tertinggi
       disimpan untuk lapisan yang benar benar melayang.
 
-        melayang  --color-elevated     L* 97.6   modal, dropdown, input
-        kanvas    --color-bg           L* 94.6   latar halaman
-        kartu     --color-surface      L* 90.5   dan --color-neutral-100
-        panel     --color-panel        L* 88.4   sidebar, navigasi bawah
-        garis     --color-divider      L* 82.7   hairline
+        melayang  --color-elevated     L* 98.2   modal, dropdown, input
+        kanvas    --color-bg           L* 94.9   latar halaman
+        kartu     --color-surface      L* 89.8   dan --color-neutral-100
+        panel     --color-panel        L* 87.2   sidebar, navigasi bawah
+        garis     --color-divider      L* 79.0   hairline
 
    2. BATAS LAPISAN DIPEGANG GARIS TIPIS, bukan lompatan terang. Ronde
       sebelumnya jarak antar lapisan sudah diperlebar dan tetap dinilai
       membosankan, jadi akar masalahnya memang bukan di jarak.
 
    3. WARNA AKSEN BERHENTI MENGISI BIDANG BESAR. Tombol utama memakai
-      isian tinta, dan kuningan jadi tanda baca editorial: tautan, label,
-      angka besar.
+      isian tinta, sementara indigo, cyan, dan warning kebiruan menjadi tanda
+      baca editorial: tautan, label, angka, dan keadaan yang perlu perhatian.
 
-   CATATAN PALING PENTING SOAL RAMP KUNINGAN. Hue-nya 78 derajat,
-   sementara ramp peringatan amber ada di 46 sampai 96 derajat. Jaraknya
-   cuma 5 sampai 25 derajat, padahal biru yang digantikannya berjarak 165
-   derajat. Yang menjaga keduanya tidak tertukar BUKAN hue, melainkan
-   CHROMA: di kesembilan level, amber selalu minimal 1.8 kali lebih pekat
-   daripada kuningan. Kuningan terbaca cokelat zaitun, amber terbaca emas.
-   Kalau suatu saat ramp ini diretune, batasan itu yang wajib dijaga, dan
-   `npm run cek:warna` yang membuktikannya.
+   Ramp warning memakai cyan kebiruan. Ia tetap
+   terpisah dari indigo utama dan hijau sukses, sehingga perhatian tidak lagi
+   terasa seperti kartu hangat. `npm run cek:warna` menjaga jarak
+   kontras dan collision antar ramp ini.
    ══════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --color-bg: #f4efe4;
-  --color-surface: #ece3d2;
-  --color-text: #1c1712;
-  --color-accent: #725421;
+  --color-bg: #eef4f9;
+  --color-surface: #ffffff;
+  --color-text: #0f1c2e;
+  --color-accent: #3157d5;
   --color-accent-2: #3a6930;
 
-  /* Garis hairline, dan ini sekarang warna PEKAT, bukan tinta transparan.
-     Di palet lama batas antar lapisan datang dari selisih terang, jadi
-     garisnya cukup samar. Di sini garisnya yang memegang batas, jadi ia
-     harus punya nilai sendiri yang cukup jauh dari semua permukaan:
-     11.9 L* dari kanvas dan 7.8 L* dari kartu. */
-  --color-divider: #d9cdb1;
+  /* Garis hairline sejuk yang presisi */
+  --color-divider: #b8cddc;
 
-  /* Lapisan paling terang. Dipakai untuk yang benar benar melayang, yaitu
-     modal dan menu turun, DAN untuk kotak input.
+  /* Lapisan paling terang untuk modal, dropdown, dan kotak input */
+  --color-elevated: #ffffff;
 
-     Input ikut ke sini karena membetulkan cacat lama: sebelumnya latar
-     input sama dengan latar halaman, jadi di form penyaring yang tidak
-     berada di dalam kartu, kotaknya cuma terlihat dari garis tepinya.
-     Sekarang ia selalu lebih terang dari apa pun yang menopangnya. */
-  --color-elevated: #fbf8f1;
-
-  /* Teks di atas bidang warna pekat (tombol utama, badge solid, lambang).
-     Dulu peran ini dipinjamkan ke --color-neutral-100, padahal token itu
-     juga jadi latar kartu. Begitu mode gelap membalik latar kartu jadi
-     gelap, tombol langsung kehilangan kontras teksnya. Karena itu
-     perannya dipisah, dan nilainya tetap terang di kedua mode. */
+  /* Teks di atas bidang warna pekat (tombol utama, badge solid, lambang). */
   --color-di-atas-solid: #fdfbf6;
 
-  /* Permukaan struktural: sidebar, navigasi bawah, panel cerita di
-     halaman masuk. Ini lapisan yang memegang kerangka halaman.
+  /* Permukaan struktural: sidebar, navigasi bawah */
+  --color-panel: #d9e5ef;
 
-     Nilai draf Sand Ledger menaruhnya cuma 3.0 L* dari kanvas dan
-     mengandalkan garis hairline sepenuhnya. Diperdalam jadi 6.1 L* atas
-     permintaan, supaya sidebar langsung terbaca sebagai lapisan sendiri
-     tanpa perlu mata mencari garisnya lebih dulu. Garisnya tetap ada. */
-  --color-panel: #e7ddca;
+  /* Teks samar di atas panel */
+  --color-panel-samar: #47637a;
 
-  /* Teks samar di atas panel, misalnya label peran di sidebar dan
-     cetakan kecil di footer. Punya token sendiri karena kontrasnya
-     berbeda per mode, dan tanpa itu mode gelap ikut bergeser saat mode
-     terang dibetulkan. */
-  --color-panel-samar: #514a42;
+  /* Isian kecil yang duduk DI ATAS panel */
+  --color-panel-isian: #ffffff;
 
-  /* Isian kecil yang duduk DI ATAS panel, yaitu lencana hitungan di item
-     nav. Memakai lapisan melayang supaya angka yang menunggu ditangani
-     tidak tenggelam di dalam panel. */
-  --color-panel-isian: #fbf8f1;
+  /* Netral Coastal Glass. Level 100 WAJIB sama persis dengan --color-surface */
+  --color-neutral-100: #ffffff;
+  --color-neutral-200: #cddce8;
+  --color-neutral-300: #bad0df;
+  --color-neutral-400: #9eb9cd;
+  --color-neutral-500: #7e9bb2;
+  --color-neutral-600: #4d6c84;
+  --color-neutral-700: #39546b;
+  --color-neutral-800: #223b50;
+  --color-neutral-900: #0f1c2e;
 
-  /* Netral pasir. Level 100 WAJIB sama persis dengan --color-surface:
-     56 tempat di kode memakai --color-neutral-100 sebagai latar kartu,
-     sementara kelas .card memakai --color-surface. Keduanya kembar dalam
-     praktik, dan kalau nilainya berbeda halaman jadi campur aduk antara
-     kartu terang dan kartu pasir. cek:warna menjaga keduanya tetap sama. */
-  --color-neutral-100: #ece3d2;
-  --color-neutral-200: #ded5c5;
-  --color-neutral-300: #cec4b3;
-  --color-neutral-400: #afa593;
-  --color-neutral-500: #8d8373;
-  --color-neutral-600: #665e51;
-  --color-neutral-700: #514a42;
-  --color-neutral-800: #36312c;
-  --color-neutral-900: #1f1c19;
-
-  /* Utama: kuningan tua. Intinya di level 700, jadi hover dan active
+  /* Utama: indigo tua. Intinya di level 700, jadi hover dan active
      memakai 800 dan 900 supaya arahnya konsisten makin pekat. Chroma
      sengaja ditahan rendah, lihat catatan di kepala berkas. */
-  --color-accent-100: #fbf7f1;
-  --color-accent-200: #f7efdf;
-  --color-accent-300: #eddec2;
-  --color-accent-400: #dec59b;
-  --color-accent-500: #c9aa77;
-  --color-accent-600: #947139;
-  --color-accent-700: #725421;
-  --color-accent-800: #5f451b;
-  --color-accent-900: #4e3918;
+  --color-accent-100: #eef2ff;
+  --color-accent-200: #dfe6ff;
+  --color-accent-300: #c4d1ff;
+  --color-accent-400: #a2b6ff;
+  --color-accent-500: #7893f2;
+  --color-accent-600: #5270e5;
+  --color-accent-700: #294bbd;
+  --color-accent-800: #213fa9;
+  --color-accent-900: #1b328d;
 
   /* Sukses: tersedia, disetujui, selesai.
 
-     Diretune saat Sand Ledger dipasang. Nilai lamanya (hue OKLCH ~165
-     derajat, mint/emerald condong dingin) sengaja dibiarkan waktu itu
-     karena arti warna status tidak boleh berubah. Tapi "arti tidak
-     berubah" bukan berarti "temponya boleh diam": di tengah palet yang
-     serba hangat, satu satunya elemen dingin di halaman jadi menonjol
-     sendiri dan terlihat seperti sisa palet lama. Sekarang huenya digeser
-     ke 140 derajat, lumut hangat: tetap jelas hijau, tapi seleranya
-     sehangat kuningan dan pasir di sekitarnya. Jaraknya diukur aman dari
-     kuningan aksen (62°) dan dari amber peringatan (44° di tepi
-     terdekat), lihat `npm run cek:warna`. */
+     tetap jelas hijau dan dipisahkan dari indigo serta cyan warning oleh
+     pemeriksa collision. */
   --color-accent-2-100: #f2fbf0;
   --color-accent-2-200: #e1f7dc;
   --color-accent-2-300: #c8edc0;
@@ -136,18 +95,16 @@
   --color-accent-2-800: #305628;
   --color-accent-2-900: #294722;
 
-  /* Peringatan dan sorotan: amber. TIDAK disentuh. Inilah ramp yang
-     paling dekat dengan kuningan, dan chromanya yang tinggi itu justru
-     yang membedakan keduanya, jadi menurunkannya akan merusak pembeda. */
-  --color-warn-100: #fffbeb;
-  --color-warn-200: #fef3c7;
-  --color-warn-300: #fde68a;
-  --color-warn-400: #fcd34d;
-  --color-warn-500: #f59e0b;
-  --color-warn-600: #d97706;
-  --color-warn-700: #b45309;
-  --color-warn-800: #92400e;
-  --color-warn-900: #78350f;
+  /* Peringatan dan sorotan: cyan kebiruan. */
+  --color-warn-100: #eafaff;
+  --color-warn-200: #d5f4ff;
+  --color-warn-300: #b6eaff;
+  --color-warn-400: #85d8f2;
+  --color-warn-500: #4dbbdc;
+  --color-warn-600: #2198bd;
+  --color-warn-700: #147895;
+  --color-warn-800: #105f76;
+  --color-warn-900: #0b4355;
 
   /* Bahaya: ditolak, gagal, bentrok. TIDAK disentuh. */
   --color-danger-100: #fef2f2;
@@ -187,13 +144,13 @@
   --radius-lg: 28px;
   --radius-pill: 999px;
 
-  /* Bayangan dihitung dari tinta HANGAT #1c1712, bukan tinta biru yang
-     lama. Bayangan bertinta biru di atas permukaan pasir terlihat kotor.
+  /* Bayangan memakai tinta navy Coastal Glass. Bayangan bertinta biru di
+     atas permukaan slate menyatu dengan kedalaman material.
      Nilainya juga ditipiskan, karena di palet ini kartu ditopang garis
      hairline dan bayangan tebal justru melawan kesan menyusut. */
-  --shadow-sm: 0 1px 2px color-mix(in srgb, #1c1712 7%, transparent);
-  --shadow-md: 0 2px 8px color-mix(in srgb, #1c1712 10%, transparent);
-  --shadow-lg: 0 10px 30px color-mix(in srgb, #1c1712 17%, transparent);
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #142338 7%, transparent);
+  --shadow-md: 0 2px 8px color-mix(in srgb, #142338 10%, transparent);
+  --shadow-lg: 0 10px 30px color-mix(in srgb, #142338 17%, transparent);
 }
 
 /* ══════════════════════════════════════════════════════════════════════
@@ -201,8 +158,8 @@
    Ditulis hanya sebagai penimpaan token. Tidak ada satu pun komponen yang
    perlu tahu soal mode gelap, karena semuanya sudah memakai token.
 
-   Tintanya HANGAT, bukan biru kehitaman seperti palet sebelumnya, supaya
-   sekeluarga dengan pasir dan kuningan di mode terang. Tumpukan lapisannya
+   Tintanya navy, sekeluarga dengan slate, indigo, dan cyan di mode terang.
+   Tumpukan lapisannya
    setangkup dengan mode terang, cuma arahnya terbalik:
 
      melayang  #322d27  L* 18.8      kanvas    #1c1814  L*  8.6
@@ -222,60 +179,55 @@
 [data-tema="gelap"] {
   color-scheme: dark;
 
-  --color-bg: #1c1814;
-  --color-surface: #27231e;
-  --color-text: #ebe7e1;
-  --color-accent: #cfb184;
+  --color-bg: #0c1424;
+  --color-surface: #162238;
+  --color-text: #edf5ff;
+  --color-accent: #8fa8ff;
   --color-accent-2: #a4e196;
 
   /* Garis hairline versi gelap. Sama seperti di mode terang, ia yang
      memegang batas lapisan, jadi nilainya pekat dan cukup jauh dari
      kartu, 14.2 L*, bukan sekadar putih transparan tipis. */
-  --color-divider: #47423a;
+  --color-divider: #3b5573;
 
-  --color-elevated: #322d27;
+  --color-elevated: #243a58;
 
   /* Tetap satu peran: teks di atas bidang pekat. Karena di mode gelap
      isian solid justru jadi terang, warnanya ikut membalik jadi tinta. */
-  --color-di-atas-solid: #1c1712;
+  --color-di-atas-solid: #091224;
 
-  --color-panel: #2b2621;
-  --color-panel-samar: #9c958b;
-  --color-panel-isian: #3e3931;
+  --color-panel: #1c2d46;
+  --color-panel-samar: #a9bdd4;
+  --color-panel-isian: #29415f;
 
   /* Level 100 sama persis dengan --color-surface, syarat yang sama dengan
      mode terang dan dijaga oleh cek:warna. */
-  --color-neutral-100: #27231e;
-  --color-neutral-200: #302b25;
-  --color-neutral-300: #3e3931;
-  --color-neutral-400: #534d44;
-  --color-neutral-500: #716a5f;
-  --color-neutral-600: #9c958b;
-  --color-neutral-700: #bbb5ae;
-  --color-neutral-800: #d6d1cb;
-  --color-neutral-900: #ebe7e2;
+  --color-neutral-100: #162238;
+  --color-neutral-200: #1d2d46;
+  --color-neutral-300: #29415f;
+  --color-neutral-400: #3c5979;
+  --color-neutral-500: #5a7594;
+  --color-neutral-600: #87a1bc;
+  --color-neutral-700: #a9bdd4;
+  --color-neutral-800: #c9d9ea;
+  --color-neutral-900: #edf5ff;
 
-  /* Chroma tiap level dipatok 0.45 kali chroma amber di level yang sama.
-     Ini BUKAN pilihan estetis, melainkan hasil dari pemeriksa: rancangan
-     pertama memakai chroma yang lebih tinggi dan cek:warna menangkapnya
-     bertabrakan dengan amber di empat level, dengan jarak hue cuma 0
-     sampai 3 derajat. Di mode gelap amber membentang hue 70 sampai 96,
-     jadi kuningan tidak bisa menghindar lewat hue, dan chroma jadi satu
-     satunya tuas yang tersisa. Sekarang amber selalu 2.2 kali lebih pekat. */
-  --color-accent-100: #272017;
-  --color-accent-200: #332a1e;
-  --color-accent-300: #433726;
-  --color-accent-400: #5a4c35;
-  --color-accent-500: #7b6749;
-  --color-accent-600: #b09262;
-  --color-accent-700: #cfb184;
-  --color-accent-800: #e5cfad;
-  --color-accent-900: #f2e7d5;
+  /* Ramp warning mode gelap mempertahankan cyan kebiruan yang berbeda dari
+     indigo utama, dengan level terang dibalik agar teks tetap terbaca. */
+  --color-accent-100: #17234d;
+  --color-accent-200: #213267;
+  --color-accent-300: #2d4489;
+  --color-accent-400: #405caf;
+  --color-accent-500: #607bd2;
+  --color-accent-600: #8fa8ff;
+  --color-accent-700: #a8baff;
+  --color-accent-800: #c5d1ff;
+  --color-accent-900: #e1e7ff;
 
   /* Diretune bersama pasangan terangnya di atas, skala L* per level
      dipertahankan sama persis dengan ramp lama supaya kontras yang sudah
      terverifikasi tidak perlu dihitung ulang dari nol, cuma hue dan
-     chroma yang berubah ke lumut hangat. */
+     chroma yang berubah ke hijau Coastal Glass. */
   --color-accent-2-100: #172813;
   --color-accent-2-200: #21381b;
   --color-accent-2-300: #2f4f28;
@@ -286,15 +238,15 @@
   --color-accent-2-800: #bff1b4;
   --color-accent-2-900: #dcf9d6;
 
-  --color-warn-100: #2b1d06;
-  --color-warn-200: #3d2a08;
-  --color-warn-300: #563b0b;
-  --color-warn-400: #75510f;
-  --color-warn-500: #9c6b14;
-  --color-warn-600: #f59e0b;
-  --color-warn-700: #fcd34d;
-  --color-warn-800: #fde68a;
-  --color-warn-900: #fef3c7;
+  --color-warn-100: #062d2e;
+  --color-warn-200: #0a4545;
+  --color-warn-300: #0d6260;
+  --color-warn-400: #11827d;
+  --color-warn-500: #1ca69e;
+  --color-warn-600: #45c8bf;
+  --color-warn-700: #82e8dc;
+  --color-warn-800: #b0f4ed;
+  --color-warn-900: #d7fcf8;
 
   --color-danger-100: #2d1214;
   --color-danger-200: #401a1d;
@@ -492,6 +444,184 @@ figure { margin: 0; }
 .anim-rise { animation: rise 0.25s ease both; }
 .anim-pop { animation: pop 0.18s ease both; }
 
+/* ── auth shell ─────────────────────────────────────────────────────── */
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  background: var(--color-bg);
+}
+.auth-showcase {
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 480px;
+  min-height: 100vh;
+  padding: clamp(32px, 5vw, 64px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  background: var(--color-panel);
+  border-right: 1px solid var(--color-divider);
+}
+.auth-showcase-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  pointer-events: none;
+  background-image: radial-gradient(var(--color-text) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.auth-showcase-brand,
+.auth-showcase-product,
+.auth-showcase-footer {
+  position: relative;
+  z-index: 1;
+}
+.auth-brand-name {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  line-height: 1.1;
+  letter-spacing: .06em;
+}
+.auth-brand-kicker {
+  display: block;
+  margin-top: 3px;
+  color: var(--color-panel-samar);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.auth-showcase-intro { margin-top: clamp(24px, 4vw, 44px); }
+.auth-showcase-intro h1 {
+  max-width: 18ch;
+  margin: 0 0 12px;
+  color: var(--color-text);
+  font-size: clamp(28px, 3.2vw, 42px);
+  line-height: 1.18;
+}
+.auth-showcase-intro p {
+  max-width: 42ch;
+  margin: 0;
+  color: var(--color-neutral-700);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.auth-showcase-product { margin: 20px 0; }
+.auth-request-card {
+  max-width: 460px;
+  padding: 20px 22px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+}
+.auth-request-id {
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-100);
+  color: var(--color-accent-700);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.auth-request-title { margin-bottom: 4px; font-size: 15px; font-weight: 700; }
+.auth-request-meta { color: var(--color-neutral-600); font-size: 12.5px; }
+.auth-request-schedule {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-neutral-700);
+  font-size: 12px;
+}
+.auth-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 460px;
+  margin-top: 16px;
+}
+.auth-feature {
+  padding: 11px 12px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.auth-feature-title { font-size: 12.5px; font-weight: 700; }
+.auth-feature-description {
+  margin-top: 3px;
+  color: var(--color-neutral-600);
+  font-size: 11px;
+  line-height: 1.35;
+}
+.auth-showcase-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-divider);
+  color: var(--color-neutral-600);
+  font-size: 12px;
+}
+.auth-content {
+  flex: 1 1 420px;
+  min-width: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(72px, 8vw, 100px) clamp(22px, 5vw, 64px) 28px;
+}
+.auth-card {
+  width: min(560px, 100%);
+  padding: clamp(22px, 4vw, 36px);
+  background: var(--color-neutral-100);
+}
+.auth-footer {
+  width: min(560px, 100%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  margin-top: 18px;
+  color: var(--color-neutral-600);
+  font-size: 11.5px;
+  text-align: center;
+}
+.auth-form-section-title {
+  margin: var(--space-6) 0 var(--space-3);
+  color: var(--color-neutral-800);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.auth-agreement {
+  margin-top: var(--space-5);
+  padding: var(--space-3);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+@media (max-width: 860px) {
+  .auth-showcase { min-height: auto; }
+  .auth-content { min-height: auto; }
+}
+@media (max-width: 560px) {
+  .auth-showcase { padding: 30px 22px; }
+  .auth-feature-grid { grid-template-columns: 1fr; }
+  .auth-showcase-product { margin: 8px 0; }
+  .auth-content { padding: 30px 16px 22px; }
+  .auth-card { padding: 20px 16px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .anim-rise, .anim-pop { animation: none; }
   /* Gerak pada navigasi dan sidebar ikut dimatikan, warna tetap berubah
@@ -541,7 +671,7 @@ figure { margin: 0; }
   height: 100vh;
   /* Permukaan bertona, bukan putih. Inilah satu perubahan yang paling
      menentukan: begitu sidebar punya tona sendiri, tiga lapisan halaman
-     langsung terbaca sekaligus, yaitu biru, pasir, lalu kartu putih. */
+     langsung terbaca sekaligus, yaitu slate, cyan, lalu kartu elevated. */
   background: var(--color-panel);
   border-right: 1px solid var(--color-divider);
   transition: width 0.2s ease;
@@ -773,9 +903,9 @@ figure { margin: 0; }
    900 supaya arahnya tetap konsisten makin gelap. */
 /* Tombol utama memakai isian TINTA, bukan isian warna aksen.
 
-   Ini bagian dari prinsip Sand Ledger: warna aksen berhenti mengisi bidang
+   Ini bagian dari prinsip Coastal Glass: warna aksen berhenti mengisi bidang
    besar dan disimpan jadi tanda baca editorial. Tombol tinta di atas kanvas
-   pasir jadi elemen paling pekat di halaman, dan justru itu yang membuatnya
+   indigo jadi elemen paling pekat di halaman, dan justru itu yang membuatnya
    terbaca sebagai aksi utama tanpa perlu warna.
 
    Arah keadaannya sengaja dibalik dari kebiasaan: disorot jadi lebih TERANG,
@@ -1398,7 +1528,7 @@ select.input { appearance: none; }
 /* ── cards ─────────────────────────────────────────────────────────── */
 /* Kartu ditopang GARIS HAIRLINE, bukan bayangan.
 
-   Ini inti Sand Ledger. Kartu sekarang lebih gelap dari kanvas, jadi ia
+   Ini inti Coastal Glass. Kartu sekarang lebih gelap dari kanvas, jadi ia
    menyusut ke dalam dan bayangan yang mengangkatnya justru melawan maksud
    itu. Yang memisahkannya dari kanvas adalah garis 1px yang berjarak 11.9
    L* dari kanvas, cukup tegas tanpa perlu mengangkat apa pun.
@@ -1628,8 +1758,7 @@ dialog.dialog {
   overflow: auto;
 }
 dialog.dialog::backdrop {
-  /* Tinta hangat, sekeluarga dengan palet. Tinta biru di belakang
-     permukaan pasir terlihat kotor. */
+  /* Tinta navy, sekeluarga dengan palet. */
   background: rgba(28, 23, 18, 0.62);
   backdrop-filter: blur(2px);
 }
@@ -1661,6 +1790,442 @@ html:has(dialog[open]) {
 .dialog-tutup:hover {
   background: color-mix(in srgb, var(--color-text) 8%, transparent);
   color: var(--color-text);
+}
+
+/* ── liquid glass refresh ──────────────────────────────────────────────
+   Arah visual baru mengambil prinsip kaca adaptif dari siakad-sekolah,
+   tetapi tetap memakai token SIPRAS dan tidak mengubah arti warna status.
+   Permukaan tidak dibuat putih transparan secara polos: tint, blur, rim,
+   highlight, dan bayangan bekerja bersama agar kaca terbaca sebagai material,
+   bukan sekadar opacity.
+*/
+:root {
+  --glass-tint-rgb: 247 252 255;
+  --glass-rim-rgb: 255 255 255;
+  --glass-shadow-rgb: 20 35 56;
+  --glass-intensity: 0.58;
+  --glass-blur: 24px;
+  --glass-saturate: 155%;
+  --glass-alpha: 0.26;
+  --glass-rim-alpha: 0.5;
+  --glass-edge-alpha: 0.1;
+  --glass-shadow-alpha: 0.09;
+  --glass-highlight-alpha: 0.16;
+  --glass-radius: 24px;
+  --glass-ease: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+[data-tema="gelap"] {
+  --glass-tint-rgb: 31 38 48;
+  --glass-rim-rgb: 224 238 255;
+  --glass-shadow-rgb: 0 0 0;
+  --glass-intensity: 0.72;
+  --glass-blur: 28px;
+  --glass-saturate: 165%;
+  --glass-alpha: 0.52;
+  --glass-rim-alpha: 0.3;
+  --glass-edge-alpha: 0.3;
+  --glass-shadow-alpha: 0.3;
+  --glass-highlight-alpha: 0.12;
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--color-accent-300) 30%, transparent), transparent 32rem),
+    radial-gradient(circle at 94% 12%, color-mix(in srgb, var(--color-accent-2-300) 20%, transparent), transparent 28rem),
+    radial-gradient(circle at 52% 100%, color-mix(in srgb, var(--color-warn-200) 15%, transparent), transparent 34rem),
+    var(--color-bg);
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  width: 34vw;
+  height: 34vw;
+  min-width: 260px;
+  min-height: 260px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(72px);
+  opacity: 0.22;
+}
+
+body::before {
+  top: 12%;
+  right: -12vw;
+  background: var(--color-accent-300);
+}
+
+body::after {
+  bottom: 3%;
+  left: -14vw;
+  background: var(--color-accent-2-300);
+}
+
+/* Dark mode keeps its established ambience; the deeper treatment above is
+   intentionally limited to light mode. */
+[data-tema="gelap"] body {
+  background:
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--color-accent-300) 34%, transparent), transparent 32rem),
+    radial-gradient(circle at 94% 12%, color-mix(in srgb, var(--color-accent-2-300) 24%, transparent), transparent 28rem),
+    radial-gradient(circle at 52% 100%, color-mix(in srgb, var(--color-warn-200) 18%, transparent), transparent 34rem),
+    var(--color-bg);
+}
+
+[data-tema="gelap"] body::before,
+[data-tema="gelap"] body::after {
+  opacity: 0.26;
+}
+
+@keyframes glass-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+
+.glass-surface,
+.card,
+.kartu-statistik,
+.kartu-pilih,
+.dialog,
+.sidebar-burger,
+.btn-secondary,
+.sakelar-bahasa,
+.input {
+  position: relative;
+  isolation: isolate;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+}
+
+.glass-surface::before,
+.card::before,
+.kartu-statistik::before,
+.dialog::before,
+.sidebar-burger::before,
+.btn-secondary::before,
+.sakelar-bahasa::before,
+.input::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgb(var(--glass-rim-rgb) / var(--glass-highlight-alpha)),
+    transparent 34%,
+    transparent 72%,
+    rgb(var(--glass-rim-rgb) / 0.04)
+  );
+}
+
+.kartu-pilih::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+  background: linear-gradient(135deg, rgb(var(--glass-rim-rgb) / var(--glass-highlight-alpha)), transparent 34%);
+}
+
+.kartu-pilih > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Light mode menghadirkan kartu putih renyah terangkat dengan subtle glass tint.
+   Dark mode mempertahankan permukaan yang sudah disukai. */
+html:not([data-tema="gelap"]) .card {
+  background: rgb(255 255 255 / 0.94);
+}
+
+html:not([data-tema="gelap"]) .kartu-statistik,
+html:not([data-tema="gelap"]) .kartu-pilih {
+  background: rgb(255 255 255 / 0.90);
+}
+
+.sidebar {
+  margin: 12px 0 12px 12px;
+  height: calc(100vh - 24px);
+  border: 1px solid rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha));
+  border-radius: var(--radius-lg);
+  background: rgb(var(--glass-tint-rgb) / var(--glass-alpha));
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.42),
+    0 10px 32px rgb(var(--glass-shadow-rgb) / var(--glass-shadow-alpha));
+}
+
+.sidebar-isi { padding: 16px 12px; }
+.sidebar-burger {
+  background: rgb(var(--glass-tint-rgb) / 0.46);
+  border-color: rgb(var(--glass-rim-rgb) / 0.46);
+  box-shadow: inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.34);
+  transition: transform 180ms var(--glass-ease), background-color 180ms ease, border-color 180ms ease;
+}
+.sidebar-burger:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--color-accent-200) 64%, transparent);
+}
+
+.nav-item {
+  border: 1px solid transparent;
+  transition: transform 180ms var(--glass-ease), background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+.nav-item:hover,
+.nav-item[aria-current="page"] {
+  border-color: rgb(var(--glass-rim-rgb) / 0.34);
+  background: color-mix(in srgb, var(--color-accent-200) 58%, transparent);
+  box-shadow: inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.28);
+}
+
+main > header {
+  margin: 12px 12px 0;
+  border: 1px solid rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha)) !important;
+  border-radius: var(--radius-lg);
+  background: rgb(var(--glass-tint-rgb) / 0.5) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.38),
+    0 8px 24px rgb(var(--glass-shadow-rgb) / 0.07);
+}
+
+main > header + div {
+  padding-top: clamp(24px, 4vw, 48px) !important;
+}
+
+.card {
+  border-color: rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha));
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.38),
+    0 8px 24px rgb(var(--glass-shadow-rgb) / var(--glass-shadow-alpha));
+  transition: transform 220ms var(--glass-ease), box-shadow 220ms var(--glass-ease), border-color 180ms ease;
+}
+.card:hover {
+  border-color: rgb(var(--glass-rim-rgb) / 0.8);
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.48),
+    0 14px 34px rgb(var(--glass-shadow-rgb) / 0.15);
+}
+
+.kartu-statistik {
+  border-color: rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha));
+  background: color-mix(in srgb, var(--color-surface) 56%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.42),
+    0 8px 24px rgb(var(--glass-shadow-rgb) / var(--glass-shadow-alpha));
+}
+
+.kartu-pilih {
+  background: color-mix(in srgb, var(--color-surface) 58%, transparent);
+  border-color: rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha));
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.34),
+    0 7px 22px rgb(var(--glass-shadow-rgb) / 0.1);
+}
+.kartu-pilih:hover {
+  transform: translateY(-3px);
+  border-color: rgb(var(--glass-rim-rgb) / 0.78);
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.5),
+    0 15px 32px rgb(var(--glass-shadow-rgb) / 0.16);
+}
+
+html:not([data-tema="gelap"]) .card {
+  border-color: var(--color-divider);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.8),
+    0 4px 18px color-mix(in srgb, var(--color-text) 5%, transparent);
+}
+
+html:not([data-tema="gelap"]) .card:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-divider));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 8px 24px color-mix(in srgb, var(--color-text) 9%, transparent);
+}
+
+html:not([data-tema="gelap"]) .kartu-statistik {
+  border-color: var(--color-divider);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.8),
+    0 4px 18px color-mix(in srgb, var(--color-text) 5%, transparent);
+}
+
+html:not([data-tema="gelap"]) .kartu-pilih {
+  background: rgb(255 255 255 / 0.92);
+  border-color: var(--color-divider);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.8),
+    0 4px 14px color-mix(in srgb, var(--color-text) 5%, transparent);
+}
+
+html:not([data-tema="gelap"]) .kartu-pilih:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-divider));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 10px 28px color-mix(in srgb, var(--color-text) 9%, transparent);
+}
+
+.btn {
+  min-height: 38px;
+  transition: transform 160ms var(--glass-ease), box-shadow 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+.btn:hover:not(:disabled) { transform: translateY(-1px); }
+.btn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+.btn-primary,
+.btn-danger {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.24),
+    0 8px 18px color-mix(in srgb, var(--color-text) 18%, transparent);
+}
+.btn-secondary {
+  border-color: rgb(var(--glass-rim-rgb) / 0.54);
+  background: rgb(var(--glass-tint-rgb) / 0.28);
+  box-shadow: inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.3);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-accent-200) 64%, transparent);
+  border-color: rgb(var(--glass-rim-rgb) / 0.78);
+}
+.btn-icon {
+  min-height: 36px;
+  border-radius: 50%;
+}
+
+html:not([data-tema="gelap"]) .btn-secondary {
+  border-color: var(--color-divider);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+html:not([data-tema="gelap"]) .btn-secondary:hover:not(:disabled) {
+  background: var(--color-neutral-200);
+  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-divider));
+}
+
+.input {
+  border-color: rgb(var(--glass-rim-rgb) / 0.54);
+  background: rgb(var(--glass-tint-rgb) / 0.34);
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.28),
+    0 2px 8px rgb(var(--glass-shadow-rgb) / 0.05);
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+.input:hover {
+  background: rgb(var(--glass-tint-rgb) / 0.48);
+  border-color: rgb(var(--glass-rim-rgb) / 0.8);
+}
+.input:focus-visible {
+  background: rgb(var(--glass-tint-rgb) / 0.58);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 22%, transparent), inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.4);
+}
+
+html:not([data-tema="gelap"]) .input {
+  border-color: var(--color-divider);
+  background: var(--color-elevated);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-text) 4%, transparent);
+}
+html:not([data-tema="gelap"]) .input:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-divider));
+}
+
+.sakelar-bahasa {
+  border-color: rgb(var(--glass-rim-rgb) / 0.48);
+  background: rgb(var(--glass-tint-rgb) / 0.28);
+  box-shadow: inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.28);
+}
+
+.dialog {
+  border: 1px solid rgb(var(--glass-rim-rgb) / 0.72);
+  background: rgb(var(--glass-tint-rgb) / 0.78);
+  -webkit-backdrop-filter: blur(30px) saturate(165%);
+  backdrop-filter: blur(30px) saturate(165%);
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.5),
+    0 24px 70px rgb(var(--glass-shadow-rgb) / 0.24);
+}
+dialog.dialog::backdrop {
+  background: rgb(8 12 18 / 0.36);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  backdrop-filter: blur(12px) saturate(120%);
+}
+
+.tab-bawah {
+  margin: 0 10px 10px;
+  border: 1px solid rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha));
+  border-radius: var(--radius-lg);
+  background: rgb(var(--glass-tint-rgb) / 0.58);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.42),
+    0 10px 30px rgb(var(--glass-shadow-rgb) / 0.16);
+}
+.tab-item[aria-current="page"],
+.tab-item:hover {
+  background: color-mix(in srgb, var(--color-accent-200) 62%, transparent);
+  box-shadow: inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.3);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  body {
+    background: var(--color-bg);
+  }
+  body::before,
+  body::after {
+    display: none;
+  }
+  .glass-surface,
+  .card,
+  .kartu-statistik,
+  .kartu-pilih,
+  .dialog,
+  .sidebar-burger,
+  .btn-secondary,
+  .sakelar-bahasa,
+  .input,
+  main > header,
+  .sidebar,
+  .tab-bawah {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--color-surface) !important;
+  }
+  .glass-surface::before,
+  .card::before,
+  .kartu-statistik::before,
+  .dialog::before,
+  .sidebar-burger::before,
+  .btn-secondary::before,
+  .sakelar-bahasa::before,
+  .input::before {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebar { margin: 0; height: 100vh; border-radius: 0; }
+  main > header { margin: 10px 10px 0; }
+  .tab-bawah { margin: 0 8px 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .kartu-statistik,
+  .kartu-pilih,
+  .btn,
+  .sidebar-burger,
+  .input { transition: none; }
+  .card:hover,
+  .btn:hover:not(:disabled),
+  .kartu-pilih:hover { transform: none; }
 }
 
 /* Drawer navigasi HP sudah dihapus. Di layar kecil sidebar memang

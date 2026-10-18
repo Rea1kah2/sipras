@@ -20,12 +20,13 @@ export default async function DasborAdmin() {
 
   const hariIni = dariISO(hariIniISO());
 
-  const [menunggu, dikembalikan, dipinjam, jumlahAset, antrean, jatuhTempo, terlambat, barang] =
+  const [menunggu, dikembalikan, dipinjam, jumlahAset, menungguSerah, antrean, jatuhTempo, terlambat, barang] =
     await Promise.all([
       prisma.pengajuan.count({ where: { status: "MENUNGGU" } }),
       prisma.pengajuan.count({ where: { status: "DIKEMBALIKAN" } }),
       prisma.pengajuan.count({ where: { status: "DIPINJAM" } }),
       prisma.aset.count({ where: { aktif: true } }),
+      prisma.pengajuan.count({ where: { status: "DISETUJUI" } }),
       prisma.pengajuan.findMany({
         where: { status: { in: ["MENUNGGU", "DISETUJUI", "DIKEMBALIKAN"] } },
         orderBy: [{ status: "asc" }, { diajukanPada: "asc" }],
@@ -82,6 +83,33 @@ export default async function DasborAdmin() {
           {t.admin.ringkas.replace("{a}", String(menunggu)).replace("{b}", String(dikembalikan))}
         </p>
       </div>
+
+      {menungguSerah > 0 && (
+        <div
+          className="card"
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 12,
+            background: "color-mix(in srgb, var(--color-accent-200) 72%, transparent)",
+            borderColor: "color-mix(in srgb, var(--color-accent-500) 55%, transparent)",
+          }}
+        >
+          <span
+            className="statistik-ikon"
+            style={{ background: "var(--color-accent-300)", color: "var(--color-accent-900)" }}
+            aria-hidden
+          >
+            <IkonNav nama="serah" ukuran={20} />
+          </span>
+          <span style={{ flex: 1, fontSize: 13, color: "var(--color-accent-900)" }}>
+            {t.admin.handoverBanner.replace("{n}", String(menungguSerah))}
+          </span>
+          <Link href="/admin/serah" className="btn btn-primary" style={{ fontSize: 12.5 }}>
+            {t.admin.handoverBannerLink}
+          </Link>
+        </div>
+      )}
 
       <div
         style={{

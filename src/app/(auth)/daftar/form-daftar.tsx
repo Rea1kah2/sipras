@@ -55,12 +55,7 @@ export function FormDaftar() {
     <form
       action={kirim}
       noValidate
-      className="card elev-md"
-      style={{
-        marginTop: "var(--space-4)",
-        padding: "var(--space-6)",
-        background: "var(--color-neutral-100)",
-      }}
+      style={{ marginTop: "var(--space-6)" }}
       onSubmit={(e) => {
         // Penjagaan di klien untuk kasus yang paling sering terjadi, supaya
         // tidak perlu bolak balik ke server hanya untuk satu centang.
@@ -73,6 +68,7 @@ export function FormDaftar() {
     >
       <PesanGagal pesan={pesanUmum} />
 
+      <h3 className="auth-form-section-title">{t.daftar.bagianIdentitas}</h3>
       <div
         style={{
           display: "grid",
@@ -99,6 +95,16 @@ export function FormDaftar() {
           error={error?.identitas}
           required
         />
+      </div>
+
+      <h3 className="auth-form-section-title">{t.daftar.bagianKontak}</h3>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+          gap: "var(--space-3)",
+        }}
+      >
         <Field
           label={t.daftar.email}
           nama="email"
@@ -121,6 +127,25 @@ export function FormDaftar() {
           petunjuk={t.daftar.whatsappBantuan}
           required
         />
+        <Field
+          label={t.daftar.unit}
+          nama="unit"
+          placeholder={t.daftar.unitContoh}
+          value={isian.unit}
+          onChange={(e) => ubah("unit")(e.target.value)}
+          error={error?.unit}
+          required
+        />
+      </div>
+
+      <h3 className="auth-form-section-title">{t.daftar.bagianKeamanan}</h3>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+          gap: "var(--space-3)",
+        }}
+      >
         <FieldSandi
           label={t.daftar.sandi}
           nama="sandi"
@@ -144,21 +169,13 @@ export function FormDaftar() {
         />
       </div>
 
-      <div style={{ marginTop: "var(--space-3)" }}>
-        <Field
-          label={t.daftar.unit}
-          nama="unit"
-          placeholder={t.daftar.unitContoh}
-          value={isian.unit}
-          onChange={(e) => ubah("unit")(e.target.value)}
-          error={error?.unit}
-          required
-        />
-      </div>
-
+      <div className="auth-agreement">
+        <div className="auth-form-section-title" style={{ marginTop: 0 }}>
+          {t.daftar.bagianPersetujuan}
+        </div>
       <label
         className="radio"
-        style={{ marginTop: "var(--space-4)", alignItems: "flex-start", gap: 10 }}
+        style={{ alignItems: "flex-start", gap: 10 }}
       >
         <input
           type="checkbox"
@@ -174,6 +191,7 @@ export function FormDaftar() {
             {t.daftar.setuju}
         </span>
       </label>
+      </div>
 
       {(lupaSetuju || error?.setuju) && (
         <div className="field-error" role="alert">

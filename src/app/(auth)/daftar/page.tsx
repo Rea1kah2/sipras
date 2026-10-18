@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { penggunaSaatIni } from "@/lib/auth";
-import { Footer } from "@/components/footer";
-import { BarTamu } from "@/components/bar-tamu";
-import { PenyediaKamus } from "@/components/kamus-provider";
+import { AuthShell } from "@/components/auth-shell";
 import { bacaPreferensi, teks } from "@/lib/preferensi-server";
 import { kamus } from "@/lib/kamus";
 import { FormDaftar } from "./form-daftar";
@@ -22,18 +20,8 @@ export default async function HalamanDaftar() {
   const t = kamus(bahasa);
 
   return (
-    <PenyediaKamus nilai={t}>
-      <div
-      className="anim-rise"
-      style={{
-        position: "relative",
-        display: "flex",
-        justifyContent: "center",
-        padding: "clamp(24px,4vw,56px) 22px",
-      }}
-    >
-      <BarTamu tema={tema} bahasa={bahasa} t={t} />
-      <div style={{ width: "min(620px,100%)" }}>
+    <AuthShell tema={tema} bahasa={bahasa} t={t}>
+      <div className="anim-rise">
         <Link href="/masuk" className="tautan" style={{ fontSize: 13 }}>
           ← {t.daftar.kembali}
         </Link>
@@ -47,12 +35,8 @@ export default async function HalamanDaftar() {
         >
           {t.daftar.penjelasan}
         </p>
-
-          <FormDaftar />
-        </div>
+        <FormDaftar />
       </div>
-
-      <Footer t={t} />
-    </PenyediaKamus>
+    </AuthShell>
   );
 }

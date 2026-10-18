@@ -36,7 +36,8 @@ terulang:
 | 1 | Hangat organik (krem, terracotta, sage) | Terlalu berwarna — warna jadi dekorasi, berhenti bermakna |
 | 2 | Grafit minimal (nyaris hitam-putih) | Terlalu suram, tidak mengundang |
 | 3 | Indigo cerah di atas putih dingin | Terlalu pucat, kesannya pastel |
-| 4 (**sekarang**) | Biru Laut di atas pasir hangat | Mode gelap disukai; **mode terang dinilai boring** |
+| 4 | Biru Laut di atas pasir hangat | Mode gelap disukai; **mode terang dinilai boring** |
+| 5 (**sekarang**) | Coastal Glass: indigo di atas slate | Struktur glass, kontras lapisan, dan responsivitas menjadi prioritas |
 
 **Pelajaran dari pola di atas:** solusinya kemungkinan besar bukan
 "tambah lebih banyak warna" (sudah gagal di ronde 1) dan bukan "kurangi
@@ -66,7 +67,7 @@ komponennya sendiri tidak tahu-menahu soal mode gelap.
 ### Mode terang (`:root`)
 
 ```css
---color-bg:      #f1ece2   /* latar halaman, pasir hangat, L* 93.5 */
+--color-bg:      #eef4f8   /* latar halaman Coastal Glass */
 --color-surface: #ffffff   /* kartu, L* 100 */
 --color-text:    #14212b
 --color-accent:    #0369a1   /* biru laut, aksi utama */

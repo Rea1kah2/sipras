@@ -51,9 +51,9 @@ Dua skrip penjaga sudah dipasang: `npm run cek:ketersediaan` (uji regresi logika
 
 ## Keputusan Desain Penting
 
-- Palet sudah empat kali diganti sebelum menetap. Yang dipakai sekarang: **biru laut `#0369a1` di atas pasir hangat `#f7f5f0`**, teks tinta `#14212b`
+- Palet sudah beberapa kali diganti sebelum menetap. Yang dipakai sekarang: **Coastal Glass dengan indigo `#3157d5` di atas slate `#eef4f8`**, teks deep navy `#142338`
 - Tiga arah yang sudah ditolak klien beserta alasannya tercatat di `BRIEF-LOGO.md` bagian 4, jangan diulang
-- Hijau, kuningan, dan merah dikhususkan sebagai penanda status, tidak boleh dipakai di logo
+- Hijau, cyan, dan merah dikhususkan sebagai penanda status, tidak boleh dipakai di logo
 - Huruf: Caprasimo untuk judul dan wordmark, Figtree untuk teks isi
 - Tipografi menghindari em dash dan en dash, dijaga otomatis oleh `npm run cek:tipografi`
 - Fully responsive, dipakai dari HP juga

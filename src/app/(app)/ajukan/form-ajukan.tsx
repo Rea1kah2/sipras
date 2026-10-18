@@ -5,6 +5,7 @@ import { useActionState, useState } from "react";
 import { aksiKirimPengajuan, type StatusAjukan } from "./aksi";
 import { Field, FieldArea, PesanGagal, TombolKirim } from "@/components/form";
 import { useKamus } from "@/components/kamus-provider";
+import { ModalKonfirmasi } from "@/components/modal";
 
 type Props = {
   mulai: string;
@@ -34,6 +35,7 @@ export function FormAjukan({
   );
   const [tglMulai, setTglMulai] = useState(mulai);
   const [tglSelesai, setTglSelesai] = useState(selesai);
+  const [konfirmasi, setKonfirmasi] = useState(false);
 
   const error = status && !status.ok ? status.error : undefined;
   const pesanUmum = status && !status.ok ? status.pesan : undefined;
@@ -158,7 +160,7 @@ export function FormAjukan({
               {jamLayanan}
             </div>
 
-            {/* Hari tutup memakai kuningan, bukan merah, dan itu bukan sekadar
+            {/* Hari tutup memakai warning Coastal Glass, bukan merah, dan itu bukan sekadar
                 selera. Merah dipakai untuk bentrok aset, yang bisa diakali
                 dengan mengurangi jumlah atau mengganti aset. Tutup artinya
                 tanggalnya yang mustahil, dan membedakan warnanya membuat kedua
@@ -290,12 +292,31 @@ export function FormAjukan({
               {petunjukKirim}
             </div>
 
-            <TombolKirim sedang={t.ajukan.mengirim} disabled={!siap}>
+            <button
+              type="button"
+              className="btn btn-primary btn-block"
+              disabled={!siap}
+              onClick={() => setKonfirmasi(true)}
+            >
               {t.ajukan.kirim}
-            </TombolKirim>
+            </button>
           </div>
         </div>
       </div>
+
+      <ModalKonfirmasi
+        terbuka={konfirmasi}
+        judul={t.ajukan.tanyaKirim}
+        labelBatal={t.umum.batal}
+        onBatal={() => setKonfirmasi(false)}
+        lanjut={
+          <TombolKirim className="btn btn-primary" sedang={t.ajukan.mengirim}>
+            {t.ajukan.kirim}
+          </TombolKirim>
+        }
+      >
+        {t.ajukan.tanyaKirimIsi}
+      </ModalKonfirmasi>
     </form>
   );
 }

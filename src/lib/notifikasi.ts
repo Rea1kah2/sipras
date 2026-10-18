@@ -191,19 +191,17 @@ function templateEmail(nama: string, isi: IsiNotifikasi): string {
   // latarnya. Pemetaan ke token ditulis di sini supaya asalnya tetap jelas
   // kalau paletnya berubah lagi.
   //
-  // Nilai di bawah sempat tertinggal DUA palet: saat ditemukan, isinya masih
-  // #f7f5f0 dan #7a7265 dari palet lama, jadi email yang terkirim sudah tidak
-  // sewarna aplikasinya. Karena hex di sini tidak bisa ikut token secara
-  // otomatis, tiap penggantian palet WAJIB mampir ke sini.
+  // Karena email tidak dapat membaca CSS custom property, nilai hex ini harus
+  // mengikuti token Coastal Glass setiap kali palet aplikasi berubah.
   const C = {
-    latar: "#f4efe4", // --color-bg, kanvas pasir
-    kartu: "#ece3d2", // --color-surface, kartu menyusut dari kanvas
-    tinta: "#1c1712", // --color-text
-    redup: "#514a42", // --color-neutral-700
-    samar: "#665e51", // --color-neutral-600
-    garis: "#d9cdb1", // --color-divider, hairline
-    aksen: "#725421", // --color-accent, kuningan
-    aksenTua: "#5f451b", // --color-accent-800
+    latar: "#eef4f8", // --color-bg
+    kartu: "#dce8f2", // --color-surface
+    tinta: "#142338", // --color-text
+    redup: "#425a70", // --color-neutral-700
+    samar: "#4d667d", // --color-neutral-600
+    garis: "#c1d2e0", // --color-divider
+    aksen: "#3157d5", // --color-accent
+    aksenTua: "#2546bb", // --color-accent-800
   };
 
   const tombol = tautanPenuh

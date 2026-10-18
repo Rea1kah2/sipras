@@ -1,9 +1,11 @@
 "use client";
 
 import { useActionState } from "react";
+import { useState } from "react";
 import { aksiReview, type StatusReview } from "./aksi";
 import { FieldArea, PesanGagal, PesanSukses, TombolKirim } from "@/components/form";
 import { useKamus } from "@/components/kamus-provider";
+import { ModalKonfirmasi } from "@/components/modal";
 
 export function PanelKeputusan({
   pengajuanId,
@@ -14,6 +16,7 @@ export function PanelKeputusan({
 }) {
   const t = useKamus();
   const [status, kirim] = useActionState<StatusReview, FormData>(aksiReview, null);
+  const [keputusan, setKeputusan] = useState<"SETUJU" | "TOLAK" | null>(null);
 
   const gagal = status && !status.ok ? status : null;
   const sukses = status && status.ok ? status : null;
@@ -23,6 +26,7 @@ export function PanelKeputusan({
   return (
     <form action={kirim} noValidate style={{ display: "contents" }}>
       <input type="hidden" name="pengajuanId" value={pengajuanId} />
+      <input type="hidden" name="keputusan" value={keputusan ?? ""} />
 
       <PesanGagal pesan={gagal?.pesan} />
       {gagal?.error?.bentrok?.map((b, i) => (
@@ -54,29 +58,47 @@ export function PanelKeputusan({
       <div style={{ display: "flex", gap: 9, flexWrap: "wrap" }}>
         {/* name dan value ikut terkirim di FormData, jadi satu form cukup
             untuk dua keputusan tanpa state tambahan. */}
-        <TombolKirim
+        <button
+          type="button"
           className="btn btn-primary"
           style={{ flex: "1 1 130px" }}
-          name="keputusan"
-          value="SETUJU"
-          sedang={t.review.memproses}
+          onClick={() => setKeputusan("SETUJU")}
         >
-          Setujui
-        </TombolKirim>
-        <TombolKirim
+          {t.review.setujui}
+        </button>
+        <button
+          type="button"
           className="btn btn-secondary"
           style={{
             flex: "1 1 130px",
             borderColor: "var(--color-danger-700)",
             color: "var(--color-danger-800)",
           }}
-          name="keputusan"
-          value="TOLAK"
-          sedang={t.review.memproses}
+          onClick={() => setKeputusan("TOLAK")}
         >
-          Tolak
-        </TombolKirim>
+          {t.review.tolak}
+        </button>
       </div>
+
+      <ModalKonfirmasi
+        terbuka={keputusan !== null && !sukses}
+        judul={keputusan === "SETUJU" ? t.review.tanyaSetujui : t.review.tanyaTolak}
+        labelBatal={t.umum.batal}
+        rupa={keputusan === "SETUJU" ? "sukses" : "bahaya"}
+        onBatal={() => setKeputusan(null)}
+        lanjut={
+          <TombolKirim
+            className={keputusan === "SETUJU" ? "btn btn-primary" : "btn btn-danger"}
+            sedang={t.review.memproses}
+          >
+            {keputusan === "SETUJU" ? t.review.setujui : t.review.tolak}
+          </TombolKirim>
+        }
+      >
+        {keputusan === "SETUJU"
+          ? t.review.konfirmasiSetujui
+          : t.review.konfirmasiTolak}
+      </ModalKonfirmasi>
     </form>
   );
 }
