@@ -17,47 +17,37 @@ import { put } from "@vercel/blob";
 import pg from "pg";
 
 const PAKSA = process.argv.includes("--paksa");
-const SUMBER = "foto-aset";
+const SUMBER = existsSync("public/images/aset")
+  ? "public/images/aset"
+  : existsSync("image-sipras")
+    ? "image-sipras"
+    : "foto-aset";
 
 /**
- * ─────────────────────────────────────────────────────────────────────────
- * PEMETAAN FOTO KE ASET. Satu satunya bagian yang perlu diubah.
- * ─────────────────────────────────────────────────────────────────────────
- *
- * Satu foto boleh dipakai beberapa aset, dan itu disengaja. Foto ruang kelas
- * menampilkan kursi plastik, meja kayu, dan lemari kayu sekaligus, jadi
- * memakainya untuk ketiga furnitur itu lebih menolong guru yang sedang
- * memilih daripada ilustrasi generik. Tiap berkas tetap diunggah SEKALI,
- * lalu URL-nya dibagikan.
- *
- * Berkas yang ada di folder tapi tidak disebut di sini sengaja tidak
- * dipakai. Alasannya dicatat di bawah supaya tidak terlihat seperti lupa.
+ * PEMETAAN FOTO KE ASET.
  */
 const PEMETAAN = [
-  {
-    berkas: "perpustakaan.jpeg",
-    aset: ["Perpustakaan", "Kursi Lipat"],
-  },
-  {
-    berkas: "ruang-kelas.jpeg",
-    aset: [
-      "Ruang Kelas 1",
-      "Ruang Kelas 2",
-      "Ruang Kelas 3",
-      "Ruang Kelas 4",
-      "Ruang Kelas 5",
-      "Ruang Kelas 6",
-      "Kursi Plastik Siswa",
-      "Meja Siswa Kayu",
-      "Lemari Kayu",
-    ],
-  },
-  { berkas: "laptop-acer.jpeg", aset: ["Laptop Acer", "Ruang Guru"] },
-  { berkas: "proyektor-infocus.jpeg", aset: ["Proyektor InFocus"] },
-  { berkas: "raket-bulu-tangkis.jpeg", aset: ["Raket Bulu Tangkis"] },
   { berkas: "bola-kaki.jpeg", aset: ["Bola Kaki"] },
-  { berkas: "bola-voli.jpeg", aset: ["Bola Voli"] },
-  { berkas: "halaman-sekolah.jpeg", aset: ["Halaman Sekolah"] },
+  { berkas: "bola-tenis.jpeg", aset: ["Bola Tenis"] },
+  { berkas: "generator.jpeg", aset: ["Generator"] },
+  { berkas: "kipas-angin.jpeg", aset: ["Kipas Angin"] },
+  { berkas: "kotak-p3k.jpeg", aset: ["Kotak P3K"] },
+  { berkas: "kursi-plastik.jpeg", aset: ["Kursi Plastik Siswa"] },
+  { berkas: "lapangan-badminton.jpeg", aset: ["Lapangan Badminton"] },
+  { berkas: "lapangan-bola.jpeg", aset: ["Lapangan Bola"] },
+  { berkas: "papan-catur.jpeg", aset: ["Papan Catur"] },
+  { berkas: "raket-badminton.jpeg", aset: ["Raket Bulu Tangkis"] },
+  { berkas: "ruang-kelas-1.jpeg", aset: ["Ruang Kelas 1"] },
+  { berkas: "ruang-kelas-2a.jpeg", aset: ["Ruang Kelas 2", "Ruang Kelas 2A"] },
+  { berkas: "ruang-kelas-2b.jpeg", aset: ["Ruang Kelas 2B"] },
+  { berkas: "ruang-kelas-3.jpeg", aset: ["Ruang Kelas 3"] },
+  { berkas: "ruang-kelas-4a.jpeg", aset: ["Ruang Kelas 4", "Ruang Kelas 4A"] },
+  { berkas: "ruang-kelas-4b.jpeg", aset: ["Ruang Kelas 4B"] },
+  { berkas: "ruang-kelas-5.jpeg", aset: ["Ruang Kelas 5"] },
+  { berkas: "ruang-kelas-6a.jpeg", aset: ["Ruang Kelas 6", "Ruang Kelas 6A"] },
+  { berkas: "ruang-kelas-6b.jpeg", aset: ["Ruang Kelas 6B"] },
+  { berkas: "ruang-laboratorium.jpeg", aset: ["Ruang Laboratorium"] },
+  { berkas: "speaker.jpeg", aset: ["Speaker"] },
 ];
 
 /**
@@ -95,7 +85,7 @@ function wajib(nama) {
 }
 
 async function main() {
-  const token = wajib("BLOB_READ_WRITE_TOKEN");
+  wajib("BLOB_READ_WRITE_TOKEN");
   const koneksi = wajib("DATABASE_URL");
 
   const db = new pg.Client({ connectionString: koneksi });

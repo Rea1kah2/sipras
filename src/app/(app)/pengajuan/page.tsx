@@ -63,21 +63,41 @@ export default async function PengajuanSaya(props: PageProps<"/pengajuan">) {
         />
       )}
 
-      <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
-        {FILTER.map((f) => (
-          <Link
-            key={f.kunci}
-            href={f.kunci === "SEMUA" ? "/pengajuan" : `/pengajuan?status=${f.kunci}`}
-            className={`btn ${f.kunci === aktif.kunci ? "btn-primary" : "btn-secondary"}`}
-            style={{ fontSize: 12.5 }}
-          >
-            {labelFilter(f.kunci)}
-          </Link>
-        ))}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+        {FILTER.map((f) => {
+          const aktifkan = f.kunci === aktif.kunci;
+          return (
+            <Link
+              key={f.kunci}
+              href={f.kunci === "SEMUA" ? "/pengajuan" : `/pengajuan?status=${f.kunci}`}
+              style={{
+                fontSize: 12.5,
+                fontWeight: aktifkan ? 600 : 500,
+                padding: "6px 14px",
+                borderRadius: "var(--radius-sm)",
+                border: "1px solid",
+                borderColor: aktifkan ? "var(--color-accent-700)" : "var(--color-divider)",
+                background: aktifkan ? "var(--color-accent-700)" : "var(--color-surface)",
+                color: aktifkan ? "var(--color-di-atas-solid)" : "var(--color-neutral-800)",
+                boxShadow: "var(--shadow-sm)",
+                transition: "all 0.15s ease",
+              }}
+            >
+              {labelFilter(f.kunci)}
+            </Link>
+          );
+        })}
       </div>
 
       {daftar.map((p) => (
-        <div key={p.id} className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+        <div
+          key={p.id}
+          className="card elev-sm"
+          style={{
+            background: "var(--color-surface)",
+            border: "1px solid var(--color-divider)",
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", gap: 9, flexWrap: "wrap" }}>
             <span className="mono" style={{ fontSize: 11, color: "var(--color-neutral-600)" }}>
               {p.kode}
@@ -164,7 +184,8 @@ export default async function PengajuanSaya(props: PageProps<"/pengajuan">) {
           className="card"
           style={{
             alignItems: "center", textAlign: "center",
-            padding: "var(--space-8)", background: "var(--color-neutral-100)",
+            padding: "var(--space-8)", background: "var(--color-surface)",
+            border: "1px solid var(--color-divider)",
           }}
         >
           <div style={{ fontFamily: "var(--font-heading)", fontSize: 16 }}>

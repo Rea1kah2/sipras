@@ -9,7 +9,7 @@ import { fmtRentang, fmtTanggal, fmtWaktu, hitungHari } from "@/lib/waktu";
 import { PILIH_PENGAJUAN, teksItem } from "@/lib/pengajuan";
 import { ambilPengaturan } from "@/lib/penutupan";
 import { BadgeStatus, GarisLangkah } from "@/components/badge";
-import { IlustrasiAset } from "@/components/ilustrasi-aset";
+import { FotoAset } from "@/components/foto-aset";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await teks();
@@ -115,7 +115,13 @@ export default async function DetailPengajuan(
       >
         {/* kiri: isi pengajuan */}
         <div className="flex flex-col" style={{ minWidth: 0, gap: "var(--space-3)" }}>
-          <div className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+          <div
+            className="card elev-sm"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-divider)",
+            }}
+          >
             <div style={{ display: "flex", alignItems: "center", gap: 9, flexWrap: "wrap" }}>
               <span className="mono" style={{ fontSize: 11.5, color: "var(--color-neutral-600)" }}>
                 {pengajuan.kode}
@@ -149,8 +155,9 @@ export default async function DetailPengajuan(
                   key={label}
                   style={{
                     padding: "10px 12px",
-                    borderRadius: "var(--radius-md)",
-                    background: "var(--color-bg)",
+                    borderRadius: "var(--radius-sm)",
+                    background: "var(--color-panel)",
+                    border: "1px solid var(--color-divider)",
                   }}
                 >
                   <div
@@ -168,33 +175,32 @@ export default async function DetailPengajuan(
           </div>
 
           {/* item */}
-          <div className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+          <div
+            className="card elev-sm"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-divider)",
+            }}
+          >
             <span className="card-kicker">{t.rincian.itemDipinjam}</span>
             {pengajuan.items.map((it) => (
               <div
                 key={it.id}
                 style={{
                   display: "flex", alignItems: "center", gap: 11,
-                  padding: 10, borderRadius: "var(--radius-md)",
-                  background: "var(--color-bg)",
+                  padding: 10, borderRadius: "var(--radius-sm)",
+                  background: "var(--color-panel)",
+                  border: "1px solid var(--color-divider)",
                 }}
               >
-                <div style={{ width: 44, height: 44, flex: "none" }}>
-                  {it.aset?.foto ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={it.aset.foto}
-                      alt=""
-                      style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 12 }}
-                    />
-                  ) : (
-                    <IlustrasiAset
-                      kategori={it.aset?.kategori ?? ""}
-                      tipe={it.aset?.tipe ?? "BARANG"}
-                      tinggi={44}
-                      radius="12px"
-                    />
-                  )}
+                <div style={{ width: 44, height: 44, flex: "none", overflow: "hidden", borderRadius: "var(--radius-sm)" }}>
+                  <FotoAset
+                    foto={it.aset?.foto}
+                    nama={it.namaAset}
+                    kategori={it.aset?.kategori ?? ""}
+                    tipe={it.aset?.tipe ?? "BARANG"}
+                    tinggi={44}
+                  />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 13.5, fontWeight: 600 }}>{it.namaAset}</div>
@@ -209,7 +215,13 @@ export default async function DetailPengajuan(
           </div>
 
           {/* keperluan */}
-          <div className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+          <div
+            className="card elev-sm"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-divider)",
+            }}
+          >
             <span className="card-kicker">{t.rincian.keperluan}</span>
             {pengajuan.namaKegiatan && (
               <div style={{ fontSize: 14, fontWeight: 600 }}>{pengajuan.namaKegiatan}</div>
@@ -243,7 +255,13 @@ export default async function DetailPengajuan(
 
         {/* kanan: jejak status dan pengembalian */}
         <div className="flex flex-col" style={{ minWidth: 0, gap: "var(--space-3)" }}>
-          <div className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+          <div
+            className="card elev-sm"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-divider)",
+            }}
+          >
             <span className="card-kicker">{t.rincian.jejakStatus}</span>
             <ol style={{ margin: 0, padding: 0, listStyle: "none" }}>
               {pengajuan.riwayatStatus.map((r, i) => {
@@ -298,7 +316,13 @@ export default async function DetailPengajuan(
           </div>
 
           {retur && (
-            <div className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+            <div
+              className="card elev-sm"
+              style={{
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-divider)",
+              }}
+            >
               <span className="card-kicker">{t.rincian.pengembalian}</span>
               <div style={{ fontSize: 12.5, color: "var(--color-neutral-700)" }}>
                 {t.umum.dikembalikanPada.replace(

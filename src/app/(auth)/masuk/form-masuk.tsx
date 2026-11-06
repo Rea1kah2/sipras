@@ -55,11 +55,9 @@ export function FormMasuk() {
       >
         <div
           style={{
-            fontSize: 11,
-            fontWeight: 700,
-            textTransform: "uppercase",
-            letterSpacing: "0.04em",
-            color: "var(--color-neutral-600)",
+            fontSize: 11.5,
+            fontWeight: 600,
+            color: "var(--color-neutral-700)",
             marginBottom: 6,
           }}
         >
@@ -68,7 +66,7 @@ export function FormMasuk() {
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => isiDemo("admin@sekolah.sch.id", "admin1234")}
+            onClick={() => isiDemo("admin@kampus.ac.id", "admin1234")}
             className="btn btn-secondary"
             style={{ fontSize: 11.5, padding: "4px 10px", minHeight: 28 }}
           >

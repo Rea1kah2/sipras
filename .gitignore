@@ -53,6 +53,8 @@ next-env.d.ts
 # Foto sumber aset sekolah. Bukan kode, dan sudah tersimpan permanen di
 # Vercel Blob setelah diunggah, jadi tidak perlu membebani repositori.
 /foto-aset
+/image-sipras
+/image-sipras.zip
 
 # Hasil `vercel env pull`, berisi kunci produksi sungguhan.
 .env.vercel

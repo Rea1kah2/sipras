@@ -6,8 +6,8 @@ import { wajibPeminjam } from "@/lib/auth";
 import { ringkasKetersediaan } from "@/lib/ketersediaan";
 import { bacaKeranjang } from "@/lib/keranjang";
 import { dariISO, hariIniISO } from "@/lib/waktu";
-import { BadgeKetersediaan } from "@/components/badge";
-import { IlustrasiAset } from "@/components/ilustrasi-aset";
+import { BadgeKetersediaan, BadgeTipe } from "@/components/badge";
+import { FotoAset } from "@/components/foto-aset";
 import { tambahKeKeranjang } from "../aksi-keranjang";
 import type { TipeAset } from "@/generated/prisma/enums";
 
@@ -117,17 +117,30 @@ export default async function Katalog(props: PageProps<"/katalog">) {
       </form>
 
       {/* filter kategori */}
-      <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
-        {kategori.map((k) => (
-          <Link
-            key={k}
-            href={tautan({ kat: k })}
-            className={`btn ${k === kat ? "btn-primary" : "btn-secondary"}`}
-            style={{ fontSize: 12.5 }}
-          >
-            {k}
-          </Link>
-        ))}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+        {kategori.map((k) => {
+          const aktif = k === kat;
+          return (
+            <Link
+              key={k}
+              href={tautan({ kat: k })}
+              style={{
+                fontSize: 12.5,
+                fontWeight: aktif ? 600 : 500,
+                padding: "6px 14px",
+                borderRadius: "var(--radius-sm)",
+                border: "1px solid",
+                borderColor: aktif ? "var(--color-accent-700)" : "var(--color-divider)",
+                background: aktif ? "var(--color-accent-700)" : "var(--color-surface)",
+                color: aktif ? "var(--color-di-atas-solid)" : "var(--color-neutral-800)",
+                boxShadow: "var(--shadow-sm)",
+                transition: "all 0.15s ease",
+              }}
+            >
+              {k}
+            </Link>
+          );
+        })}
       </div>
 
       <div style={{ fontSize: 12, color: "var(--color-neutral-600)" }}>
@@ -138,8 +151,8 @@ export default async function Katalog(props: PageProps<"/katalog">) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill,minmax(215px,1fr))",
-          gap: "var(--space-3)",
+          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+          gap: "var(--space-4)",
         }}
       >
         {aset.map((a) => {
@@ -149,27 +162,46 @@ export default async function Katalog(props: PageProps<"/katalog">) {
             <div
               key={a.id}
               className="card elev-sm"
-              style={{ padding: 0, overflow: "hidden", background: "var(--color-neutral-100)" }}
+              style={{
+                padding: 0,
+                overflow: "hidden",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-divider)",
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
-              <Link href={`/katalog/${a.id}`} style={{ display: "block" }}>
-                {a.foto ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={a.foto}
-                    alt={a.nama}
-                    style={{ height: 126, width: "100%", objectFit: "cover" }}
-                  />
-                ) : (
-                  <IlustrasiAset kategori={a.kategori} tipe={a.tipe} tinggi={126} />
-                )}
+              <Link href={`/katalog/${a.id}`} style={{ display: "block", position: "relative" }}>
+                <FotoAset
+                  foto={a.foto}
+                  nama={a.nama}
+                  kategori={a.kategori}
+                  tipe={a.tipe}
+                  tinggi={165}
+                />
               </Link>
 
-              <div style={{ padding: "var(--space-3)", display: "flex", flexDirection: "column", gap: 7 }}>
-                <span className="card-kicker">{a.kategori}</span>
-                <Link href={`/katalog/${a.id}`} className="card-title" style={{ color: "inherit" }}>
+              <div
+                style={{
+                  padding: "var(--space-4)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 8,
+                  flex: 1,
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+                  <span className="card-kicker">{a.kategori}</span>
+                  <BadgeTipe tipe={a.tipe} />
+                </div>
+                <Link
+                  href={`/katalog/${a.id}`}
+                  className="card-title"
+                  style={{ color: "inherit", fontSize: 16, lineHeight: 1.25 }}
+                >
                   {a.nama}
                 </Link>
-                <span style={{ fontSize: 12, color: "var(--color-neutral-600)" }}>
+                <span style={{ fontSize: 12.5, color: "var(--color-neutral-600)" }}>
                   {/* Dirakit lewat kamus. Versi lama menulis "orang",
                       "terbuka", dan "unit" langsung di template bersarang,
                       dan template bersarang itulah yang membuat pemindai
@@ -182,13 +214,16 @@ export default async function Katalog(props: PageProps<"/katalog">) {
                       } · ${a.lokasi}`
                     : `${a.stok} ${t.umum.unit} · ${a.lokasi}`}
                 </span>
-                <BadgeKetersediaan teks={av.teks} nuansa={av.nuansa} />
 
-                <div style={{ display: "flex", gap: 7, marginTop: 3 }}>
+                <div style={{ marginTop: "auto", paddingTop: 6 }}>
+                  <BadgeKetersediaan teks={av.teks} nuansa={av.nuansa} />
+                </div>
+
+                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
                   <Link
                     href={`/katalog/${a.id}`}
                     className="btn btn-secondary"
-                    style={{ flex: 1, fontSize: 12.5 }}
+                    style={{ flex: 1, fontSize: 12.5, minHeight: 36 }}
                   >
                     Detail
                   </Link>
@@ -202,7 +237,7 @@ export default async function Katalog(props: PageProps<"/katalog">) {
                     <button
                       type="submit"
                       className={`btn ${sudah ? "btn-secondary" : "btn-primary"}`}
-                      style={{ flex: 1, fontSize: 12.5 }}
+                      style={{ flex: 1, fontSize: 12.5, minHeight: 36 }}
                       disabled={!av.bisaDipinjam && !sudah}
                     >
                       {sudah ? t.katalog.ditambahkan : "Tambah"}
@@ -220,7 +255,8 @@ export default async function Katalog(props: PageProps<"/katalog">) {
           className="card"
           style={{
             alignItems: "center", textAlign: "center",
-            padding: "var(--space-8)", background: "var(--color-neutral-100)",
+            padding: "var(--space-8)", background: "var(--color-surface)",
+            border: "1px solid var(--color-divider)",
           }}
         >
           <div
@@ -251,21 +287,22 @@ export default async function Katalog(props: PageProps<"/katalog">) {
       {keranjang.length > 0 && (
         <div
           style={{
-            position: "sticky", bottom: 14,
-            display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap",
-            padding: "11px 11px 11px 20px", borderRadius: 999,
-            background: "var(--color-neutral-900)", color: "var(--color-bg)",
+            position: "sticky", bottom: 16, zIndex: 40,
+            display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap",
+            padding: "14px 20px", borderRadius: "var(--radius-md)",
+            background: "var(--color-panel)", color: "var(--color-text)",
+            border: "1px solid var(--color-divider)",
             boxShadow: "var(--shadow-lg)",
           }}
         >
-          <div style={{ minWidth: 0, flex: "1 1 160px" }}>
-            <div style={{ fontSize: 13, fontWeight: 600 }}>
+          <div style={{ minWidth: 0, flex: "1 1 200px" }}>
+            <div style={{ fontSize: 13.5, fontWeight: 700 }}>
               {t.katalog.itemDipilih.replace("{n}", String(keranjang.length))}
             </div>
             <div
               style={{
-                fontSize: 11, opacity: 0.7, overflow: "hidden",
-                textOverflow: "ellipsis", whiteSpace: "nowrap",
+                fontSize: 12, color: "var(--color-neutral-700)", overflow: "hidden",
+                textOverflow: "ellipsis", whiteSpace: "nowrap", marginTop: 2,
               }}
             >
               {keranjang
@@ -274,8 +311,8 @@ export default async function Katalog(props: PageProps<"/katalog">) {
                 .join(", ") || t.katalog.dariHalamanLain}
             </div>
           </div>
-          <Link href="/ajukan" className="btn btn-primary" style={{ fontSize: 13 }}>
-            {t.katalog.lanjutForm}
+          <Link href="/ajukan" className="btn btn-primary" style={{ fontSize: 13, flexShrink: 0 }}>
+            {t.katalog.lanjutForm} →
           </Link>
         </div>
       )}

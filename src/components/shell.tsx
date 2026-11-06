@@ -97,7 +97,7 @@ export function Shell({
 
   return (
     <PenyediaKamus nilai={t}>
-    <div className="flex items-stretch" style={{ minHeight: "100vh" }}>
+    <div className="flex items-stretch" style={{ minHeight: "100dvh" }}>
       {/* Sidebar tidak pernah dilepas dari DOM. Saat ditutup ia menyusut jadi
           rel ikon, karena burger ada DI DALAMNYA dan harus tetap terjangkau. */}
       <aside
@@ -124,7 +124,7 @@ export function Shell({
             gap: 12,
             padding: "var(--space-3) var(--space-4)",
             borderBottom: "1px solid var(--color-divider)",
-            background: "var(--color-bg)",
+            background: "var(--color-surface)",
             position: "sticky",
             top: 0,
             zIndex: 60,
@@ -218,16 +218,6 @@ export function Shell({
   );
 }
 
-function IkonBurger() {
-  return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-      <path d="M4 6h16" />
-      <path d="M4 12h16" />
-      <path d="M4 18h16" />
-    </svg>
-  );
-}
-
 function IkonKeluar() {
   return (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
@@ -253,26 +243,21 @@ function IsiSidebar({
 }) {
   return (
     <div className="sidebar-isi">
-      {/* Burger duduk di puncak sidebar, bukan di header, karena memang
-          tugasnya membuka dan menutup sidebar ini. Saat menyusut jadi rel,
-          tombol ini yang tersisa sebagai jalan untuk membukanya lagi. */}
+      {/* Di layar desktop/tablet, logo SIPRAS berfungsi sebagai tombol
+          buka tutup sidebar yang bersih tanpa icon burger mandiri. */}
       <div className="sidebar-kepala">
         <button
           type="button"
-          className="sidebar-burger"
+          className="sidebar-logo-tombol"
           aria-expanded={terbuka}
           aria-controls="menu-samping"
           aria-label={terbuka ? t.shell.tutupMenu : t.shell.bukaMenu}
           title={terbuka ? t.shell.tutupMenu : t.shell.bukaMenu}
           onClick={onTogel}
         >
-          <IkonBurger />
-        </button>
-
-        <span className="sidebar-merek">
           <LambangSipras ukuran={30} />
-          <span className="nav-label">{brand}</span>
-        </span>
+          <span className="nav-label sidebar-merek-teks">{brand}</span>
+        </button>
       </div>
 
       <nav style={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -402,25 +387,26 @@ function MenuAkun({ nama, inisial, t }: { nama: string; inisial: string; t: Kamu
         onClick={() => setBuka((v) => !v)}
         style={{
           display: "flex", alignItems: "center", gap: 8,
-          padding: "4px 12px 4px 4px", borderRadius: 999,
-          background: "var(--color-neutral-100)",
+          padding: "4px 10px 4px 4px", borderRadius: "var(--radius-sm)",
+          background: "var(--color-surface)",
           border: "1px solid var(--color-divider)", font: "inherit", cursor: "pointer",
           color: "var(--color-text)",
+          boxShadow: "var(--shadow-sm)",
         }}
       >
         <span
           aria-hidden
           style={{
-            width: 28, height: 28, borderRadius: "50%",
-            background: "var(--color-accent-200)",
+            width: 28, height: 28, borderRadius: "var(--radius-xs)",
+            background: "var(--color-accent-100)",
             display: "grid", placeItems: "center",
-            fontSize: 11.5, fontWeight: 700,
-            color: "var(--color-accent-900)",
+            fontSize: 12, fontWeight: 700,
+            color: "var(--color-accent-800)",
           }}
         >
           {inisial}
         </span>
-        <span style={{ fontSize: 12, lineHeight: 1.2 }} className="hidden sm:block">
+        <span style={{ fontSize: 12, lineHeight: 1.2, fontWeight: 600 }} className="hidden sm:block">
           {nama}
         </span>
       </button>
@@ -505,7 +491,7 @@ function Lonceng({
             style={{
               position: "absolute", top: -4, right: -4,
               minWidth: 18, height: 18, padding: "0 5px",
-              borderRadius: 999, display: "grid", placeItems: "center",
+              borderRadius: "var(--radius-pill)", display: "grid", placeItems: "center",
               background: "var(--color-danger-600)", color: "var(--color-di-atas-solid)",
               fontSize: 10, fontWeight: 700, lineHeight: 1,
               border: "2px solid var(--color-bg)",

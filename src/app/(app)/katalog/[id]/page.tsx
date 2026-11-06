@@ -8,7 +8,7 @@ import { wajibPeminjam } from "@/lib/auth";
 import { hariTerisi, ringkasKetersediaan } from "@/lib/ketersediaan";
 import { BULAN_PANJANG, dariISO, hariIniISO } from "@/lib/waktu";
 import { BadgeKetersediaan } from "@/components/badge";
-import { IlustrasiAset } from "@/components/ilustrasi-aset";
+import { FotoAset } from "@/components/foto-aset";
 import { tambahKeKeranjang } from "../../aksi-keranjang";
 
 export async function generateMetadata(
@@ -71,25 +71,22 @@ export default async function DetailAset(props: PageProps<"/katalog/[id]">) {
         }}
       >
         {/* kiri: foto */}
-        <div style={{ minWidth: 0 }}>
-          {aset.foto ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={aset.foto}
-              alt={aset.nama}
-              style={{
-                aspectRatio: "4/3", width: "100%", objectFit: "cover",
-                borderRadius: "var(--radius-lg)",
-              }}
-            />
-          ) : (
-            <IlustrasiAset
-              kategori={aset.kategori}
-              tipe={aset.tipe}
-              rasio="4/3"
-              radius="var(--radius-lg)"
-            />
-          )}
+        <div
+          style={{
+            minWidth: 0,
+            overflow: "hidden",
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--color-divider)",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
+          <FotoAset
+            foto={aset.foto}
+            nama={aset.nama}
+            kategori={aset.kategori}
+            tipe={aset.tipe}
+            rasio="4/3"
+          />
         </div>
 
         {/* kanan: informasi */}
@@ -115,13 +112,18 @@ export default async function DetailAset(props: PageProps<"/katalog/[id]">) {
               <div
                 key={s.label}
                 style={{
-                  padding: "11px 13px", borderRadius: "var(--radius-md)",
-                  background: "var(--color-neutral-100)",
+                  padding: "11px 13px",
+                  borderRadius: "var(--radius-sm)",
+                  background: "var(--color-surface)",
+                  border: "1px solid var(--color-divider)",
+                  boxShadow: "var(--shadow-sm)",
                 }}
               >
                 <div
                   style={{
-                    fontSize: 10.5, letterSpacing: ".06em", textTransform: "uppercase",
+                    fontSize: 10.5,
+                    letterSpacing: ".06em",
+                    textTransform: "uppercase",
                     color: "var(--color-neutral-600)",
                   }}
                 >
@@ -133,7 +135,13 @@ export default async function DetailAset(props: PageProps<"/katalog/[id]">) {
           </div>
 
           {aset.tipe === "BARANG" && (
-            <div className="card" style={{ background: "var(--color-neutral-100)" }}>
+            <div
+              className="card"
+              style={{
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-divider)",
+              }}
+            >
               <span className="card-kicker">{t.katalog.ketersediaanHariIni}</span>
               <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
                 <span style={{ fontFamily: "var(--font-heading)", fontSize: 26 }}>
@@ -145,15 +153,18 @@ export default async function DetailAset(props: PageProps<"/katalog/[id]">) {
               </div>
               <div
                 style={{
-                  height: 10, borderRadius: 999,
-                  background: "var(--color-neutral-200)", overflow: "hidden",
+                  height: 10,
+                  borderRadius: "var(--radius-pill)",
+                  background: "var(--color-neutral-200)",
+                  overflow: "hidden",
                 }}
               >
                 <div
                   style={{
                     height: "100%",
                     width: `${Math.round((av.tersedia / Math.max(1, av.total)) * 100)}%`,
-                    background: "var(--color-accent-2-600)", borderRadius: 999,
+                    background: "var(--color-accent-2-600)",
+                    borderRadius: "var(--radius-pill)",
                   }}
                 />
               </div>
@@ -217,10 +228,16 @@ function KalenderRuang({
     `${tahun}-${String(bulan).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
   return (
-    <div className="card" style={{ background: "var(--color-neutral-100)" }}>
+    <div
+      className="card"
+      style={{
+        background: "var(--color-surface)",
+        border: "1px solid var(--color-divider)",
+      }}
+    >
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
         <span className="card-kicker">{t.katalog.kalender}</span>
-        <span style={{ fontSize: 12.5, fontWeight: 600 }}>
+        <span style={{ fontSize: 13, fontWeight: 700 }}>
           {BULAN_PANJANG[bulan - 1]} {tahun}
         </span>
       </div>
@@ -261,7 +278,7 @@ function KalenderRuang({
               title={dipesan ? t.katalog.sudahDipesan : lewat ? t.katalog.sudahLewat : t.katalog.kosongHari}
               style={{
                 height: 34, display: "grid", placeItems: "center",
-                borderRadius: 10, fontSize: 12, fontWeight: iniHari ? 700 : 500,
+                borderRadius: "var(--radius-sm)", fontSize: 12, fontWeight: iniHari ? 700 : 500,
                 background: bg, color: warna,
                 boxShadow: iniHari ? "inset 0 0 0 2px var(--color-accent-700)" : undefined,
               }}

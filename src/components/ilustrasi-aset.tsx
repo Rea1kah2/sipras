@@ -161,6 +161,67 @@ const KATA_KUNCI: { cocok: RegExp; motif: () => Motif }[] = [
       ),
     }),
   },
+  {
+    cocok: /kesehatan|p3k|medis|obat/i,
+    motif: () => ({
+      latar: "var(--color-neutral-200)",
+      tinta: "var(--color-neutral-700)",
+      gambar: (
+        <>
+          <rect x="10" y="14" width="44" height="36" rx="4" />
+          <path d="M22 14v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4" />
+          <path d="M32 24v16" />
+          <path d="M24 32h16" />
+        </>
+      ),
+    }),
+  },
+  {
+    cocok: /permainan|catur/i,
+    motif: () => ({
+      latar: "var(--color-neutral-200)",
+      tinta: "var(--color-neutral-800)",
+      gambar: (
+        <>
+          <rect x="12" y="12" width="40" height="40" rx="3" />
+          <path d="M12 22h40M12 32h40M12 42h40" />
+          <path d="M22 12v40M32 12v40M42 12v40" />
+        </>
+      ),
+    }),
+  },
+  {
+    cocok: /generator|genset|listrik/i,
+    motif: () => ({
+      latar: "var(--color-neutral-200)",
+      tinta: "var(--color-neutral-700)",
+      gambar: (
+        <>
+          <rect x="10" y="16" width="44" height="32" rx="4" />
+          <circle cx="26" cy="32" r="7" />
+          <path d="M39 26l-4 8h6l-4 8" />
+        </>
+      ),
+    }),
+  },
+  {
+    cocok: /kipas|angin/i,
+    motif: () => ({
+      latar: "var(--color-neutral-200)",
+      tinta: "var(--color-neutral-700)",
+      gambar: (
+        <>
+          <circle cx="32" cy="26" r="16" />
+          <circle cx="32" cy="26" r="3" />
+          <path d="M32 42v14" />
+          <path d="M22 56h20" />
+          <path d="M32 23a7 7 0 0 1 6-6" />
+          <path d="M35 28a7 7 0 0 1 4 7" />
+          <path d="M29 27a7 7 0 0 1-7 2" />
+        </>
+      ),
+    }),
+  },
 ];
 
 function motifUntuk(kategori: string, tipe: "BARANG" | "RUANG"): Motif {

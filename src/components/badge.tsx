@@ -102,7 +102,7 @@ export function GarisLangkah({ status }: { status: StatusPengajuan }) {
           <li key={l.status} style={{ flex: 1, minWidth: 0 }}>
             <div
               style={{
-                height: 5, borderRadius: 999,
+                height: 5, borderRadius: "var(--radius-pill)",
                 background: tercapai
                   ? ditolak && i === 0
                     ? "var(--color-danger-600)"

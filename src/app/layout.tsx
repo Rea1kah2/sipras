@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Caprasimo, Figtree } from "next/font/google";
+import { Caprasimo, DM_Sans } from "next/font/google";
 import { bacaPreferensi, teks } from "@/lib/preferensi-server";
 import "./globals.css";
 
@@ -10,9 +10,9 @@ const caprasimo = Caprasimo({
   display: "swap",
 });
 
-const figtree = Figtree({
+const dmSans = DM_Sans({
   variable: "--font-figtree",
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -43,7 +43,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang={bahasa}
       data-tema={tema}
-      className={`${caprasimo.variable} ${figtree.variable} h-full antialiased`}
+      className={`${caprasimo.variable} ${dmSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

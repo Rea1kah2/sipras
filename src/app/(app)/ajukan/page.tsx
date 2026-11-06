@@ -7,7 +7,7 @@ import { bacaKeranjang } from "@/lib/keranjang";
 import { cekBentrok } from "@/lib/ketersediaan";
 import { ambilPengaturan, cekTutup, jendelaBuka, pesanTutup } from "@/lib/penutupan";
 import { dariISO, fmtRentang, hariIniISO } from "@/lib/waktu";
-import { IlustrasiAset } from "@/components/ilustrasi-aset";
+import { FotoAset } from "@/components/foto-aset";
 import { hapusDariKeranjang, ubahJumlah } from "../aksi-keranjang";
 import { FormAjukan } from "./form-ajukan";
 
@@ -95,7 +95,13 @@ export default async function Ajukan(props: PageProps<"/ajukan">) {
   return (
     <div className="anim-rise flex flex-col" style={{ gap: "var(--space-4)" }}>
       {/* ── 1. item ── di luar <form> utama supaya tidak jadi form bersarang */}
-      <div className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+      <div
+        className="card elev-sm"
+        style={{
+          background: "var(--color-surface)",
+          border: "1px solid var(--color-divider)",
+        }}
+      >
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10 }}>
           <h4 style={{ margin: 0 }}>{t.ajukan.langkah1}</h4>
           <Link href="/katalog" className="btn btn-ghost" style={{ fontSize: 12.5 }}>
@@ -108,26 +114,19 @@ export default async function Ajukan(props: PageProps<"/ajukan">) {
             key={b.asetId}
             style={{
               display: "flex", alignItems: "center", gap: 11, flexWrap: "wrap",
-              padding: 11, borderRadius: "var(--radius-md)",
-              background: "var(--color-bg)",
+              padding: 11, borderRadius: "var(--radius-sm)",
+              background: "var(--color-panel)",
+              border: "1px solid var(--color-divider)",
             }}
           >
-            <div style={{ width: 44, height: 44, flex: "none" }}>
-              {b.aset.foto ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={b.aset.foto}
-                  alt=""
-                  style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 12 }}
-                />
-              ) : (
-                <IlustrasiAset
-                  kategori={b.aset.kategori}
-                  tipe={b.aset.tipe}
-                  tinggi={44}
-                  radius="12px"
-                />
-              )}
+            <div style={{ width: 44, height: 44, flex: "none", overflow: "hidden", borderRadius: "var(--radius-sm)" }}>
+              <FotoAset
+                foto={b.aset.foto}
+                nama={b.aset.nama}
+                kategori={b.aset.kategori}
+                tipe={b.aset.tipe}
+                tinggi={44}
+              />
             </div>
             <div style={{ flex: "1 1 130px", minWidth: 0 }}>
               <div style={{ fontSize: 13.5, fontWeight: 600 }}>{b.aset.nama}</div>

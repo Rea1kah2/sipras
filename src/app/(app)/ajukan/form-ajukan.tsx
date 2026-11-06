@@ -87,7 +87,13 @@ export function FormAjukan({
       >
         <div className="flex flex-col" style={{ minWidth: 0, gap: "var(--space-4)" }}>
           {/* ── tanggal ── */}
-          <div className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+          <div
+            className="card elev-sm"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-divider)",
+            }}
+          >
             <h4 style={{ margin: 0 }}>{t.ajukan.langkah2}</h4>
 
             <div
@@ -220,7 +226,13 @@ export function FormAjukan({
           </div>
 
           {/* ── keperluan ── */}
-          <div className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+          <div
+            className="card elev-sm"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-divider)",
+            }}
+          >
             <h4 style={{ margin: 0 }}>{t.ajukan.langkah3}</h4>
             <Field
               label={t.ajukan.namaKegiatan}
@@ -262,7 +274,13 @@ export function FormAjukan({
           {/* Kartu ini cuma merangkum, tidak menandai keadaan apa apa, jadi
               latarnya netral. Hijau disimpan untuk banner "semua tersedia"
               di atas, yang memang membawa arti. */}
-          <div className="card elev-md" style={{ background: "var(--color-neutral-100)" }}>
+          <div
+            className="card elev-md"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-divider)",
+            }}
+          >
             <span className="card-kicker">{t.ajukan.ringkasan}</span>
             <div
               className="flex flex-col"

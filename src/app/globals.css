@@ -33,80 +33,75 @@
    ══════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --color-bg: #eef4f9;
+  --color-bg: #f0f4f8;
   --color-surface: #ffffff;
-  --color-text: #0f1c2e;
-  --color-accent: #3157d5;
-  --color-accent-2: #3a6930;
+  --color-text: #0f172a;
+  --color-accent: #1d4ed8;
+  --color-accent-2: #15803d;
 
   /* Garis hairline sejuk yang presisi */
-  --color-divider: #b8cddc;
+  --color-divider: #cbd5e1;
 
   /* Lapisan paling terang untuk modal, dropdown, dan kotak input */
   --color-elevated: #ffffff;
 
   /* Teks di atas bidang warna pekat (tombol utama, badge solid, lambang). */
-  --color-di-atas-solid: #fdfbf6;
+  --color-di-atas-solid: #f8fafc;
 
   /* Permukaan struktural: sidebar, navigasi bawah */
-  --color-panel: #d9e5ef;
+  --color-panel: #e2e8f0;
 
   /* Teks samar di atas panel */
-  --color-panel-samar: #47637a;
+  --color-panel-samar: #475569;
 
   /* Isian kecil yang duduk DI ATAS panel */
   --color-panel-isian: #ffffff;
 
-  /* Netral Coastal Glass. Level 100 WAJIB sama persis dengan --color-surface */
+  /* Netral Nordic Academic. Level 100 WAJIB sama persis dengan --color-surface */
   --color-neutral-100: #ffffff;
-  --color-neutral-200: #cddce8;
-  --color-neutral-300: #bad0df;
-  --color-neutral-400: #9eb9cd;
-  --color-neutral-500: #7e9bb2;
-  --color-neutral-600: #4d6c84;
-  --color-neutral-700: #39546b;
-  --color-neutral-800: #223b50;
-  --color-neutral-900: #0f1c2e;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
 
-  /* Utama: indigo tua. Intinya di level 700, jadi hover dan active
-     memakai 800 dan 900 supaya arahnya konsisten makin pekat. Chroma
-     sengaja ditahan rendah, lihat catatan di kepala berkas. */
-  --color-accent-100: #eef2ff;
-  --color-accent-200: #dfe6ff;
-  --color-accent-300: #c4d1ff;
-  --color-accent-400: #a2b6ff;
-  --color-accent-500: #7893f2;
-  --color-accent-600: #5270e5;
-  --color-accent-700: #294bbd;
-  --color-accent-800: #213fa9;
-  --color-accent-900: #1b328d;
+  /* Utama: Deep Royal Blue. Intinya di level 700. */
+  --color-accent-100: #eff6ff;
+  --color-accent-200: #dbeafe;
+  --color-accent-300: #bfdbfe;
+  --color-accent-400: #93c5fd;
+  --color-accent-500: #60a5fa;
+  --color-accent-600: #2563eb;
+  --color-accent-700: #1d4ed8;
+  --color-accent-800: #1e40af;
+  --color-accent-900: #172554;
 
-  /* Sukses: tersedia, disetujui, selesai.
+  /* Sukses: tersedia, disetujui, selesai. */
+  --color-accent-2-100: #f0fdf4;
+  --color-accent-2-200: #dcfce7;
+  --color-accent-2-300: #bbf7d0;
+  --color-accent-2-400: #86efac;
+  --color-accent-2-500: #4ade80;
+  --color-accent-2-600: #16a34a;
+  --color-accent-2-700: #15803d;
+  --color-accent-2-800: #166534;
+  --color-accent-2-900: #14532d;
 
-     tetap jelas hijau dan dipisahkan dari indigo serta cyan warning oleh
-     pemeriksa collision. */
-  --color-accent-2-100: #f2fbf0;
-  --color-accent-2-200: #e1f7dc;
-  --color-accent-2-300: #c8edc0;
-  --color-accent-2-400: #aae09e;
-  --color-accent-2-500: #8cca7f;
-  --color-accent-2-600: #76b268;
-  --color-accent-2-700: #3a6930;
-  --color-accent-2-800: #305628;
-  --color-accent-2-900: #294722;
+  /* Peringatan dan sorotan: Golden Amber. */
+  --color-warn-100: #fefce8;
+  --color-warn-200: #fef9c3;
+  --color-warn-300: #fef08a;
+  --color-warn-400: #facc15;
+  --color-warn-500: #eab308;
+  --color-warn-600: #ca8a04;
+  --color-warn-700: #a16207;
+  --color-warn-800: #854d0e;
+  --color-warn-900: #713f12;
 
-  /* Peringatan dan sorotan: cyan kebiruan. */
-  --color-warn-100: #eafaff;
-  --color-warn-200: #d5f4ff;
-  --color-warn-300: #b6eaff;
-  --color-warn-400: #85d8f2;
-  --color-warn-500: #4dbbdc;
-  --color-warn-600: #2198bd;
-  --color-warn-700: #147895;
-  --color-warn-800: #105f76;
-  --color-warn-900: #0b4355;
-
-  /* Bahaya: ditolak, gagal, bentrok. TIDAK disentuh. */
+  /* Bahaya: ditolak, gagal, bentrok. */
   --color-danger-100: #fef2f2;
   --color-danger-200: #fee2e2;
   --color-danger-300: #fecaca;
@@ -117,8 +112,8 @@
   --color-danger-800: #991b1b;
   --color-danger-900: #7f1d1d;
 
-  --font-heading: var(--font-caprasimo), system-ui, sans-serif;
-  --font-heading-weight: 400;
+  --font-heading: var(--font-figtree), system-ui, sans-serif;
+  --font-heading-weight: 700;
   --font-body: var(--font-figtree), system-ui, sans-serif;
   --font-mono: ui-monospace, Menlo, monospace;
 
@@ -129,124 +124,81 @@
   --space-6: 26.4px;
   --space-8: 35.2px;
 
-  /* Tangga radius. Semula cuma tiga token, dan akibatnya nilai yang tidak
-     punya rumah ditulis mentah: 4px, 6px, 12px, dan 14px tersebar di tiga
-     puluh tempat sementara tokennya sendiri nyaris tidak terpakai. Tangganya
-     dilengkapi supaya tiap kebutuhan punya nama, karena token yang tidak
-     memuat kebutuhan nyata akan selalu kalah oleh angka mentah.
-
-     Aturan memilih: elemen kendali dan item kecil membulat ke bawah,
-     wadah konten membulat ke atas. `50%` untuk lingkaran sengaja tetap
-     mentah, sebab itu menyatakan bentuk, bukan pelunakan sudut. */
   --radius-xs: 4px;
   --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 28px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
   --radius-pill: 999px;
 
-  /* Bayangan memakai tinta navy Coastal Glass. Bayangan bertinta biru di
-     atas permukaan slate menyatu dengan kedalaman material.
-     Nilainya juga ditipiskan, karena di palet ini kartu ditopang garis
-     hairline dan bayangan tebal justru melawan kesan menyusut. */
-  --shadow-sm: 0 1px 2px color-mix(in srgb, #142338 7%, transparent);
-  --shadow-md: 0 2px 8px color-mix(in srgb, #142338 10%, transparent);
-  --shadow-lg: 0 10px 30px color-mix(in srgb, #142338 17%, transparent);
+  /* Bayangan presisi bertona slate */
+  --shadow-sm: 0 1px 3px color-mix(in srgb, #0f172a 6%, transparent), 0 1px 2px color-mix(in srgb, #0f172a 4%, transparent);
+  --shadow-md: 0 4px 12px color-mix(in srgb, #0f172a 8%, transparent), 0 1px 3px color-mix(in srgb, #0f172a 4%, transparent);
+  --shadow-lg: 0 12px 30px color-mix(in srgb, #0f172a 12%, transparent), 0 4px 8px color-mix(in srgb, #0f172a 4%, transparent);
 }
 
 /* ══════════════════════════════════════════════════════════════════════
    MODE GELAP
-   Ditulis hanya sebagai penimpaan token. Tidak ada satu pun komponen yang
-   perlu tahu soal mode gelap, karena semuanya sudah memakai token.
-
-   Tintanya navy, sekeluarga dengan slate, indigo, dan cyan di mode terang.
-   Tumpukan lapisannya
-   setangkup dengan mode terang, cuma arahnya terbalik:
-
-     melayang  #322d27  L* 18.8      kanvas    #1c1814  L*  8.6
-     panel     #2b2621  L* 15.5      garis     #47423a  L* 28.2
-     kartu     #27231e  L* 14.0
-
-   Kuncinya: tiap ramp DIBALIK utuh, bukan digelapkan sebagian.
-     tingkat 100 sampai 300  -> latar bertona gelap
-     tingkat 600 sampai 700  -> warna terang untuk isian solid
-     tingkat 800 sampai 900  -> warna paling terang untuk teks
-
-   Ini wajib utuh karena badge solid memasangkan tingkat 700 sebagai latar
-   dengan tingkat 100 sebagai teks. Kalau cuma sebagian yang dibalik,
-   pasangan itu jadi terang di atas terang dan hilang terbaca.
+   Deep Slate Obsidian
    ══════════════════════════════════════════════════════════════════════ */
 
 [data-tema="gelap"] {
   color-scheme: dark;
 
-  --color-bg: #0c1424;
-  --color-surface: #162238;
-  --color-text: #edf5ff;
-  --color-accent: #8fa8ff;
-  --color-accent-2: #a4e196;
+  --color-bg: #0b0f19;
+  --color-surface: #141c2e;
+  --color-text: #f1f5f9;
+  --color-accent: #60a5fa;
+  --color-accent-2: #4ade80;
 
-  /* Garis hairline versi gelap. Sama seperti di mode terang, ia yang
-     memegang batas lapisan, jadi nilainya pekat dan cukup jauh dari
-     kartu, 14.2 L*, bukan sekadar putih transparan tipis. */
-  --color-divider: #3b5573;
+  --color-divider: #334155;
 
-  --color-elevated: #243a58;
+  --color-elevated: #1e293b;
 
-  /* Tetap satu peran: teks di atas bidang pekat. Karena di mode gelap
-     isian solid justru jadi terang, warnanya ikut membalik jadi tinta. */
-  --color-di-atas-solid: #091224;
+  --color-di-atas-solid: #0b0f19;
 
-  --color-panel: #1c2d46;
-  --color-panel-samar: #a9bdd4;
-  --color-panel-isian: #29415f;
+  --color-panel: #1a243b;
+  --color-panel-samar: #94a3b8;
+  --color-panel-isian: #24314e;
 
-  /* Level 100 sama persis dengan --color-surface, syarat yang sama dengan
-     mode terang dan dijaga oleh cek:warna. */
-  --color-neutral-100: #162238;
-  --color-neutral-200: #1d2d46;
-  --color-neutral-300: #29415f;
-  --color-neutral-400: #3c5979;
-  --color-neutral-500: #5a7594;
-  --color-neutral-600: #87a1bc;
-  --color-neutral-700: #a9bdd4;
-  --color-neutral-800: #c9d9ea;
-  --color-neutral-900: #edf5ff;
+  --color-neutral-100: #141c2e;
+  --color-neutral-200: #1e293b;
+  --color-neutral-300: #334155;
+  --color-neutral-400: #475569;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #94a3b8;
+  --color-neutral-700: #cbd5e1;
+  --color-neutral-800: #e2e8f0;
+  --color-neutral-900: #f1f5f9;
 
-  /* Ramp warning mode gelap mempertahankan cyan kebiruan yang berbeda dari
-     indigo utama, dengan level terang dibalik agar teks tetap terbaca. */
-  --color-accent-100: #17234d;
-  --color-accent-200: #213267;
-  --color-accent-300: #2d4489;
-  --color-accent-400: #405caf;
-  --color-accent-500: #607bd2;
-  --color-accent-600: #8fa8ff;
-  --color-accent-700: #a8baff;
-  --color-accent-800: #c5d1ff;
-  --color-accent-900: #e1e7ff;
+  --color-accent-100: #111c38;
+  --color-accent-200: #172750;
+  --color-accent-300: #1e3a8a;
+  --color-accent-400: #2563eb;
+  --color-accent-500: #3b82f6;
+  --color-accent-600: #60a5fa;
+  --color-accent-700: #93c5fd;
+  --color-accent-800: #bfdbfe;
+  --color-accent-900: #eff6ff;
 
-  /* Diretune bersama pasangan terangnya di atas, skala L* per level
-     dipertahankan sama persis dengan ramp lama supaya kontras yang sudah
-     terverifikasi tidak perlu dihitung ulang dari nol, cuma hue dan
-     chroma yang berubah ke hijau Coastal Glass. */
-  --color-accent-2-100: #172813;
-  --color-accent-2-200: #21381b;
-  --color-accent-2-300: #2f4f28;
-  --color-accent-2-400: #416a38;
-  --color-accent-2-500: #5d8c52;
-  --color-accent-2-600: #8fca82;
-  --color-accent-2-700: #a4e196;
-  --color-accent-2-800: #bff1b4;
-  --color-accent-2-900: #dcf9d6;
+  --color-accent-2-100: #0b2512;
+  --color-accent-2-200: #11381b;
+  --color-accent-2-300: #16552a;
+  --color-accent-2-400: #15803d;
+  --color-accent-2-500: #22c55e;
+  --color-accent-2-600: #4ade80;
+  --color-accent-2-700: #86efac;
+  --color-accent-2-800: #bbf7d0;
+  --color-accent-2-900: #f0fdf4;
 
-  --color-warn-100: #062d2e;
-  --color-warn-200: #0a4545;
-  --color-warn-300: #0d6260;
-  --color-warn-400: #11827d;
-  --color-warn-500: #1ca69e;
-  --color-warn-600: #45c8bf;
-  --color-warn-700: #82e8dc;
-  --color-warn-800: #b0f4ed;
-  --color-warn-900: #d7fcf8;
+  --color-warn-100: #2a2007;
+  --color-warn-200: #3f300b;
+  --color-warn-300: #5a450f;
+  --color-warn-400: #856616;
+  --color-warn-500: #b58c1e;
+  --color-warn-600: #eab308;
+  --color-warn-700: #facc15;
+  --color-warn-800: #fde047;
+  --color-warn-900: #fef9c3;
 
   --color-danger-100: #2d1214;
   --color-danger-200: #401a1d;
@@ -258,10 +210,8 @@
   --color-danger-800: #fecaca;
   --color-danger-900: #fee2e2;
 
-  /* Bayangan nyaris tidak terlihat di atas gelap, jadi dipertegas. Kartu
-     tetap ditopang garis hairline, sama seperti di mode terang. */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
-  --shadow-md: 0 2px 10px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 12px 34px rgba(0, 0, 0, 0.6);
 }
 
@@ -446,7 +396,7 @@ figure { margin: 0; }
 
 /* ── auth shell ─────────────────────────────────────────────────────── */
 .auth-shell {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-wrap: wrap;
   position: relative;
@@ -456,7 +406,7 @@ figure { margin: 0; }
   position: relative;
   overflow: hidden;
   flex: 1 1 480px;
-  min-height: 100vh;
+  min-height: 100dvh;
   padding: clamp(32px, 5vw, 64px);
   display: flex;
   flex-direction: column;
@@ -490,10 +440,9 @@ figure { margin: 0; }
   display: block;
   margin-top: 3px;
   color: var(--color-panel-samar);
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: .04em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: normal;
 }
 .auth-showcase-intro { margin-top: clamp(24px, 4vw, 44px); }
 .auth-showcase-intro h1 {
@@ -572,7 +521,7 @@ figure { margin: 0; }
 .auth-content {
   flex: 1 1 420px;
   min-width: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -582,7 +531,9 @@ figure { margin: 0; }
 .auth-card {
   width: min(560px, 100%);
   padding: clamp(22px, 4vw, 36px);
-  background: var(--color-neutral-100);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
 }
 .auth-footer {
   width: min(560px, 100%);
@@ -597,11 +548,10 @@ figure { margin: 0; }
 }
 .auth-form-section-title {
   margin: var(--space-6) 0 var(--space-3);
-  color: var(--color-neutral-800);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .04em;
-  text-transform: uppercase;
+  color: var(--color-text);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: normal;
 }
 .auth-agreement {
   margin-top: var(--space-5);
@@ -668,7 +618,7 @@ figure { margin: 0; }
   flex-direction: column;
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: 100dvh;
   /* Permukaan bertona, bukan putih. Inilah satu perubahan yang paling
      menentukan: begitu sidebar punya tona sendiri, tiga lapisan halaman
      langsung terbaca sekaligus, yaitu slate, cyan, lalu kartu elevated. */
@@ -691,50 +641,53 @@ figure { margin: 0; }
 .sidebar-kepala {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
-.sidebar.rel .sidebar-kepala { flex-direction: column; gap: 12px; }
+.sidebar.rel .sidebar-kepala { justify-content: center; }
 
-.sidebar-burger {
-  width: 38px;
-  height: 38px;
-  flex: none;
-  display: grid;
-  place-items: center;
+.sidebar-logo-tombol {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
   border: 1px solid var(--color-divider);
   border-radius: var(--radius-sm);
   background: var(--color-surface);
-  color: var(--color-neutral-700);
+  color: var(--color-text);
   cursor: pointer;
-  transition: background-color 0.16s ease, color 0.16s ease;
-}
-/* Hover memakai accent-200, bukan accent-100.
-
-   Di mode terang: tombol ini berlatar putih dan sekarang duduk di atas panel
-   bertona, jadi terbaca sebagai kontrol yang terangkat. accent-100 cuma 2.6
-   L* dari putih, hovernya nyaris tidak terasa. accent-200 memberi 5.5 L*.
-
-   Ini SATU SATUNYA perubahan yang juga menggeser mode gelap, dan disengaja
-   karena di sana keadaannya lebih parah: accent-100 gelap hanya 1.3 L* dari
-   latar tombol, jadi hovernya praktis tidak pernah bekerja. accent-200
-   menaikkannya ke 8.8 L*. Ini membetulkan kerusakan, bukan mengubah gaya,
-   tapi tetap dicatat di sini karena mode gelap seharusnya tidak disentuh. */
-.sidebar-burger:hover {
-  background: var(--color-accent-200);
-  color: var(--color-accent-800);
-  border-color: var(--color-accent-300);
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
+  text-align: left;
 }
 
-.sidebar-merek {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  min-width: 0;
+.sidebar-logo-tombol:hover {
+  background: var(--color-neutral-200);
+  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-divider));
+}
+
+.sidebar-logo-tombol:active {
+  transform: scale(0.98);
+}
+
+.sidebar-merek-teks {
   font-family: var(--font-heading);
-  font-size: 17px;
-  /* Caprasimo bulat dan tebal, jadi kapital semua wajib direnggangkan.
-     Panduan logo: 0.1em untuk ukuran 20px ke bawah. */
-  letter-spacing: 0.1em;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.sidebar.rel .sidebar-logo-tombol {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+}
+.sidebar.rel .sidebar-merek-teks {
+  display: none;
 }
 .sidebar-peran {
   font-size: 10px;
@@ -887,41 +840,74 @@ figure { margin: 0; }
   gap: 6px;
   cursor: pointer;
   text-decoration: none;
-  font-family: var(--font-heading);
-  font-weight: var(--font-heading-weight);
-  font-size: 14px;
-  line-height: 1.2;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13.5px;
+  line-height: 1.25;
   color: var(--color-text);
   background: transparent;
   border: 1px solid transparent;
   padding: var(--space-2) calc(var(--space-3) * 1.2);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.12s ease;
 }
 .btn svg { display: block; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-/* Warna utama sudah gelap, jadi hover dan active memakai langkah 800 dan
-   900 supaya arahnya tetap konsisten makin gelap. */
-/* Tombol utama memakai isian TINTA, bukan isian warna aksen.
 
-   Ini bagian dari prinsip Coastal Glass: warna aksen berhenti mengisi bidang
-   besar dan disimpan jadi tanda baca editorial. Tombol tinta di atas kanvas
-   indigo jadi elemen paling pekat di halaman, dan justru itu yang membuatnya
-   terbaca sebagai aksi utama tanpa perlu warna.
-
-   Arah keadaannya sengaja dibalik dari kebiasaan: disorot jadi lebih TERANG,
-   ditekan jadi paling gelap. Isian dasarnya sudah nyaris hitam, jadi
-   menggelapkannya saat hover tidak akan terlihat sama sekali. */
-.btn-primary { background: var(--color-neutral-900); color: var(--color-di-atas-solid); }
-.btn-primary:hover:not(:disabled) { background: var(--color-neutral-800); color: var(--color-di-atas-solid); }
-.btn-primary:active:not(:disabled) { background: var(--color-text); }
-.btn-secondary { border-color: var(--color-divider); }
-.btn-secondary:hover:not(:disabled) { background: color-mix(in srgb, var(--color-text) 6%, transparent); }
-.btn-secondary:active:not(:disabled) { background: color-mix(in srgb, var(--color-text) 12%, transparent); }
-.btn-ghost { color: var(--color-accent-700); padding-inline: var(--space-1); }
-.btn-ghost:hover:not(:disabled) { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
-.btn-ghost:active:not(:disabled) { background: color-mix(in srgb, var(--color-text) 13%, transparent); }
-.btn-danger { background: var(--color-danger-700); color: var(--color-di-atas-solid); }
-.btn-danger:hover:not(:disabled) { background: var(--color-danger-800); color: var(--color-di-atas-solid); }
+.btn-primary {
+  background: var(--color-accent-700);
+  color: var(--color-di-atas-solid);
+  border-color: var(--color-accent-700);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-accent-700) 25%, transparent);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-800);
+  border-color: var(--color-accent-800);
+  color: var(--color-di-atas-solid);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--color-accent-700) 30%, transparent);
+}
+.btn-primary:active:not(:disabled) {
+  background: var(--color-accent-900);
+  border-color: var(--color-accent-900);
+  transform: translateY(1px);
+}
+.btn-secondary {
+  background: var(--color-surface);
+  border-color: var(--color-divider);
+  color: var(--color-neutral-800);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-text) 5%, transparent);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-900);
+  border-color: var(--color-neutral-400);
+}
+.btn-secondary:active:not(:disabled) {
+  background: var(--color-neutral-300);
+  transform: translateY(1px);
+}
+.btn-ghost {
+  color: var(--color-accent-700);
+  padding-inline: var(--space-2);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: var(--color-accent-100);
+  color: var(--color-accent-900);
+}
+.btn-ghost:active:not(:disabled) {
+  background: var(--color-accent-200);
+}
+.btn-danger {
+  background: var(--color-danger-700);
+  color: var(--color-di-atas-solid);
+  border-color: var(--color-danger-700);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-danger-700) 25%, transparent);
+}
+.btn-danger:hover:not(:disabled) {
+  background: var(--color-danger-800);
+  border-color: var(--color-danger-800);
+  color: var(--color-di-atas-solid);
+}
 .btn-icon { width: 36px; height: 36px; padding: 0; }
 
 /* Sakelar bahasa: dua sisi yang selalu terlihat, dengan penanda yang
@@ -1449,20 +1435,15 @@ figure { margin: 0; }
   font-size: 14px;
   color: var(--color-text);
   caret-color: var(--color-accent);
-  /* Lapisan melayang, jadi input SELALU lebih terang dari apa pun yang
-     menopangnya: 7.1 L* di atas kartu dan 3.0 L* di atas kanvas.
-
-     Dulu latarnya sama dengan latar halaman, dan itu cacat: di form
-     penyaring yang tidak berada di dalam kartu, kotaknya sewarna persis
-     dengan halamannya dan cuma terlihat dari garis tepinya. */
   background: var(--color-elevated);
   border: 1px solid var(--color-divider);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
 }
 .input:hover { border-color: color-mix(in srgb, var(--color-text) 40%, transparent); }
-.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+.input:focus-visible { border-color: var(--color-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 15%, transparent); outline-offset: 0; }
 .input[aria-invalid="true"] { border-color: var(--color-danger-600); }
-textarea.input { min-height: 90px; resize: vertical; border-radius: var(--radius-lg); }
+textarea.input { min-height: 90px; resize: vertical; border-radius: var(--radius-sm); }
 select.input { appearance: none; }
 
 @media (max-width: 640px) {
@@ -1510,44 +1491,43 @@ select.input { appearance: none; }
   display: inline-flex;
   overflow: hidden;
   border: 1px solid var(--color-divider);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
 }
 .seg-opt {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 12px;
+  padding: 6px 14px;
   font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.16s ease, color 0.16s ease;
 }
 .seg-opt + .seg-opt { border-left: 1px solid var(--color-divider); }
-.seg-opt:has(input:checked) { background: var(--color-accent); color: var(--color-bg); }
-.seg-opt:not(:has(input:checked)):hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.seg-opt:has(input:checked) { background: var(--color-accent); color: var(--color-di-atas-solid); font-weight: 600; }
+.seg-opt:not(:has(input:checked)):hover { background: var(--color-neutral-200); }
 .seg-opt:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
 
 /* ── cards ─────────────────────────────────────────────────────────── */
-/* Kartu ditopang GARIS HAIRLINE, bukan bayangan.
-
-   Ini inti Coastal Glass. Kartu sekarang lebih gelap dari kanvas, jadi ia
-   menyusut ke dalam dan bayangan yang mengangkatnya justru melawan maksud
-   itu. Yang memisahkannya dari kanvas adalah garis 1px yang berjarak 11.9
-   L* dari kanvas, cukup tegas tanpa perlu mengangkat apa pun.
-
-   Berlaku di KEDUA mode. Dulu garis ini cuma dipasang di mode gelap,
-   karena di mode terang kartu putih sudah terpisah sendiri dari latarnya. */
 .card {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding: var(--space-3);
-  border-radius: calc(var(--radius-lg) * 1.15);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
   border: 1px solid var(--color-divider);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
 }
 .card-kicker {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: var(--color-accent-700);
+}
+[data-tema="gelap"] .card-kicker {
   color: var(--color-accent);
 }
 .card-title {
@@ -1683,25 +1663,25 @@ select.input { appearance: none; }
   position: sticky;
   top: 0;
   z-index: 1;
-  background: var(--color-neutral-100);
+  background: var(--color-surface);
   text-align: left;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-neutral-600);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: var(--color-neutral-700);
   padding: var(--space-3) var(--space-2);
   border-bottom: 1px solid var(--color-divider);
   white-space: nowrap;
 }
 .table td {
   padding: var(--space-3) var(--space-2);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 7%, transparent);
+  border-bottom: 1px solid var(--color-divider);
   vertical-align: middle;
 }
 .table tbody tr { transition: background-color 0.16s ease; }
-.table tbody tr:hover { background: var(--color-accent-100); }
+.table tbody tr:hover { background: color-mix(in srgb, var(--color-panel-samar) 8%, transparent); }
 .table tbody tr:last-child td { border-bottom: 0; }
-.table-wrap { overflow-x: auto; max-height: 70vh; overflow-y: auto; }
+.table-wrap { overflow-x: auto; max-height: 70dvh; overflow-y: auto; }
 
 /* ── dialog ────────────────────────────────────────────────────────── */
 
@@ -1792,428 +1772,218 @@ html:has(dialog[open]) {
   color: var(--color-text);
 }
 
-/* ── liquid glass refresh ──────────────────────────────────────────────
-   Arah visual baru mengambil prinsip kaca adaptif dari siakad-sekolah,
-   tetapi tetap memakai token SIPRAS dan tidak mengubah arti warna status.
-   Permukaan tidak dibuat putih transparan secara polos: tint, blur, rim,
-   highlight, dan bayangan bekerja bersama agar kaca terbaca sebagai material,
-   bukan sekadar opacity.
+/* ── Modern Editorial Academic Refinement ──────────────────────────────
+   Sesuai prinsip frontend-design, impeccable, dan design-taste-frontend:
+   - Menghilangkan blob gradien dekoratif dan efek kaca (backdrop blur) berlebih.
+   - Menguatkan kontras struktural dan hirarki tipografi akademik.
+   - Kanvas slate sejuk, kartu solid bergaris hairline presisi, elevasi hanya untuk elemen melayang.
+   - Sidebar dan header terpasang kokoh dan teratur.
+   - Responsif 100dvh untuk kenyamanan perangkat bergerak tanpa layout shift.
 */
-:root {
-  --glass-tint-rgb: 247 252 255;
-  --glass-rim-rgb: 255 255 255;
-  --glass-shadow-rgb: 20 35 56;
-  --glass-intensity: 0.58;
-  --glass-blur: 24px;
-  --glass-saturate: 155%;
-  --glass-alpha: 0.26;
-  --glass-rim-alpha: 0.5;
-  --glass-edge-alpha: 0.1;
-  --glass-shadow-alpha: 0.09;
-  --glass-highlight-alpha: 0.16;
-  --glass-radius: 24px;
-  --glass-ease: cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-[data-tema="gelap"] {
-  --glass-tint-rgb: 31 38 48;
-  --glass-rim-rgb: 224 238 255;
-  --glass-shadow-rgb: 0 0 0;
-  --glass-intensity: 0.72;
-  --glass-blur: 28px;
-  --glass-saturate: 165%;
-  --glass-alpha: 0.52;
-  --glass-rim-alpha: 0.3;
-  --glass-edge-alpha: 0.3;
-  --glass-shadow-alpha: 0.3;
-  --glass-highlight-alpha: 0.12;
-}
 
 body {
-  position: relative;
-  isolation: isolate;
-  background:
-    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--color-accent-300) 30%, transparent), transparent 32rem),
-    radial-gradient(circle at 94% 12%, color-mix(in srgb, var(--color-accent-2-300) 20%, transparent), transparent 28rem),
-    radial-gradient(circle at 52% 100%, color-mix(in srgb, var(--color-warn-200) 15%, transparent), transparent 34rem),
-    var(--color-bg);
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100dvh;
 }
 
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  z-index: -1;
-  width: 34vw;
-  height: 34vw;
-  min-width: 260px;
-  min-height: 260px;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(72px);
-  opacity: 0.22;
-}
-
-body::before {
-  top: 12%;
-  right: -12vw;
-  background: var(--color-accent-300);
-}
-
-body::after {
-  bottom: 3%;
-  left: -14vw;
-  background: var(--color-accent-2-300);
-}
-
-/* Dark mode keeps its established ambience; the deeper treatment above is
-   intentionally limited to light mode. */
-[data-tema="gelap"] body {
-  background:
-    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--color-accent-300) 34%, transparent), transparent 32rem),
-    radial-gradient(circle at 94% 12%, color-mix(in srgb, var(--color-accent-2-300) 24%, transparent), transparent 28rem),
-    radial-gradient(circle at 52% 100%, color-mix(in srgb, var(--color-warn-200) 18%, transparent), transparent 34rem),
-    var(--color-bg);
-}
-
-[data-tema="gelap"] body::before,
-[data-tema="gelap"] body::after {
-  opacity: 0.26;
-}
-
-@keyframes glass-in {
-  from { opacity: 0; transform: translateY(10px) scale(0.99); }
-  to { opacity: 1; transform: none; }
-}
-
-.glass-surface,
-.card,
-.kartu-statistik,
-.kartu-pilih,
-.dialog,
-.sidebar-burger,
-.btn-secondary,
-.sakelar-bahasa,
-.input {
-  position: relative;
-  isolation: isolate;
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-}
-
-.glass-surface::before,
-.card::before,
-.kartu-statistik::before,
-.dialog::before,
-.sidebar-burger::before,
-.btn-secondary::before,
-.sakelar-bahasa::before,
-.input::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: var(--radius-lg);
-  pointer-events: none;
-  background: linear-gradient(
-    135deg,
-    rgb(var(--glass-rim-rgb) / var(--glass-highlight-alpha)),
-    transparent 34%,
-    transparent 72%,
-    rgb(var(--glass-rim-rgb) / 0.04)
-  );
-}
-
-.kartu-pilih::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: var(--radius-lg);
-  pointer-events: none;
-  background: linear-gradient(135deg, rgb(var(--glass-rim-rgb) / var(--glass-highlight-alpha)), transparent 34%);
-}
-
-.kartu-pilih > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* Light mode menghadirkan kartu putih renyah terangkat dengan subtle glass tint.
-   Dark mode mempertahankan permukaan yang sudah disukai. */
-html:not([data-tema="gelap"]) .card {
-  background: rgb(255 255 255 / 0.94);
-}
-
-html:not([data-tema="gelap"]) .kartu-statistik,
-html:not([data-tema="gelap"]) .kartu-pilih {
-  background: rgb(255 255 255 / 0.90);
-}
-
-.sidebar {
-  margin: 12px 0 12px 12px;
-  height: calc(100vh - 24px);
-  border: 1px solid rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha));
-  border-radius: var(--radius-lg);
-  background: rgb(var(--glass-tint-rgb) / var(--glass-alpha));
-  box-shadow:
-    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.42),
-    0 10px 32px rgb(var(--glass-shadow-rgb) / var(--glass-shadow-alpha));
-}
-
-.sidebar-isi { padding: 16px 12px; }
-.sidebar-burger {
-  background: rgb(var(--glass-tint-rgb) / 0.46);
-  border-color: rgb(var(--glass-rim-rgb) / 0.46);
-  box-shadow: inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.34);
-  transition: transform 180ms var(--glass-ease), background-color 180ms ease, border-color 180ms ease;
-}
-.sidebar-burger:hover {
-  transform: translateY(-1px);
-  background: color-mix(in srgb, var(--color-accent-200) 64%, transparent);
-}
-
-.nav-item {
-  border: 1px solid transparent;
-  transition: transform 180ms var(--glass-ease), background-color 180ms ease, border-color 180ms ease, color 180ms ease;
-}
-.nav-item:hover,
-.nav-item[aria-current="page"] {
-  border-color: rgb(var(--glass-rim-rgb) / 0.34);
-  background: color-mix(in srgb, var(--color-accent-200) 58%, transparent);
-  box-shadow: inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.28);
-}
-
-main > header {
-  margin: 12px 12px 0;
-  border: 1px solid rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha)) !important;
-  border-radius: var(--radius-lg);
-  background: rgb(var(--glass-tint-rgb) / 0.5) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(150%);
-  backdrop-filter: blur(22px) saturate(150%);
-  box-shadow:
-    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.38),
-    0 8px 24px rgb(var(--glass-shadow-rgb) / 0.07);
-}
-
-main > header + div {
-  padding-top: clamp(24px, 4vw, 48px) !important;
-}
-
+/* Kartu & panel dalam mode Modern Editorial Academic */
 .card {
-  border-color: rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha));
-  box-shadow:
-    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.38),
-    0 8px 24px rgb(var(--glass-shadow-rgb) / var(--glass-shadow-alpha));
-  transition: transform 220ms var(--glass-ease), box-shadow 220ms var(--glass-ease), border-color 180ms ease;
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
+
 .card:hover {
-  border-color: rgb(var(--glass-rim-rgb) / 0.8);
-  box-shadow:
-    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.48),
-    0 14px 34px rgb(var(--glass-shadow-rgb) / 0.15);
+  border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-divider));
+  box-shadow: var(--shadow-md);
 }
 
 .kartu-statistik {
-  border-color: rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha));
-  background: color-mix(in srgb, var(--color-surface) 56%, transparent);
-  box-shadow:
-    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.42),
-    0 8px 24px rgb(var(--glass-shadow-rgb) / var(--glass-shadow-alpha));
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .kartu-pilih {
-  background: color-mix(in srgb, var(--color-surface) 58%, transparent);
-  border-color: rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha));
-  box-shadow:
-    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.34),
-    0 7px 22px rgb(var(--glass-shadow-rgb) / 0.1);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
+
 .kartu-pilih:hover {
-  transform: translateY(-3px);
-  border-color: rgb(var(--glass-rim-rgb) / 0.78);
-  box-shadow:
-    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.5),
-    0 15px 32px rgb(var(--glass-shadow-rgb) / 0.16);
-}
-
-html:not([data-tema="gelap"]) .card {
-  border-color: var(--color-divider);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.8),
-    0 4px 18px color-mix(in srgb, var(--color-text) 5%, transparent);
-}
-
-html:not([data-tema="gelap"]) .card:hover {
+  transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-divider));
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.9),
-    0 8px 24px color-mix(in srgb, var(--color-text) 9%, transparent);
+  box-shadow: var(--shadow-md);
 }
 
-html:not([data-tema="gelap"]) .kartu-statistik {
+/* Sidebar dalam struktur kokoh tanpa margin melayang */
+.sidebar {
+  width: 240px;
+  height: 100dvh;
+  position: sticky;
+  top: 0;
+  background: var(--color-panel);
+  border-right: 1px solid var(--color-divider);
+  border-radius: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+.sidebar.rel {
+  width: 68px;
+}
+
+.sidebar-isi {
+  padding: 16px 12px;
+}
+
+.sidebar-logo-tombol {
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  color: var(--color-neutral-700);
+  transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+.sidebar-logo-tombol:hover {
+  background: var(--color-neutral-200);
+  color: var(--color-text);
+}
+
+.nav-item {
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  color: var(--color-neutral-800);
+  transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+}
+
+.nav-item:hover {
+  background: color-mix(in srgb, var(--color-panel-samar) 12%, transparent);
+  color: var(--color-text);
+}
+
+.nav-item[aria-current="page"] {
+  background: var(--color-panel-isian);
   border-color: var(--color-divider);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.8),
-    0 4px 18px color-mix(in srgb, var(--color-text) 5%, transparent);
+  color: var(--color-accent-700);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
 }
 
-html:not([data-tema="gelap"]) .kartu-pilih {
-  background: rgb(255 255 255 / 0.92);
-  border-color: var(--color-divider);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.8),
-    0 4px 14px color-mix(in srgb, var(--color-text) 5%, transparent);
+[data-tema="gelap"] .nav-item[aria-current="page"] {
+  color: var(--color-accent);
 }
 
-html:not([data-tema="gelap"]) .kartu-pilih:hover {
-  border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-divider));
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.9),
-    0 10px 28px color-mix(in srgb, var(--color-text) 9%, transparent);
+/* Header terstruktur rapi */
+main > header {
+  margin: 0;
+  border-radius: 0;
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-surface);
+  box-shadow: none;
 }
 
+/* Tombol */
 .btn {
   min-height: 38px;
-  transition: transform 160ms var(--glass-ease), box-shadow 160ms ease, background-color 160ms ease, border-color 160ms ease;
-}
-.btn:hover:not(:disabled) { transform: translateY(-1px); }
-.btn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
-.btn-primary,
-.btn-danger {
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.24),
-    0 8px 18px color-mix(in srgb, var(--color-text) 18%, transparent);
-}
-.btn-secondary {
-  border-color: rgb(var(--glass-rim-rgb) / 0.54);
-  background: rgb(var(--glass-tint-rgb) / 0.28);
-  box-shadow: inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.3);
-}
-.btn-secondary:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--color-accent-200) 64%, transparent);
-  border-color: rgb(var(--glass-rim-rgb) / 0.78);
-}
-.btn-icon {
-  min-height: 36px;
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
 }
 
-html:not([data-tema="gelap"]) .btn-secondary {
-  border-color: var(--color-divider);
-  background: var(--color-surface);
-  color: var(--color-text);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--color-text) 6%, transparent);
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
 }
-html:not([data-tema="gelap"]) .btn-secondary:hover:not(:disabled) {
+
+.btn-primary {
+  background: var(--color-accent-700);
+  color: var(--color-di-atas-solid);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-800);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover:not(:disabled) {
   background: var(--color-neutral-200);
-  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-divider));
+  border-color: color-mix(in srgb, var(--color-accent) 30%, var(--color-divider));
 }
 
 .input {
-  border-color: rgb(var(--glass-rim-rgb) / 0.54);
-  background: rgb(var(--glass-tint-rgb) / 0.34);
-  box-shadow:
-    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.28),
-    0 2px 8px rgb(var(--glass-shadow-rgb) / 0.05);
-  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
-}
-.input:hover {
-  background: rgb(var(--glass-tint-rgb) / 0.48);
-  border-color: rgb(var(--glass-rim-rgb) / 0.8);
-}
-.input:focus-visible {
-  background: rgb(var(--glass-tint-rgb) / 0.58);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 22%, transparent), inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.4);
-}
-
-html:not([data-tema="gelap"]) .input {
-  border-color: var(--color-divider);
   background: var(--color-elevated);
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-text) 4%, transparent);
-}
-html:not([data-tema="gelap"]) .input:hover {
-  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-divider));
-}
-
-.sakelar-bahasa {
-  border-color: rgb(var(--glass-rim-rgb) / 0.48);
-  background: rgb(var(--glass-tint-rgb) / 0.28);
-  box-shadow: inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.28);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease, outline 0.15s ease;
 }
 
+.input:focus-visible {
+  border-color: var(--color-accent);
+  outline: 2px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+  outline-offset: 1px;
+}
+
+/* Dialog / Modal */
 .dialog {
-  border: 1px solid rgb(var(--glass-rim-rgb) / 0.72);
-  background: rgb(var(--glass-tint-rgb) / 0.78);
-  -webkit-backdrop-filter: blur(30px) saturate(165%);
-  backdrop-filter: blur(30px) saturate(165%);
-  box-shadow:
-    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.5),
-    0 24px 70px rgb(var(--glass-shadow-rgb) / 0.24);
+  border: 1px solid var(--color-divider);
+  background: var(--color-elevated);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
 }
+
 dialog.dialog::backdrop {
-  background: rgb(8 12 18 / 0.36);
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
-  backdrop-filter: blur(12px) saturate(120%);
+  background: color-mix(in srgb, #0a111a 50%, transparent);
 }
 
+/* Tab bawah responsif mobile */
 .tab-bawah {
-  margin: 0 10px 10px;
-  border: 1px solid rgb(var(--glass-rim-rgb) / var(--glass-rim-alpha));
-  border-radius: var(--radius-lg);
-  background: rgb(var(--glass-tint-rgb) / 0.58);
-  -webkit-backdrop-filter: blur(22px) saturate(150%);
-  backdrop-filter: blur(22px) saturate(150%);
-  box-shadow:
-    inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.42),
-    0 10px 30px rgb(var(--glass-shadow-rgb) / 0.16);
-}
-.tab-item[aria-current="page"],
-.tab-item:hover {
-  background: color-mix(in srgb, var(--color-accent-200) 62%, transparent);
-  box-shadow: inset 0 1px 0 rgb(var(--glass-rim-rgb) / 0.3);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  border-radius: 0;
+  border-top: 1px solid var(--color-divider);
+  background: var(--color-panel);
+  box-shadow: 0 -2px 10px color-mix(in srgb, var(--color-text) 6%, transparent);
+  padding-bottom: env(safe-area-inset-bottom, 8px);
+  z-index: 40;
 }
 
-@media (prefers-reduced-transparency: reduce) {
-  body {
-    background: var(--color-bg);
-  }
-  body::before,
-  body::after {
-    display: none;
-  }
-  .glass-surface,
-  .card,
-  .kartu-statistik,
-  .kartu-pilih,
-  .dialog,
-  .sidebar-burger,
-  .btn-secondary,
-  .sakelar-bahasa,
-  .input,
-  main > header,
-  .sidebar,
-  .tab-bawah {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    background: var(--color-surface) !important;
-  }
-  .glass-surface::before,
-  .card::before,
-  .kartu-statistik::before,
-  .dialog::before,
-  .sidebar-burger::before,
-  .btn-secondary::before,
-  .sakelar-bahasa::before,
-  .input::before {
-    display: none;
-  }
+.tab-item[aria-current="page"] {
+  background: var(--color-surface);
+  color: var(--color-accent-700);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+[data-tema="gelap"] .tab-item[aria-current="page"] {
+  color: var(--color-accent);
 }
 
 @media (max-width: 767px) {
-  .sidebar { margin: 0; height: 100vh; border-radius: 0; }
-  main > header { margin: 10px 10px 0; }
-  .tab-bawah { margin: 0 8px 8px; }
+  .sidebar {
+    display: none !important;
+  }
+  main > header {
+    padding: 12px 16px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2221,19 +1991,18 @@ dialog.dialog::backdrop {
   .kartu-statistik,
   .kartu-pilih,
   .btn,
-  .sidebar-burger,
-  .input { transition: none; }
+  .sidebar-logo-tombol,
+  .input {
+    transition: none;
+  }
   .card:hover,
   .btn:hover:not(:disabled),
-  .kartu-pilih:hover { transform: none; }
-}
-
-/* Drawer navigasi HP sudah dihapus. Di layar kecil sidebar memang
-   ditiadakan dan diganti navigasi bawah, jadi drawer kehilangan alasan
-   keberadaannya. */
-
-@media (prefers-reduced-motion: reduce) {
-  dialog.dialog[open] { animation: none; }
+  .kartu-pilih:hover {
+    transform: none;
+  }
+  dialog.dialog[open] {
+    animation: none;
+  }
 }
 
 /* Aset tanpa foto sekarang memakai komponen IlustrasiAset, bukan arsiran

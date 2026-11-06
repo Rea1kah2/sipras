@@ -101,7 +101,14 @@ export default async function Dasbor() {
           </div>
 
           {berjalan.map((p) => (
-            <div key={p.id} className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+            <div
+              key={p.id}
+              className="card elev-sm"
+              style={{
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-divider)",
+              }}
+            >
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                 <span className="mono" style={{ fontSize: 11, color: "var(--color-neutral-600)" }}>
                   {p.kode}
@@ -132,7 +139,8 @@ export default async function Dasbor() {
               style={{
                 alignItems: "center", textAlign: "center",
                 padding: "var(--space-8) var(--space-4)",
-                background: "var(--color-neutral-100)",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-divider)",
               }}
             >
               <div
@@ -163,14 +171,30 @@ export default async function Dasbor() {
 
         {/* kolom kanan: akses cepat */}
         <div className="flex flex-col" style={{ gap: "var(--space-3)", minWidth: 0 }}>
-          <div className="card elev-sm" style={{ background: "var(--color-accent-200)" }}>
-            <span className="card-kicker" style={{ color: "var(--color-accent-800)" }}>
-              {t.dasbor.aksesCepat}
-            </span>
-            <div className="card-title" style={{ color: "var(--color-accent-900)" }}>
+          <div
+            className="card elev-sm"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-divider)",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 3,
+                background: "var(--color-accent-700)",
+              }}
+            />
+            <span className="card-kicker">{t.dasbor.aksesCepat}</span>
+            <div className="card-title" style={{ fontSize: 17 }}>
               {t.dasbor.ajukanBaru}
             </div>
-            <p style={{ fontSize: 12.5, margin: 0, color: "var(--color-accent-900)" }}>
+            <p style={{ fontSize: 12.5, margin: 0, color: "var(--color-neutral-700)" }}>
               {t.dasbor.ajukanBaruIsi}
             </p>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 4 }}>
@@ -180,14 +204,20 @@ export default async function Dasbor() {
               <Link
                 href="/ajukan"
                 className="btn btn-secondary"
-                style={{ fontSize: 13, borderColor: "var(--color-accent-800)" }}
+                style={{ fontSize: 13 }}
               >
                 {t.dasbor.langsungForm}
               </Link>
             </div>
           </div>
 
-          <div className="card elev-sm" style={{ background: "var(--color-neutral-100)" }}>
+          <div
+            className="card elev-sm"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-divider)",
+            }}
+          >
             <span className="card-kicker">{t.dasbor.caraKerja}</span>
             <ol style={{ margin: 0, paddingLeft: 18, fontSize: 12.5, color: "var(--color-neutral-800)", lineHeight: 1.9 }}>
               <li>{t.dasbor.cara1}</li>

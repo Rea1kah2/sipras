@@ -16,6 +16,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
  *
  * Pakai:
  *   npm run db:aset
+ *   npm run db:aset -- --paksa-foto   (timpa foto yang sudah ada)
  */
 
 const connectionString = process.env.DATABASE_URL;
@@ -25,32 +26,15 @@ const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString }),
 });
 
+const PAKSA_FOTO = process.argv.includes("--paksa-foto");
+
 /**
- * ─────────────────────────────────────────────────────────────────────────
- * DAFTAR ASET. Ini satu satunya bagian yang perlu diubah.
- * ─────────────────────────────────────────────────────────────────────────
+ * DAFTAR ASET SEKOLAH.
  *
  * jumlah = stok untuk BARANG, kapasitas orang untuk RUANG (0 berarti
  * terbuka, dipakai halaman dan lapangan).
  *
- * `perkiraan: true` menandai angka yang BELUM dihitung langsung di sekolah.
- * Angka itu tetap dipasang supaya asetnya bisa langsung dipinjam, tapi
- * ditaksir RENDAH dengan sengaja. Alasannya bukan kehati hatian umum:
- * stok yang kelebihan membuat sistem menyetujui peminjaman 30 kursi padahal
- * yang tersedia 20, dan petugas baru menyadarinya saat guru datang mengambil.
- * Stok yang kekurangan cuma menolak lebih cepat dari perlunya, dan itu bisa
- * dinaikkan admin lewat halaman Kelola aset dalam hitungan detik. Dari dua
- * arah kesalahan, yang satu gagal di depan pengguna, yang satu tidak.
- *
- * Kapasitas RUANG tidak ikut ditaksir rendah karena sifatnya beda: nilainya
- * cuma ditampilkan sebagai keterangan dan tidak pernah menjadi dasar
- * penolakan, sebab tiap ruang selalu berstok 1.
- *
- * Nilai null tetap didukung untuk aset yang ditambahkan nanti: barisnya
- * dilewati, bukan diisi nol diam diam.
- *
- * Deskripsi ditulis dari apa yang benar benar tampak di foto lokasi, bukan
- * dari bayangan umum tentang sekolah dasar.
+ * foto = tautan lokal ke /images/aset/<berkas>.jpeg yang dibundel Next.js.
  */
 type Baris = {
   nama: string;
@@ -61,10 +45,11 @@ type Baris = {
   perkiraan?: boolean;
   lokasi: string;
   deskripsi: string;
+  foto?: string;
 };
 
 const ASET: Baris[] = [
-  // ── prasarana ────────────────────────────────────────────────────────
+  // ── prasarana / ruang kelas ──────────────────────────────────────────
   {
     nama: "Ruang Kelas 1",
     tipe: "RUANG",
@@ -74,6 +59,7 @@ const ASET: Baris[] = [
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
+    foto: "/images/aset/ruang-kelas-1.jpeg",
   },
   {
     nama: "Ruang Kelas 2",
@@ -84,6 +70,29 @@ const ASET: Baris[] = [
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
+    foto: "/images/aset/ruang-kelas-2a.jpeg",
+  },
+  {
+    nama: "Ruang Kelas 2A",
+    tipe: "RUANG",
+    kategori: "Ruang Kelas",
+    jumlah: 24,
+    perkiraan: true,
+    lokasi: "Gedung utama",
+    deskripsi:
+      "Ruang kelas 2A dengan ventilasi udara baik, papan tulis putih, meja dan kursi siswa teratur.",
+    foto: "/images/aset/ruang-kelas-2a.jpeg",
+  },
+  {
+    nama: "Ruang Kelas 2B",
+    tipe: "RUANG",
+    kategori: "Ruang Kelas",
+    jumlah: 24,
+    perkiraan: true,
+    lokasi: "Gedung utama",
+    deskripsi:
+      "Ruang kelas 2B bersebelahan dengan kelas 2A, dilengkapi meja belajar kayu dan papan pengumuman.",
+    foto: "/images/aset/ruang-kelas-2b.jpeg",
   },
   {
     nama: "Ruang Kelas 3",
@@ -94,6 +103,7 @@ const ASET: Baris[] = [
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
+    foto: "/images/aset/ruang-kelas-3.jpeg",
   },
   {
     nama: "Ruang Kelas 4",
@@ -104,6 +114,29 @@ const ASET: Baris[] = [
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
+    foto: "/images/aset/ruang-kelas-4a.jpeg",
+  },
+  {
+    nama: "Ruang Kelas 4A",
+    tipe: "RUANG",
+    kategori: "Ruang Kelas",
+    jumlah: 24,
+    perkiraan: true,
+    lokasi: "Gedung utama",
+    deskripsi:
+      "Ruang kelas 4A dengan pencahayaan alami memadai, meja ganda, dan lemari penyimpanan buku.",
+    foto: "/images/aset/ruang-kelas-4a.jpeg",
+  },
+  {
+    nama: "Ruang Kelas 4B",
+    tipe: "RUANG",
+    kategori: "Ruang Kelas",
+    jumlah: 24,
+    perkiraan: true,
+    lokasi: "Gedung utama",
+    deskripsi:
+      "Ruang kelas 4B lengkap dengan deretan meja kayu dan perlengkapan mengajar.",
+    foto: "/images/aset/ruang-kelas-4b.jpeg",
   },
   {
     nama: "Ruang Kelas 5",
@@ -114,6 +147,7 @@ const ASET: Baris[] = [
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
+    foto: "/images/aset/ruang-kelas-5.jpeg",
   },
   {
     nama: "Ruang Kelas 6",
@@ -124,6 +158,40 @@ const ASET: Baris[] = [
     lokasi: "Gedung utama",
     deskripsi:
       "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
+    foto: "/images/aset/ruang-kelas-6a.jpeg",
+  },
+  {
+    nama: "Ruang Kelas 6A",
+    tipe: "RUANG",
+    kategori: "Ruang Kelas",
+    jumlah: 24,
+    perkiraan: true,
+    lokasi: "Gedung utama",
+    deskripsi:
+      "Ruang kelas tingkat akhir 6A untuk persiapan ujian dan belajar intensif.",
+    foto: "/images/aset/ruang-kelas-6a.jpeg",
+  },
+  {
+    nama: "Ruang Kelas 6B",
+    tipe: "RUANG",
+    kategori: "Ruang Kelas",
+    jumlah: 24,
+    perkiraan: true,
+    lokasi: "Gedung utama",
+    deskripsi:
+      "Ruang kelas 6B yang luas dengan tata letak meja berderet rapi.",
+    foto: "/images/aset/ruang-kelas-6b.jpeg",
+  },
+  {
+    nama: "Ruang Laboratorium",
+    tipe: "RUANG",
+    kategori: "Laboratorium",
+    jumlah: 30,
+    perkiraan: true,
+    lokasi: "Gedung utama",
+    deskripsi:
+      "Ruang laboratorium sains dan komputer untuk kegiatan praktikum siswa.",
+    foto: "/images/aset/ruang-laboratorium.jpeg",
   },
   {
     nama: "Ruang Guru",
@@ -144,8 +212,29 @@ const ASET: Baris[] = [
     deskripsi:
       "Halaman tanah luas dengan tiang bendera, dipakai upacara, olahraga, dan kegiatan luar ruang. Tanpa batas kapasitas.",
   },
+  {
+    nama: "Lapangan Badminton",
+    tipe: "RUANG",
+    kategori: "Olahraga",
+    jumlah: 10,
+    perkiraan: true,
+    lokasi: "Halaman sekolah",
+    deskripsi:
+      "Area lapangan bulu tangkis luar ruang dengan garis batas standar.",
+    foto: "/images/aset/lapangan-badminton.jpeg",
+  },
+  {
+    nama: "Lapangan Bola",
+    tipe: "RUANG",
+    kategori: "Outdoor",
+    jumlah: 0,
+    lokasi: "Area terbuka sekolah",
+    deskripsi:
+      "Lapangan bola terbuka untuk kegiatan sepak bola, senam, dan kegiatan luar ruang bersama.",
+    foto: "/images/aset/lapangan-bola.jpeg",
+  },
 
-  // ── sarana ───────────────────────────────────────────────────────────
+  // ── sarana dan furnitur ──────────────────────────────────────────────
   {
     nama: "Kursi Plastik Siswa",
     tipe: "BARANG",
@@ -154,6 +243,7 @@ const ASET: Baris[] = [
     perkiraan: true,
     lokasi: "Ruang Kelas",
     deskripsi: "Kursi plastik warna oranye, ringan dan mudah dipindah antar ruang.",
+    foto: "/images/aset/kursi-plastik.jpeg",
   },
   {
     nama: "Meja Siswa Kayu",
@@ -193,15 +283,6 @@ const ASET: Baris[] = [
     lokasi: "Ruang Guru",
     deskripsi: "Meja panjang untuk rapat dan meja registrasi acara.",
   },
-  // Semula "Buku Paket Tematik" berupa BARANG berstok 6. Diubah jadi RUANG
-  // atas permintaan sekolah, dan perubahannya masuk akal: yang sebenarnya
-  // dipakai bersama adalah sudut bacanya, bukan paket bukunya yang berpindah
-  // tangan. Kategorinya sengaja dipertahankan supaya kata kunci ilustrasi
-  // /buku|perpustakaan|pustaka/ di ilustrasi-aset.tsx tetap cocok.
-  //
-  // Baris lama TIDAK ikut terhapus oleh skrip ini, karena skrip ini memang
-  // tidak pernah menghapus apa pun. Menonaktifkannya dikerjakan sekali lewat
-  // halaman Kelola aset.
   {
     nama: "Perpustakaan",
     tipe: "RUANG",
@@ -213,11 +294,7 @@ const ASET: Baris[] = [
       "Sudut baca dengan rak buku besar berisi buku paket tersusun per tingkat kelas, bersebelahan dengan lemari piala di ruang guru.",
   },
 
-  // ── olahraga dan elektronik ──────────────────────────────────────────
-  // Jumlah kelima aset di bawah dihitung langsung dari foto inventaris, jadi
-  // angkanya sudah terisi. Kalau ternyata sekolah punya lebih banyak daripada
-  // yang sempat difoto, stoknya diubah lewat halaman Kelola aset, tidak perlu
-  // menyentuh berkas ini lagi.
+  // ── olahraga, kesehatan, permainan, dan elektronik ───────────────────
   {
     nama: "Raket Bulu Tangkis",
     tipe: "BARANG",
@@ -226,6 +303,7 @@ const ASET: Baris[] = [
     lokasi: "Ruang Guru",
     deskripsi:
       "Tiga raket bulu tangkis beserta dua tas pelindung. Kok disediakan terpisah dan tidak ikut dihitung sebagai aset karena habis pakai.",
+    foto: "/images/aset/raket-badminton.jpeg",
   },
   {
     nama: "Bola Kaki",
@@ -235,6 +313,18 @@ const ASET: Baris[] = [
     lokasi: "Ruang Guru",
     deskripsi:
       "Empat bola kaki yang disimpan dalam kemasan plastik. Dipakai untuk pelajaran PJOK dan kegiatan lomba di halaman sekolah.",
+    foto: "/images/aset/bola-kaki.jpeg",
+  },
+  {
+    nama: "Bola Tenis",
+    tipe: "BARANG",
+    kategori: "Olahraga",
+    jumlah: 12,
+    perkiraan: true,
+    lokasi: "Ruang Guru",
+    deskripsi:
+      "Satu set bola tenis untuk latihan ketangkasan dan olahraga siswa.",
+    foto: "/images/aset/bola-tenis.jpeg",
   },
   {
     nama: "Bola Voli",
@@ -243,6 +333,61 @@ const ASET: Baris[] = [
     jumlah: 1,
     lokasi: "Ruang Guru",
     deskripsi: "Bola voli merek Mikasa, masih tersimpan dalam kemasan plastik.",
+  },
+  {
+    nama: "Papan Catur",
+    tipe: "BARANG",
+    kategori: "Permainan",
+    jumlah: 4,
+    perkiraan: true,
+    lokasi: "Ruang Guru",
+    deskripsi:
+      "Papan catur kayu lengkap dengan set bidak catur untuk kegiatan ekstrakurikuler dan lomba.",
+    foto: "/images/aset/papan-catur.jpeg",
+  },
+  {
+    nama: "Kotak P3K",
+    tipe: "BARANG",
+    kategori: "Kesehatan",
+    jumlah: 2,
+    perkiraan: true,
+    lokasi: "UKS / Ruang Guru",
+    deskripsi:
+      "Kotak pertolongan pertama pada kecelakaan berisi kasa steril, perban, antiseptik, dan obat dasar.",
+    foto: "/images/aset/kotak-p3k.jpeg",
+  },
+  {
+    nama: "Generator",
+    tipe: "BARANG",
+    kategori: "Elektronik",
+    jumlah: 1,
+    perkiraan: true,
+    lokasi: "Gudang",
+    deskripsi:
+      "Genset penyuplai daya listrik cadangan saat terjadi pemadaman aliran listrik sekolah.",
+    foto: "/images/aset/generator.jpeg",
+  },
+  {
+    nama: "Kipas Angin",
+    tipe: "BARANG",
+    kategori: "Elektronik",
+    jumlah: 4,
+    perkiraan: true,
+    lokasi: "Ruang Guru",
+    deskripsi:
+      "Kipas angin berdiri untuk penyejuk ruangan pada acara pertemuan atau kegiatan belajar.",
+    foto: "/images/aset/kipas-angin.jpeg",
+  },
+  {
+    nama: "Speaker",
+    tipe: "BARANG",
+    kategori: "Audio Visual",
+    jumlah: 2,
+    perkiraan: true,
+    lokasi: "Ruang Guru",
+    deskripsi:
+      "Unit pengeras suara aktif lengkap dengan mikrofon nirkabel untuk upacara dan pengumuman.",
+    foto: "/images/aset/speaker.jpeg",
   },
   {
     nama: "Proyektor InFocus",
@@ -267,13 +412,10 @@ const ASET: Baris[] = [
 async function main() {
   let dibuat = 0;
   let diperbarui = 0;
+  let fotoDiisi = 0;
   const dilewati: string[] = [];
 
   for (const a of ASET) {
-    // Jumlah kosong berarti sekolah belum mengonfirmasi angkanya. Barisnya
-    // DILEWATI, bukan membatalkan seluruh skrip: aset yang angkanya sudah pasti
-    // tidak pantas tersandera oleh aset lain yang belum sempat dihitung.
-    // Yang tetap ditolak adalah menebak angkanya sendiri.
     if (a.jumlah === null) {
       dilewati.push(a.nama);
       continue;
@@ -286,67 +428,44 @@ async function main() {
       kategori: a.kategori,
       deskripsi: a.deskripsi,
       lokasi: a.lokasi,
-      // Sama aturannya dengan admin/aset/aksi.ts: ruang selalu berstok 1,
-      // karena satu ruang tidak bisa dipakai dua kegiatan sekaligus.
       stok: ruang ? 1 : a.jumlah,
       kapasitas: ruang ? a.jumlah : null,
     };
 
-    // Aset.nama tidak bertanda unik di skema, jadi upsert bawaan Prisma
-    // tidak bisa dipakai. Skrip ini dijalankan sekali oleh satu orang, bukan
-    // bersamaan, jadi cari lalu tulis sudah memadai di sini.
     const ada = await prisma.aset.findFirst({
       where: { nama: a.nama },
-      select: { id: true },
+      select: { id: true, foto: true },
     });
 
     if (ada) {
-      // Foto sengaja tidak ikut ditulis. Kalau admin sudah memasang foto
-      // lewat antarmuka, menjalankan skrip ini lagi tidak boleh menghapusnya.
-      await prisma.aset.update({ where: { id: ada.id }, data: isi });
+      const dataUpdate: Record<string, unknown> = { ...isi };
+      // Foto diisi jika belum ada di database, atau jika parameter --paksa-foto aktif
+      if ((!ada.foto || PAKSA_FOTO) && a.foto) {
+        dataUpdate.foto = a.foto;
+        fotoDiisi++;
+      }
+      await prisma.aset.update({ where: { id: ada.id }, data: dataUpdate });
       diperbarui++;
     } else {
-      await prisma.aset.create({ data: isi });
+      await prisma.aset.create({
+        data: {
+          ...isi,
+          foto: a.foto ?? null,
+        },
+      });
       dibuat++;
+      if (a.foto) fotoDiisi++;
     }
   }
 
   console.log(
-    `Selesai. ${dibuat} aset dibuat, ${diperbarui} diperbarui, ${dilewati.length} dilewati.`
+    `Selesai. ${dibuat} aset dibuat, ${diperbarui} diperbarui, ${fotoDiisi} foto terpasang, ${dilewati.length} dilewati.`
   );
-  if (dibuat === 0 && diperbarui > 0) {
-    console.log("Semua aset berangka sudah ada sebelumnya, jadi tidak ada yang ditambahkan.");
-  }
-  if (dilewati.length > 0) {
-    console.log("\nBelum masuk karena jumlahnya masih kosong:");
-    for (const nama of dilewati) console.log(`  - ${nama}`);
-    console.log(
-      "\nIsi kolom jumlah untuk aset di atas pada berkas prisma/isi-aset-sekolah.ts," +
-        "\nlalu jalankan npm run db:aset sekali lagi. Yang sudah masuk tidak akan" +
-        "\nterduplikasi, cuma diperbarui."
-    );
-  }
 
-  // Daftar ini yang membuat sifat sementara angkanya tidak hilang begitu
-  // skripnya selesai. Tanpa dicetak di sini, taksiran akan terbaca sebagai
-  // hasil hitungan sungguhan oleh siapa pun yang membuka katalog nanti.
   const perkiraan = ASET.filter((a) => a.perkiraan && a.jumlah !== null);
   if (perkiraan.length > 0) {
-    console.log(`\nPERLU DICEK PETUGAS. ${perkiraan.length} aset memakai angka taksiran,`);
-    console.log("bukan hasil hitungan langsung di sekolah:\n");
-    for (const a of perkiraan) {
-      const satuan = a.tipe === "RUANG" ? "orang" : "unit";
-      console.log(`  ${a.nama.padEnd(22)} ${String(a.jumlah).padStart(3)} ${satuan}`);
-    }
-    console.log(
-      "\nSemuanya sudah bisa dipinjam sekarang. Angka barang sengaja ditaksir" +
-        "\nRENDAH: stok kelebihan membuat sistem menyetujui peminjaman barang yang" +
-        "\ntidak ada, sedangkan stok kekurangan cuma menolak lebih cepat dari" +
-        "\nperlunya. Betulkan lewat halaman Kelola aset, tanpa menyentuh kode."
-    );
+    console.log(`\nPERLU DICEK PETUGAS: ${perkiraan.length} aset memakai angka taksiran.`);
   }
-
-  console.log("\nFoto tiap aset dipasang sendiri lewat halaman Kelola aset.");
 }
 
 main()
