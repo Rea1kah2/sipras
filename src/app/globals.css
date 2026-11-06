@@ -1982,7 +1982,31 @@ dialog.dialog::backdrop {
     display: none !important;
   }
   main > header {
-    padding: 12px 16px;
+    padding: 10px 14px;
+    gap: 8px;
+    min-height: 54px;
+  }
+  .navbar-logo-hp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: var(--radius-xs);
+    color: var(--color-accent);
+    flex-shrink: 0;
+    transition: transform 0.16s ease;
+  }
+  .navbar-logo-hp:hover {
+    transform: scale(1.05);
+  }
+  .judul-halaman {
+    gap: 0;
+  }
+  .judul-halaman .judul-teks {
+    font-size: 16px;
+  }
+  .judul-halaman .judul-sub {
+    display: none !important;
   }
 }
 

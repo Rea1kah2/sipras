@@ -130,6 +130,16 @@ export function Shell({
             zIndex: 60,
           }}
         >
+          {/* Logo SIPRAS khusus layar HP: sidebar disembunyikan di HP, jadi logo ditaruh di bilah atas */}
+          <Link
+            href="/katalog"
+            className="navbar-logo-hp hanya-hp"
+            aria-label="SIPRAS Beranda"
+            title="SIPRAS"
+          >
+            <LambangSipras ukuran={26} />
+          </Link>
+
           <JudulHalaman
             judul={judul}
             sub={sub}
@@ -149,16 +159,20 @@ export function Shell({
               position: "relative",
             }}
           >
-            <TogelBahasa
-              awal={bahasa}
-              label={t.shell.gantiBahasa}
-              simpanKeAkun={simpanBahasa}
-            />
-            <TogelTema
-              awal={tema}
-              labelKeGelap={t.shell.keGelap}
-              labelKeTerang={t.shell.keTerang}
-            />
+            {/* Sakelar bahasa dan tema di bilah atas hanya untuk layar besar.
+                Di layar HP kontrol ini masuk ke dalam MenuAkun agar bilah atas tetap lega. */}
+            <div className="hanya-desktop" style={{ alignItems: "center", gap: 8 }}>
+              <TogelBahasa
+                awal={bahasa}
+                label={t.shell.gantiBahasa}
+                simpanKeAkun={simpanBahasa}
+              />
+              <TogelTema
+                awal={tema}
+                labelKeGelap={t.shell.keGelap}
+                labelKeTerang={t.shell.keTerang}
+              />
+            </div>
 
             <Lonceng
               notif={notif}
@@ -168,13 +182,20 @@ export function Shell({
               t={t}
             />
 
-            <MenuAkun nama={nama} inisial={inisial} t={t} />
+            <MenuAkun
+              nama={nama}
+              inisial={inisial}
+              bahasa={bahasa}
+              tema={tema}
+              simpanBahasa={simpanBahasa}
+              onKeluar={() => setTanyaKeluar(true)}
+              t={t}
+            />
 
-            {/* Tombol keluar berdiri sendiri sebagai ikon. Modal konfirmasi
-                baru muncul setelah tombol ini ditekan, tidak sebelumnya. */}
+            {/* Tombol keluar mandiri hanya di desktop */}
             <button
               type="button"
-              className="btn btn-secondary btn-icon"
+              className="btn btn-secondary btn-icon hanya-desktop"
               aria-label={t.shell.keluar}
               title={t.shell.keluar}
               onClick={() => setTanyaKeluar(true)}
@@ -350,7 +371,23 @@ function TabBawah({
 }
 
 // ── menu akun ───────────────────────────────────────────────────────────
-function MenuAkun({ nama, inisial, t }: { nama: string; inisial: string; t: Kamus }) {
+function MenuAkun({
+  nama,
+  inisial,
+  bahasa,
+  tema,
+  simpanBahasa,
+  onKeluar,
+  t,
+}: {
+  nama: string;
+  inisial: string;
+  bahasa: Bahasa;
+  tema: Tema;
+  simpanBahasa: (nilai: string) => Promise<void>;
+  onKeluar: () => void;
+  t: Kamus;
+}) {
   const [buka, setBuka] = useState(false);
   const wadah = useRef<HTMLDivElement>(null);
 
@@ -417,19 +454,65 @@ function MenuAkun({ nama, inisial, t }: { nama: string; inisial: string; t: Kamu
           className="card elev-lg anim-pop"
           style={{
             position: "absolute", top: 44, right: 0,
-            width: "min(220px,80vw)", zIndex: 90, gap: 2,
+            width: "min(240px,86vw)", zIndex: 90, gap: 2,
             // Lapisan melayang, bukan warna kartu. Menu turun mengambang di
             // atas isi halaman, jadi ia memakai permukaan paling terang
             // supaya jelas terpisah dari kartu di belakangnya.
             background: "var(--color-elevated)",
+            padding: "8px",
           }}
         >
+          <div style={{ padding: "4px 8px 8px", borderBottom: "1px solid var(--color-divider)", marginBottom: 4 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--color-text)" }}>{nama}</div>
+          </div>
+
           <Link href="/profil" role="menuitem" style={gayaItem} onClick={() => setBuka(false)}>
             {t.shell.profilSaya}
           </Link>
           <Link href="/notifikasi" role="menuitem" style={gayaItem} onClick={() => setBuka(false)}>
             {t.shell.semuaNotifikasi}
           </Link>
+
+          {/* Pengaturan bahasa, tema, dan tombol keluar saat di layar HP */}
+          <div
+            className="hanya-hp"
+            style={{
+              flexDirection: "column",
+              gap: 8,
+              paddingTop: 8,
+              marginTop: 4,
+              borderTop: "1px solid var(--color-divider)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "4px 8px" }}>
+              <span style={{ fontSize: 12, color: "var(--color-neutral-600)", fontWeight: 500 }}>
+                {t.shell.gantiBahasa}
+              </span>
+              <TogelBahasa awal={bahasa} label={t.shell.gantiBahasa} simpanKeAkun={simpanBahasa} />
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "4px 8px" }}>
+              <span style={{ fontSize: 12, color: "var(--color-neutral-600)", fontWeight: 500 }}>
+                {tema === "gelap" ? t.shell.keTerang : t.shell.keGelap}
+              </span>
+              <TogelTema awal={tema} labelKeGelap={t.shell.keGelap} labelKeTerang={t.shell.keTerang} />
+            </div>
+
+            <div style={{ borderTop: "1px solid var(--color-divider)", paddingTop: 4, marginTop: 2 }}>
+              <button
+                type="button"
+                role="menuitem"
+                style={{ ...gayaItem, color: "var(--color-danger)" }}
+                onClick={() => {
+                  setBuka(false);
+                  onKeluar();
+                }}
+              >
+                <IkonKeluar />
+                {t.shell.keluar}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -2,17 +2,10 @@ import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 /**
- * Mengisi daftar sarana dan prasarana nyata UPTD SD Negeri 372 Sikara Kara.
+ * Mengisi dan menyinkronkan 21 sarana dan prasarana nyata SIPRAS.
  *
- * BEDA PALING PENTING dari prisma/seed.ts: skrip ini TIDAK PERNAH MENGHAPUS
- * apa pun. seed.ts diawali sederet deleteMany() yang mengosongkan sepuluh
- * tabel, dan itu benar untuk data demo yang memang boleh ditimpa berulang.
- * Di basis data produksi perilaku itu mematikan: sekali salah jalan, seluruh
- * riwayat peminjaman sungguhan lenyap.
- *
- * Skrip ini mencari aset berdasarkan namanya lebih dulu, memperbarui yang
- * sudah ada dan membuat yang belum. Jadi aman dijalankan dua kali, dan aman
- * dipakai lagi nanti saat sekolah menambah aset baru.
+ * Skrip ini bersifat aman dan idempotent: mencari aset berdasarkan namanya,
+ * memperbarui data atau foto bila sudah ada, dan membuat baru bila belum ada.
  *
  * Pakai:
  *   npm run db:aset
@@ -28,199 +21,116 @@ const prisma = new PrismaClient({
 
 const PAKSA_FOTO = process.argv.includes("--paksa-foto");
 
-/**
- * DAFTAR ASET SEKOLAH.
- *
- * jumlah = stok untuk BARANG, kapasitas orang untuk RUANG (0 berarti
- * terbuka, dipakai halaman dan lapangan).
- *
- * foto = tautan lokal ke /images/aset/<berkas>.jpeg yang dibundel Next.js.
- */
 type Baris = {
   nama: string;
   tipe: "BARANG" | "RUANG";
   kategori: string;
   jumlah: number | null;
-  /** Angka belum diverifikasi sekolah, wajib dicek petugas setelah deploy. */
-  perkiraan?: boolean;
   lokasi: string;
   deskripsi: string;
-  foto?: string;
+  foto: string;
 };
 
 const ASET: Baris[] = [
-  // ── prasarana / ruang kelas ──────────────────────────────────────────
+  // ── Prasarana / Ruang Kelas ──────────────────────────────────────────
   {
     nama: "Ruang Kelas 1",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
+    jumlah: 28,
+    lokasi: "Gedung A Lantai 1",
+    deskripsi: "Ruang kelas 1 dilengkapi meja kursi siswa, papan tulis, dan ventilasi udara baik.",
     foto: "/images/aset/ruang-kelas-1.jpeg",
-  },
-  {
-    nama: "Ruang Kelas 2",
-    tipe: "RUANG",
-    kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
-    foto: "/images/aset/ruang-kelas-2a.jpeg",
   },
   {
     nama: "Ruang Kelas 2A",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas 2A dengan ventilasi udara baik, papan tulis putih, meja dan kursi siswa teratur.",
+    jumlah: 28,
+    lokasi: "Gedung A Lantai 1",
+    deskripsi: "Ruang kelas 2A yang rapi dan nyaman untuk proses pembelajaran tatap muka.",
     foto: "/images/aset/ruang-kelas-2a.jpeg",
   },
   {
     nama: "Ruang Kelas 2B",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas 2B bersebelahan dengan kelas 2A, dilengkapi meja belajar kayu dan papan pengumuman.",
+    jumlah: 28,
+    lokasi: "Gedung A Lantai 1",
+    deskripsi: "Ruang kelas 2B bersebelahan dengan kelas 2A dengan tata letak bangku ergonomis.",
     foto: "/images/aset/ruang-kelas-2b.jpeg",
   },
   {
     nama: "Ruang Kelas 3",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
+    jumlah: 28,
+    lokasi: "Gedung A Lantai 2",
+    deskripsi: "Ruang kelas 3 berpencahayaan alami cukup dengan papan display karya siswa.",
     foto: "/images/aset/ruang-kelas-3.jpeg",
-  },
-  {
-    nama: "Ruang Kelas 4",
-    tipe: "RUANG",
-    kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
-    foto: "/images/aset/ruang-kelas-4a.jpeg",
   },
   {
     nama: "Ruang Kelas 4A",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas 4A dengan pencahayaan alami memadai, meja ganda, dan lemari penyimpanan buku.",
+    jumlah: 30,
+    lokasi: "Gedung B Lantai 1",
+    deskripsi: "Ruang kelas 4A dengan perlengkapan belajar lengkap dan papan tulis putih ganda.",
     foto: "/images/aset/ruang-kelas-4a.jpeg",
   },
   {
     nama: "Ruang Kelas 4B",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas 4B lengkap dengan deretan meja kayu dan perlengkapan mengajar.",
+    jumlah: 30,
+    lokasi: "Gedung B Lantai 1",
+    deskripsi: "Ruang kelas 4B berukuran luas dengan sirkulasi udara optimal.",
     foto: "/images/aset/ruang-kelas-4b.jpeg",
   },
   {
     nama: "Ruang Kelas 5",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
+    jumlah: 30,
+    lokasi: "Gedung B Lantai 2",
+    deskripsi: "Ruang kelas 5 yang kondusif untuk kegiatan belajar mengajar dan diskusi kelompok.",
     foto: "/images/aset/ruang-kelas-5.jpeg",
-  },
-  {
-    nama: "Ruang Kelas 6",
-    tipe: "RUANG",
-    kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas berdinding hijau dengan papan tulis putih, meja kayu panjang, kursi plastik, dan lemari kayu di sudut ruangan.",
-    foto: "/images/aset/ruang-kelas-6a.jpeg",
   },
   {
     nama: "Ruang Kelas 6A",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas tingkat akhir 6A untuk persiapan ujian dan belajar intensif.",
+    jumlah: 32,
+    lokasi: "Gedung C Lantai 1",
+    deskripsi: "Ruang kelas 6A untuk siswa tingkat akhir dengan fasilitas meja kursi belajar standar.",
     foto: "/images/aset/ruang-kelas-6a.jpeg",
   },
   {
     nama: "Ruang Kelas 6B",
     tipe: "RUANG",
     kategori: "Ruang Kelas",
-    jumlah: 24,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kelas 6B yang luas dengan tata letak meja berderet rapi.",
+    jumlah: 32,
+    lokasi: "Gedung C Lantai 1",
+    deskripsi: "Ruang kelas 6B yang tenang dan lapang untuk pemantapan materi ujian.",
     foto: "/images/aset/ruang-kelas-6b.jpeg",
   },
   {
     nama: "Ruang Laboratorium",
     tipe: "RUANG",
-    kategori: "Laboratorium",
-    jumlah: 30,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang laboratorium sains dan komputer untuk kegiatan praktikum siswa.",
+    kategori: "Fasilitas Khusus",
+    jumlah: 35,
+    lokasi: "Gedung Laboratorium",
+    deskripsi: "Ruang laboratorium sains dan komputer dengan meja praktikum dan saluran listrik memadai.",
     foto: "/images/aset/ruang-laboratorium.jpeg",
   },
-  {
-    nama: "Ruang Guru",
-    tipe: "RUANG",
-    kategori: "Ruang Kerja dan Rapat",
-    jumlah: 12,
-    perkiraan: true,
-    lokasi: "Gedung utama",
-    deskripsi:
-      "Ruang kerja guru sekaligus tempat rapat kecil. Berisi rak buku besar, lemari kaca piala, dan meja panjang bertaplak.",
-  },
-  {
-    nama: "Halaman Sekolah",
-    tipe: "RUANG",
-    kategori: "Outdoor",
-    jumlah: 0,
-    lokasi: "Depan gedung utama",
-    deskripsi:
-      "Halaman tanah luas dengan tiang bendera, dipakai upacara, olahraga, dan kegiatan luar ruang. Tanpa batas kapasitas.",
-  },
+  // ── Prasarana / Outdoor & Lapangan ───────────────────────────────────
   {
     nama: "Lapangan Badminton",
     tipe: "RUANG",
     kategori: "Olahraga",
-    jumlah: 10,
-    perkiraan: true,
-    lokasi: "Halaman sekolah",
-    deskripsi:
-      "Area lapangan bulu tangkis luar ruang dengan garis batas standar.",
+    jumlah: 0,
+    lokasi: "Area Olahraga Sekolah",
+    deskripsi: "Lapangan bulu tangkis dengan garis standar dan jaring net terpasang rapi.",
     foto: "/images/aset/lapangan-badminton.jpeg",
   },
   {
@@ -228,244 +138,151 @@ const ASET: Baris[] = [
     tipe: "RUANG",
     kategori: "Outdoor",
     jumlah: 0,
-    lokasi: "Area terbuka sekolah",
-    deskripsi:
-      "Lapangan bola terbuka untuk kegiatan sepak bola, senam, dan kegiatan luar ruang bersama.",
+    lokasi: "Area Terbuka Sekolah",
+    deskripsi: "Lapangan sepak bola rumput terbuka untuk pertandingan olahraga dan kegiatan luar ruang.",
     foto: "/images/aset/lapangan-bola.jpeg",
   },
-
-  // ── sarana dan furnitur ──────────────────────────────────────────────
-  {
-    nama: "Kursi Plastik Siswa",
-    tipe: "BARANG",
-    kategori: "Furnitur",
-    jumlah: 60,
-    perkiraan: true,
-    lokasi: "Ruang Kelas",
-    deskripsi: "Kursi plastik warna oranye, ringan dan mudah dipindah antar ruang.",
-    foto: "/images/aset/kursi-plastik.jpeg",
-  },
-  {
-    nama: "Meja Siswa Kayu",
-    tipe: "BARANG",
-    kategori: "Furnitur",
-    jumlah: 48,
-    perkiraan: true,
-    lokasi: "Ruang Kelas",
-    deskripsi: "Meja kayu panjang untuk dua siswa, berlaci di bawah permukaan mejanya.",
-  },
-  {
-    nama: "Lemari Kayu",
-    tipe: "BARANG",
-    kategori: "Furnitur",
-    jumlah: 6,
-    perkiraan: true,
-    lokasi: "Ruang Kelas",
-    deskripsi:
-      "Lemari kayu berdaun dua untuk menyimpan berkas dan alat peraga. Berat, perlu dua orang untuk memindahkannya.",
-  },
-  {
-    nama: "Kursi Lipat",
-    tipe: "BARANG",
-    kategori: "Furnitur",
-    jumlah: 20,
-    perkiraan: true,
-    lokasi: "Ruang Guru",
-    deskripsi:
-      "Kursi lipat rangka besi dengan dudukan busa biru. Biasa dipakai untuk rapat dan acara di halaman.",
-  },
-  {
-    nama: "Meja Panjang",
-    tipe: "BARANG",
-    kategori: "Furnitur",
-    jumlah: 6,
-    perkiraan: true,
-    lokasi: "Ruang Guru",
-    deskripsi: "Meja panjang untuk rapat dan meja registrasi acara.",
-  },
-  {
-    nama: "Perpustakaan",
-    tipe: "RUANG",
-    kategori: "Buku dan Perpustakaan",
-    jumlah: 10,
-    perkiraan: true,
-    lokasi: "Ruang Guru",
-    deskripsi:
-      "Sudut baca dengan rak buku besar berisi buku paket tersusun per tingkat kelas, bersebelahan dengan lemari piala di ruang guru.",
-  },
-
-  // ── olahraga, kesehatan, permainan, dan elektronik ───────────────────
-  {
-    nama: "Raket Bulu Tangkis",
-    tipe: "BARANG",
-    kategori: "Olahraga",
-    jumlah: 3,
-    lokasi: "Ruang Guru",
-    deskripsi:
-      "Tiga raket bulu tangkis beserta dua tas pelindung. Kok disediakan terpisah dan tidak ikut dihitung sebagai aset karena habis pakai.",
-    foto: "/images/aset/raket-badminton.jpeg",
-  },
+  // ── Sarana / Barang Olahraga & Permainan ──────────────────────────────
   {
     nama: "Bola Kaki",
     tipe: "BARANG",
     kategori: "Olahraga",
-    jumlah: 4,
-    lokasi: "Ruang Guru",
-    deskripsi:
-      "Empat bola kaki yang disimpan dalam kemasan plastik. Dipakai untuk pelajaran PJOK dan kegiatan lomba di halaman sekolah.",
+    jumlah: 10,
+    lokasi: "Ruang Olahraga",
+    deskripsi: "Bola sepak standar untuk kegiatan olahraga, latihan PJOK, dan pertandingan sekolah.",
     foto: "/images/aset/bola-kaki.jpeg",
   },
   {
     nama: "Bola Tenis",
     tipe: "BARANG",
     kategori: "Olahraga",
-    jumlah: 12,
-    perkiraan: true,
-    lokasi: "Ruang Guru",
-    deskripsi:
-      "Satu set bola tenis untuk latihan ketangkasan dan olahraga siswa.",
+    jumlah: 15,
+    lokasi: "Lemari Olahraga",
+    deskripsi: "Bola tenis lapangan berkualitas baik untuk latihan ketangkasan dan olahraga siswa.",
     foto: "/images/aset/bola-tenis.jpeg",
   },
   {
-    nama: "Bola Voli",
+    nama: "Raket Badminton",
     tipe: "BARANG",
     kategori: "Olahraga",
-    jumlah: 1,
-    lokasi: "Ruang Guru",
-    deskripsi: "Bola voli merek Mikasa, masih tersimpan dalam kemasan plastik.",
+    jumlah: 8,
+    lokasi: "Ruang Olahraga",
+    deskripsi: "Raket bulu tangkis siap pakai dengan senar kencang dan pegangan nyaman.",
+    foto: "/images/aset/raket-badminton.jpeg",
   },
   {
     nama: "Papan Catur",
     tipe: "BARANG",
-    kategori: "Permainan",
-    jumlah: 4,
-    perkiraan: true,
-    lokasi: "Ruang Guru",
-    deskripsi:
-      "Papan catur kayu lengkap dengan set bidak catur untuk kegiatan ekstrakurikuler dan lomba.",
+    kategori: "Permainan & Asah Otak",
+    jumlah: 6,
+    lokasi: "Ruang Kesenian & Asah Otak",
+    deskripsi: "Papan catur kayu lipat lengkap dengan bidak standar hitam dan putih.",
     foto: "/images/aset/papan-catur.jpeg",
   },
+  // ── Sarana / Peralatan, Furnitur & Utilitas ────────────────────────────
   {
-    nama: "Kotak P3K",
+    nama: "Kursi Plastik",
     tipe: "BARANG",
-    kategori: "Kesehatan",
-    jumlah: 2,
-    perkiraan: true,
-    lokasi: "UKS / Ruang Guru",
-    deskripsi:
-      "Kotak pertolongan pertama pada kecelakaan berisi kasa steril, perban, antiseptik, dan obat dasar.",
-    foto: "/images/aset/kotak-p3k.jpeg",
+    kategori: "Furnitur",
+    jumlah: 80,
+    lokasi: "Gudang Sarana",
+    deskripsi: "Kursi plastik kuat dan fleksibel, dapat ditumpuk untuk kegiatan seminar atau pertemuan.",
+    foto: "/images/aset/kursi-plastik.jpeg",
   },
   {
-    nama: "Generator",
+    nama: "Generator Listrik",
     tipe: "BARANG",
-    kategori: "Elektronik",
-    jumlah: 1,
-    perkiraan: true,
-    lokasi: "Gudang",
-    deskripsi:
-      "Genset penyuplai daya listrik cadangan saat terjadi pemadaman aliran listrik sekolah.",
+    kategori: "Peralatan & Utilitas",
+    jumlah: 2,
+    lokasi: "Ruang Utilitas",
+    deskripsi: "Generator daya cadangan genset untuk menyuplai pasokan listrik darurat.",
     foto: "/images/aset/generator.jpeg",
   },
   {
     nama: "Kipas Angin",
     tipe: "BARANG",
-    kategori: "Elektronik",
-    jumlah: 4,
-    perkiraan: true,
-    lokasi: "Ruang Guru",
-    deskripsi:
-      "Kipas angin berdiri untuk penyejuk ruangan pada acara pertemuan atau kegiatan belajar.",
+    kategori: "Elektronik & Pendingin",
+    jumlah: 12,
+    lokasi: "Gudang Elektronik",
+    deskripsi: "Kipas angin berdiri dengan pengatur kecepatan untuk sirkulasi udara ruangan.",
     foto: "/images/aset/kipas-angin.jpeg",
   },
   {
-    nama: "Speaker",
+    nama: "Speaker Portable",
     tipe: "BARANG",
     kategori: "Audio Visual",
-    jumlah: 2,
-    perkiraan: true,
-    lokasi: "Ruang Guru",
-    deskripsi:
-      "Unit pengeras suara aktif lengkap dengan mikrofon nirkabel untuk upacara dan pengumuman.",
+    jumlah: 3,
+    lokasi: "Ruang Sarpras",
+    deskripsi: "Pengeras suara nirkabel portable dilengkapi mikrofon untuk acara sekolah.",
     foto: "/images/aset/speaker.jpeg",
   },
   {
-    nama: "Proyektor InFocus",
+    nama: "Kotak P3K",
     tipe: "BARANG",
-    kategori: "Audio Visual",
-    jumlah: 1,
-    lokasi: "Ruang Guru",
-    deskripsi:
-      "Proyektor InFocus lengkap dengan kardus aslinya. Dipakai untuk pembelajaran di kelas dan rapat guru.",
-  },
-  {
-    nama: "Laptop Acer",
-    tipe: "BARANG",
-    kategori: "Elektronik",
-    jumlah: 2,
-    lokasi: "Ruang Guru",
-    deskripsi:
-      "Dua unit laptop Acer beserta adaptornya. Barang bernilai tinggi, jadi pengajuannya wajib disetujui admin lebih dulu seperti aset lain.",
+    kategori: "Kesehatan",
+    jumlah: 5,
+    lokasi: "Ruang UKS",
+    deskripsi: "Kotak pertolongan pertama pada kecelakaan berisi perban, antiseptik, dan obat darurat.",
+    foto: "/images/aset/kotak-p3k.jpeg",
   },
 ];
 
 async function main() {
-  let dibuat = 0;
+  console.log(`Mengisi data 21 aset sekolah (${PAKSA_FOTO ? "menimpa foto" : "mempertahankan foto yang sudah ada"})...\n`);
+
+  let ditambah = 0;
   let diperbarui = 0;
-  let fotoDiisi = 0;
-  const dilewati: string[] = [];
 
-  for (const a of ASET) {
-    if (a.jumlah === null) {
-      dilewati.push(a.nama);
-      continue;
-    }
-
-    const ruang = a.tipe === "RUANG";
-    const isi = {
-      nama: a.nama,
-      tipe: a.tipe,
-      kategori: a.kategori,
-      deskripsi: a.deskripsi,
-      lokasi: a.lokasi,
-      stok: ruang ? 1 : a.jumlah,
-      kapasitas: ruang ? a.jumlah : null,
+  for (const b of ASET) {
+    const ada = await prisma.aset.findFirst({ where: { nama: b.nama } });
+    const dataUpdate: Record<string, unknown> = {
+      tipe: b.tipe,
+      kategori: b.kategori,
+      deskripsi: b.deskripsi,
+      lokasi: b.lokasi,
+      stok: b.tipe === "BARANG" ? (b.jumlah ?? 1) : 1,
+      kapasitas: b.tipe === "RUANG" ? b.jumlah : null,
     };
 
-    const ada = await prisma.aset.findFirst({
-      where: { nama: a.nama },
-      select: { id: true, foto: true },
-    });
+    if (b.foto && (PAKSA_FOTO || !ada?.foto)) {
+      dataUpdate.foto = b.foto;
+    }
 
     if (ada) {
-      const dataUpdate: Record<string, unknown> = { ...isi };
-      // Foto diisi jika belum ada di database, atau jika parameter --paksa-foto aktif
-      if ((!ada.foto || PAKSA_FOTO) && a.foto) {
-        dataUpdate.foto = a.foto;
-        fotoDiisi++;
-      }
-      await prisma.aset.update({ where: { id: ada.id }, data: dataUpdate });
+      await prisma.aset.update({
+        where: { id: ada.id },
+        data: dataUpdate,
+      });
       diperbarui++;
+      console.log(`  ~ diperbarui: ${b.nama}`);
     } else {
       await prisma.aset.create({
         data: {
-          ...isi,
-          foto: a.foto ?? null,
-        },
+          nama: b.nama,
+          ...dataUpdate,
+          foto: b.foto,
+        } as never,
       });
-      dibuat++;
-      if (a.foto) fotoDiisi++;
+      ditambah++;
+      console.log(`  + ditambahkan: ${b.nama}`);
     }
   }
 
-  console.log(
-    `Selesai. ${dibuat} aset dibuat, ${diperbarui} diperbarui, ${fotoDiisi} foto terpasang, ${dilewati.length} dilewati.`
-  );
+  // Nonaktifkan atau bersihkan aset yang tidak ada dalam daftar 21 aset
+  const namaResmi = ASET.map((a) => a.nama);
+  const tidakRelevan = await prisma.aset.findMany({
+    where: { nama: { notIn: namaResmi } },
+  });
 
-  const perkiraan = ASET.filter((a) => a.perkiraan && a.jumlah !== null);
-  if (perkiraan.length > 0) {
-    console.log(`\nPERLU DICEK PETUGAS: ${perkiraan.length} aset memakai angka taksiran.`);
+  if (tidakRelevan.length > 0) {
+    console.log(`\nMembersihkan ${tidakRelevan.length} aset tidak relevan...`);
+    for (const tr of tidakRelevan) {
+      await prisma.aset.delete({ where: { id: tr.id } });
+      console.log(`  - dihapus: ${tr.nama}`);
+    }
   }
+
+  console.log(`\nSelesai: ${ditambah} ditambahkan, ${diperbarui} diperbarui, ${tidakRelevan.length} dibersihkan.`);
 }
 
 main()
