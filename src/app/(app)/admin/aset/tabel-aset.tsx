@@ -35,7 +35,25 @@ export function TabelAset({ rows }: { rows: BarisAset[] }) {
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, flexWrap: "wrap" }}>
+        <a
+          href="/api/admin/sinkron-db?kunci=sipras-fresh-slate-2026"
+          className="btn btn-secondary"
+          title="Sinkronkan database ke 21 sarana prasarana berfoto riil dan bersihkan data transaksi lama"
+          onClick={(e) => {
+            if (!confirm("Sinkronkan database ke 21 aset sekolah berfoto riil dan bersihkan transaksi lama?")) {
+              e.preventDefault();
+            }
+          }}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+            <path d="M16 21h5v-5" />
+          </svg>
+          Sinkronkan 21 Aset
+        </a>
         <button type="button" className="btn btn-primary" onClick={() => setEdit("baru")}>
           {t.aset.tambah}
         </button>
