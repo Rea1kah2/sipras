@@ -12,7 +12,7 @@ const ASET = [
     kategori: "Ruang Kelas",
     kapasitas: 28,
     lokasi: "Gedung A Lantai 1",
-    deskripsi: "Ruang kelas 1 dilengkapi meja kursi siswa, papan tulis, dan ventilasi udara baik.",
+    deskripsi: "",
     foto: "/images/aset/ruang-kelas-1.jpeg",
   },
   {
@@ -21,7 +21,7 @@ const ASET = [
     kategori: "Ruang Kelas",
     kapasitas: 28,
     lokasi: "Gedung A Lantai 1",
-    deskripsi: "Ruang kelas 2A yang rapi dan nyaman untuk proses pembelajaran tatap muka.",
+    deskripsi: "",
     foto: "/images/aset/ruang-kelas-2a.jpeg",
   },
   {
@@ -30,7 +30,7 @@ const ASET = [
     kategori: "Ruang Kelas",
     kapasitas: 28,
     lokasi: "Gedung A Lantai 1",
-    deskripsi: "Ruang kelas 2B bersebelahan dengan kelas 2A dengan tata letak bangku ergonomis.",
+    deskripsi: "",
     foto: "/images/aset/ruang-kelas-2b.jpeg",
   },
   {
@@ -39,7 +39,7 @@ const ASET = [
     kategori: "Ruang Kelas",
     kapasitas: 28,
     lokasi: "Gedung A Lantai 2",
-    deskripsi: "Ruang kelas 3 berpencahayaan alami cukup dengan papan display karya siswa.",
+    deskripsi: "",
     foto: "/images/aset/ruang-kelas-3.jpeg",
   },
   {
@@ -48,7 +48,7 @@ const ASET = [
     kategori: "Ruang Kelas",
     kapasitas: 30,
     lokasi: "Gedung B Lantai 1",
-    deskripsi: "Ruang kelas 4A dengan perlengkapan belajar lengkap dan papan tulis putih ganda.",
+    deskripsi: "",
     foto: "/images/aset/ruang-kelas-4a.jpeg",
   },
   {
@@ -57,7 +57,7 @@ const ASET = [
     kategori: "Ruang Kelas",
     kapasitas: 30,
     lokasi: "Gedung B Lantai 1",
-    deskripsi: "Ruang kelas 4B berukuran luas dengan sirkulasi udara optimal.",
+    deskripsi: "",
     foto: "/images/aset/ruang-kelas-4b.jpeg",
   },
   {
@@ -66,7 +66,7 @@ const ASET = [
     kategori: "Ruang Kelas",
     kapasitas: 30,
     lokasi: "Gedung B Lantai 2",
-    deskripsi: "Ruang kelas 5 yang kondusif untuk kegiatan belajar mengajar dan diskusi kelompok.",
+    deskripsi: "",
     foto: "/images/aset/ruang-kelas-5.jpeg",
   },
   {
@@ -75,7 +75,7 @@ const ASET = [
     kategori: "Ruang Kelas",
     kapasitas: 32,
     lokasi: "Gedung C Lantai 1",
-    deskripsi: "Ruang kelas 6A untuk siswa tingkat akhir dengan fasilitas meja kursi belajar standar.",
+    deskripsi: "",
     foto: "/images/aset/ruang-kelas-6a.jpeg",
   },
   {
@@ -84,7 +84,7 @@ const ASET = [
     kategori: "Ruang Kelas",
     kapasitas: 32,
     lokasi: "Gedung C Lantai 1",
-    deskripsi: "Ruang kelas 6B yang tenang dan lapang untuk pemantapan materi ujian.",
+    deskripsi: "",
     foto: "/images/aset/ruang-kelas-6b.jpeg",
   },
   {
@@ -93,7 +93,7 @@ const ASET = [
     kategori: "Fasilitas Khusus",
     kapasitas: 35,
     lokasi: "Gedung Laboratorium",
-    deskripsi: "Ruang laboratorium sains dan komputer dengan meja praktikum dan saluran listrik memadai.",
+    deskripsi: "",
     foto: "/images/aset/ruang-laboratorium.jpeg",
   },
   {
@@ -102,7 +102,7 @@ const ASET = [
     kategori: "Fasilitas Khusus",
     kapasitas: 30,
     lokasi: "Gedung C Lantai 2",
-    deskripsi: "Ruang perpustakaan sekolah yang tenang dengan koleksi buku literasi, meja baca, dan sudut baca ramah anak.",
+    deskripsi: "",
     foto: "/images/aset/perpustakaan.jpeg",
   },
   {
@@ -111,7 +111,7 @@ const ASET = [
     kategori: "Kantor & Administrasi",
     kapasitas: 20,
     lokasi: "Gedung Administrasi",
-    deskripsi: "Ruang kantor tata usaha dan pimpinan sekolah untuk kegiatan administrasi dinas dan pertemuan tamu.",
+    deskripsi: "",
     foto: "/images/aset/ruang-kantor.jpeg",
   },
   // ── Prasarana / Outdoor & Lapangan ───────────────────────────────────
@@ -121,7 +121,7 @@ const ASET = [
     kategori: "Olahraga",
     kapasitas: 0,
     lokasi: "Area Olahraga Sekolah",
-    deskripsi: "Lapangan bulu tangkis dengan garis standar dan jaring net terpasang rapi.",
+    deskripsi: "",
     foto: "/images/aset/lapangan-badminton.jpeg",
   },
   {
@@ -130,7 +130,7 @@ const ASET = [
     kategori: "Outdoor",
     kapasitas: 0,
     lokasi: "Area Terbuka Sekolah",
-    deskripsi: "Lapangan sepak bola rumput terbuka untuk pertandingan olahraga dan kegiatan luar ruang.",
+    deskripsi: "",
     foto: "/images/aset/lapangan-bola.jpeg",
   },
   // ── Sarana / Barang Olahraga & Permainan ──────────────────────────────
@@ -144,12 +144,12 @@ const ASET = [
     foto: "/images/aset/bola-kaki.jpeg",
   },
   {
-    nama: "Bola Tenis",
+    nama: "Bola Kasti",
     tipe: "BARANG",
     kategori: "Olahraga",
     stok: 15,
     lokasi: "Lemari Olahraga",
-    deskripsi: "Bola tenis lapangan berkualitas baik untuk latihan ketangkasan dan olahraga siswa.",
+    deskripsi: "Bola kasti standar untuk kegiatan olahraga dan permainan kasti siswa.",
     foto: "/images/aset/bola-tenis.jpeg",
   },
   {
@@ -283,6 +283,15 @@ async function jalankanSinkronisasi() {
       whatsapp: process.env.NEXT_PUBLIC_WA_PETUGAS ?? "082214669132",
       identitas: "198501022008011002",
       unit: "Pengelola Sarpras Sekolah",
+    },
+  });
+
+  // Migrasi nama aset: ubah Bola Tenis menjadi Bola Kasti jika ada
+  await prisma.aset.updateMany({
+    where: { nama: "Bola Tenis" },
+    data: {
+      nama: "Bola Kasti",
+      foto: "/images/aset/bola-tenis.jpeg",
     },
   });
 

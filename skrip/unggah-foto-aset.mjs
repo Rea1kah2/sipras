@@ -28,7 +28,7 @@ const SUMBER = existsSync("public/images/aset")
  */
 const PEMETAAN = [
   { berkas: "bola-kaki.jpeg", aset: ["Bola Kaki"] },
-  { berkas: "bola-tenis.jpeg", aset: ["Bola Tenis"] },
+  { berkas: "bola-tenis.jpeg", aset: ["Bola Tenis", "Bola Kasti"] },
   { berkas: "generator.jpeg", aset: ["Generator"] },
   { berkas: "kipas-angin.jpeg", aset: ["Kipas Angin"] },
   { berkas: "kotak-p3k.jpeg", aset: ["Kotak P3K"] },
