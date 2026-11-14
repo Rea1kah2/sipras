@@ -6,7 +6,8 @@ import { wajibAdmin } from "@/lib/auth";
 import { ringkasKetersediaan } from "@/lib/ketersediaan";
 import { fmtRentang, fmtTanggal, fmtTanggalPanjang, dariISO, hariIniISO, hitungHari, sisaHari } from "@/lib/waktu";
 import { PILIH_PENGAJUAN, teksItem } from "@/lib/pengajuan";
-import { BadgeStatus } from "@/components/badge";
+import { BadgeKetersediaan, BadgeStatus, BadgeTipe } from "@/components/badge";
+import { FotoAset } from "@/components/foto-aset";
 import { IkonNav } from "@/components/ikon-nav";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,7 +21,7 @@ export default async function DasborAdmin() {
 
   const hariIni = dariISO(hariIniISO());
 
-  const [menunggu, dikembalikan, dipinjam, jumlahAset, menungguSerah, antrean, jatuhTempo, terlambat, barang] =
+  const [menunggu, dikembalikan, dipinjam, jumlahAset, menungguSerah, antrean, jatuhTempo, terlambat, semuaAset] =
     await Promise.all([
       prisma.pengajuan.count({ where: { status: "MENUNGGU" } }),
       prisma.pengajuan.count({ where: { status: "DIKEMBALIKAN" } }),
@@ -49,14 +50,14 @@ export default async function DasborAdmin() {
         select: PILIH_PENGAJUAN,
       }),
       prisma.aset.findMany({
-        where: { aktif: true, tipe: "BARANG" },
-        select: { id: true, nama: true, tipe: true, stok: true },
+        where: { aktif: true },
+        orderBy: [{ tipe: "asc" }, { nama: "asc" }],
       }),
     ]);
 
-  // Stok menipis dihitung dari stok dikurangi yang sedang dipinjam hari ini,
-  // bukan dari kolom tersimpan.
-  const tersedia = await ringkasKetersediaan(prisma, barang, hariIni, hariIni, t.katalog);
+  // Ketersediaan seluruh aset sarpras dihitung untuk hari ini
+  const tersedia = await ringkasKetersediaan(prisma, semuaAset, hariIni, hariIni, t.katalog);
+  const barang = semuaAset.filter((a) => a.tipe === "BARANG");
   const menipis = barang
     .map((a) => {
       const av = tersedia.get(a.id)!;
@@ -337,6 +338,94 @@ export default async function DasborAdmin() {
               {t.admin.stokCatatan}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Katalog Sarana dan Prasarana Sekolah Bergambar */}
+      <div className="flex flex-col" style={{ gap: "var(--space-3)", marginTop: "var(--space-4)" }}>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
+          <div>
+            <h3 style={{ margin: "0 0 4px", fontSize: 17 }}>{t.katalog.semuaSarana}</h3>
+            <p style={{ margin: 0, fontSize: 12.5, color: "var(--color-neutral-600)" }}>
+              {semuaAset.length} {t.admin.statAset.toLowerCase()}
+            </p>
+          </div>
+          <Link href="/admin/aset" className="btn btn-secondary" style={{ fontSize: 12.5 }}>
+            {t.nav.aset}
+          </Link>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))",
+            gap: "var(--space-4)",
+          }}
+        >
+          {semuaAset.map((a) => {
+            const av = tersedia.get(a.id) ?? { teks: t.katalog.kosongHari, nuansa: "sage" as const };
+            return (
+              <div
+                key={a.id}
+                className="card elev-sm"
+                style={{
+                  padding: 0,
+                  overflow: "hidden",
+                  background: "var(--color-surface)",
+                  border: "1px solid var(--color-divider)",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <div style={{ position: "relative" }}>
+                  <FotoAset
+                    foto={a.foto}
+                    nama={a.nama}
+                    kategori={a.kategori}
+                    tipe={a.tipe}
+                    tinggi={140}
+                  />
+                </div>
+                <div
+                  style={{
+                    padding: "var(--space-3) var(--space-4)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 6,
+                    flex: 1,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+                    <span className="card-kicker">{a.kategori}</span>
+                    <BadgeTipe tipe={a.tipe} />
+                  </div>
+                  <div
+                    className="card-title"
+                    style={{ fontSize: 14.5, lineHeight: 1.25, margin: 0 }}
+                  >
+                    {a.nama}
+                  </div>
+                  <span style={{ fontSize: 12, color: "var(--color-neutral-600)" }}>
+                    {a.tipe === "RUANG"
+                      ? `${t.katalog.kapasitas} ${
+                          a.kapasitas ? `${a.kapasitas} ${t.umum.orang}` : t.katalog.terbuka
+                        } · ${a.lokasi}`
+                      : `${a.stok} ${t.umum.unit} · ${a.lokasi}`}
+                  </span>
+                  <div style={{ marginTop: "auto", paddingTop: 4, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                    <BadgeKetersediaan teks={av.teks} nuansa={av.nuansa} />
+                    <Link
+                      href={`/katalog/${a.id}`}
+                      className="btn btn-secondary"
+                      style={{ fontSize: 11.5, padding: "3px 8px", minHeight: 26 }}
+                    >
+                      {t.katalog.detail}
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

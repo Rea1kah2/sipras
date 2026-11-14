@@ -20,11 +20,6 @@ export function FormMasuk() {
   const pesanUmum =
     status && !status.ok && !status.error ? status.pesan : undefined;
 
-  function isiDemo(e: string, p: string) {
-    setEmail(e);
-    setSandi(p);
-  }
-
   return (
     <form action={kirim} noValidate>
       <div className="flex items-center gap-3" style={{ marginBottom: 16 }}>
@@ -40,46 +35,6 @@ export function FormMasuk() {
           >
             {t.masuk.kartuSub}
           </p>
-        </div>
-      </div>
-
-      {/* Akun Uji Cepat (Demo Chips) */}
-      <div
-        style={{
-          padding: "10px 12px",
-          background: "var(--color-bg)",
-          borderRadius: "var(--radius-md)",
-          border: "1px solid var(--color-divider)",
-          marginBottom: "var(--space-4)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: 11.5,
-            fontWeight: 600,
-            color: "var(--color-neutral-700)",
-            marginBottom: 6,
-          }}
-        >
-          {t.masuk.demoJudul}:
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => isiDemo("admin@kampus.ac.id", "admin1234")}
-            className="btn btn-secondary"
-            style={{ fontSize: 11.5, padding: "4px 10px", minHeight: 28 }}
-          >
-            {t.masuk.demoAdmin}
-          </button>
-          <button
-            type="button"
-            onClick={() => isiDemo("siti@gmail.com", "peminjam1234")}
-            className="btn btn-secondary"
-            style={{ fontSize: 11.5, padding: "4px 10px", minHeight: 28 }}
-          >
-            {t.masuk.demoPeminjam}
-          </button>
         </div>
       </div>
 

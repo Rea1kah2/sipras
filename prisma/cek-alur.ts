@@ -39,9 +39,24 @@ function cek(nama: string, aktual: unknown, harapan: unknown) {
 
 const PENGAJUAN_UJI: string[] = [];
 const ASET_UJI: string[] = [];
+const USER_UJI: string[] = [];
 
 async function main() {
-  const nadia = await prisma.user.findFirstOrThrow({ where: { peran: "PEMINJAM" } });
+  let nadia = await prisma.user.findFirst({ where: { peran: "PEMINJAM" } });
+  if (!nadia) {
+    nadia = await prisma.user.create({
+      data: {
+        nama: "Peminjam Uji Alur",
+        email: `uji-alur-${Date.now()}@sekolah.sch.id`,
+        password: "hash-uji-alur",
+        peran: "PEMINJAM",
+        whatsapp: "081234567890",
+        identitas: "199001012015011002",
+        unit: "Uji Otomatis",
+      },
+    });
+    USER_UJI.push(nadia.id);
+  }
   const admin = await prisma.user.findFirstOrThrow({ where: { peran: "ADMIN" } });
 
   const aset = await prisma.aset.create({
@@ -149,6 +164,9 @@ async function bersihkan() {
   }
   if (ASET_UJI.length) {
     await prisma.aset.deleteMany({ where: { id: { in: ASET_UJI } } });
+  }
+  if (USER_UJI.length) {
+    await prisma.user.deleteMany({ where: { id: { in: USER_UJI } } });
   }
 }
 

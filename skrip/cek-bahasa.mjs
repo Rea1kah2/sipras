@@ -152,7 +152,7 @@ function teksTampak(html) {
  * alatnya tetap jalan.
  */
 const DB_URL = (readFileSync(".env", "utf8").match(/^DATABASE_URL="?([^"\n]+)"?/m) ?? [])[1];
-const db = DB_URL ? new pg.Client({ connectionString: DB_URL }) : null;
+let db = DB_URL ? new pg.Client({ connectionString: DB_URL }) : null;
 
 async function setBahasaAkun(bahasa) {
   if (!db || !SESI) return;
@@ -456,7 +456,13 @@ function pindaiSumber() {
 console.log(`\nKamus: ${CARI_ID.length} frasa Indonesia, ${CARI_EN.length} frasa Inggris.`);
 console.log(`Frasa yang sama di kedua bahasa dan sengaja dilewati: ${SAMA.size}.\n`);
 
-if (db) await db.connect();
+if (db) {
+  try {
+    await db.connect();
+  } catch {
+    db = null;
+  }
+}
 
 /**
  * Langkah 1 dan 2 butuh server hidup, langkah 3 dan 4 tidak.
@@ -476,7 +482,7 @@ try {
   await babak("en", RUTE_TAMU, false);
   await babak("id", RUTE_TAMU, false);
 } catch (e) {
-  if (e?.cause?.code !== "ECONNREFUSED") throw e;
+  if (e?.cause?.code !== "ECONNREFUSED" && e?.cause?.code !== "EPERM" && e?.code !== "EPERM") throw e;
   halamanDiperiksa = false;
   console.log(`Server di ${ASAL} tidak hidup. Pemeriksaan halaman DILEWATI,`);
   console.log("hanya pemindaian kode sumber yang dijalankan.\n");

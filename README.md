@@ -29,14 +29,14 @@ npm run dev
 
 Buka <http://localhost:3000>. Untuk membuka dari HP di jaringan wifi yang sama, pakai alamat Network yang tercetak di terminal saat `npm run dev`.
 
-### Akun contoh setelah `npm run db:seed`
+### Akun bawaan setelah `npm run db:seed`
 
 | Peran | Email | Kata sandi |
 | --- | --- | --- |
-| Admin | nilai `EMAIL_REPLY_TO` di `.env` | `admin1234` |
-| Peminjam | `nadia@kampus.ac.id` | `peminjam1234` |
+| Admin | `rabdillah760@gmail.com` | `admin1234` |
+| Peminjam | Mendaftar mandiri via `/daftar` | Ditentukan saat registrasi |
 
-Akun admin sengaja memakai email asli dari `.env`, bukan alamat karangan. Alasannya ada di bagian Email di bawah.
+Akun admin sengaja memakai email asli dari `.env`, bukan alamat karangan. Peminjam baru mendaftar secara mandiri melalui menu registrasi akun.
 
 ---
 

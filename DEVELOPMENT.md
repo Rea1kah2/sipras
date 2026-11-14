@@ -40,12 +40,12 @@ npm run db:seed
 npm run dev
 ```
 
-Buka `http://localhost:3000`. Seed menyediakan akun demo:
+Buka `http://localhost:3000`. Seed menyediakan akun bawaan:
 
 | Peran | Email | Kata sandi |
 | --- | --- | --- |
-| Admin | nilai `EMAIL_REPLY_TO` | `admin1234` |
-| Peminjam | `siti@gmail.com` | `peminjam1234` |
+| Admin | `rabdillah760@gmail.com` | `admin1234` |
+| Peminjam | Mendaftar mandiri via `/daftar` | Ditentukan saat registrasi |
 
 Mode email dapat tetap kosong. Sistem menyimpan notifikasi in-app terlebih
 dahulu dan memakai mode konsol jika `RESEND_API_KEY` kosong.

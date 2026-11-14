@@ -123,6 +123,24 @@ const ASET: Baris[] = [
     deskripsi: "Ruang laboratorium sains dan komputer dengan meja praktikum dan saluran listrik memadai.",
     foto: "/images/aset/ruang-laboratorium.jpeg",
   },
+  {
+    nama: "Perpustakaan",
+    tipe: "RUANG",
+    kategori: "Fasilitas Khusus",
+    jumlah: 30,
+    lokasi: "Gedung C Lantai 2",
+    deskripsi: "Ruang perpustakaan sekolah yang tenang dengan koleksi buku literasi, meja baca, dan sudut baca ramah anak.",
+    foto: "/images/aset/perpustakaan.jpeg",
+  },
+  {
+    nama: "Ruang Kantor",
+    tipe: "RUANG",
+    kategori: "Kantor & Administrasi",
+    jumlah: 20,
+    lokasi: "Gedung Administrasi",
+    deskripsi: "Ruang kantor tata usaha dan pimpinan sekolah untuk kegiatan administrasi dinas dan pertemuan tamu.",
+    foto: "/images/aset/ruang-kantor.jpeg",
+  },
   // ── Prasarana / Outdoor & Lapangan ───────────────────────────────────
   {
     nama: "Lapangan Badminton",
@@ -225,10 +243,37 @@ const ASET: Baris[] = [
     deskripsi: "Kotak pertolongan pertama pada kecelakaan berisi perban, antiseptik, dan obat darurat.",
     foto: "/images/aset/kotak-p3k.jpeg",
   },
+  {
+    nama: "Laptop",
+    tipe: "BARANG",
+    kategori: "Elektronik",
+    jumlah: 5,
+    lokasi: "Lab Komputer",
+    deskripsi: "Laptop operasional sekolah untuk menunjang kegiatan pembelajaran, asesmen ANBK, dan presentasi guru.",
+    foto: "/images/aset/laptop.jpeg",
+  },
+  {
+    nama: "Tenda Kemah",
+    tipe: "BARANG",
+    kategori: "Pramuka & Outdoor",
+    jumlah: 5,
+    lokasi: "Gudang Sarana",
+    deskripsi: "Tenda dome kapasitas 4-6 orang untuk kegiatan kepramukaan dan perkemahan sekolah.",
+    foto: "/images/aset/tenda-kemah.jpeg",
+  },
+  {
+    nama: "Proyektor",
+    tipe: "BARANG",
+    kategori: "Audio Visual",
+    jumlah: 2,
+    lokasi: "Ruang Sarpras",
+    deskripsi: "Proyektor InFocus resolusi tinggi dilengkapi kabel HDMI/VGA untuk presentasi kelas atau rapat dinas.",
+    foto: "/images/aset/proyektor.jpeg",
+  },
 ];
 
 async function main() {
-  console.log(`Mengisi data 21 aset sekolah (${PAKSA_FOTO ? "menimpa foto" : "mempertahankan foto yang sudah ada"})...\n`);
+  console.log(`Mengisi data 26 aset sekolah (${PAKSA_FOTO ? "menimpa foto" : "mempertahankan foto yang sudah ada"})...\n`);
 
   let ditambah = 0;
   let diperbarui = 0;
@@ -268,7 +313,7 @@ async function main() {
     }
   }
 
-  // Nonaktifkan atau bersihkan aset yang tidak ada dalam daftar 21 aset
+  // Nonaktifkan atau bersihkan aset yang tidak ada dalam daftar 26 aset resmi
   const namaResmi = ASET.map((a) => a.nama);
   const tidakRelevan = await prisma.aset.findMany({
     where: { nama: { notIn: namaResmi } },

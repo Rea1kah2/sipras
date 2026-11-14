@@ -134,8 +134,8 @@ export function Shell({
           <Link
             href="/katalog"
             className="navbar-logo-hp hanya-hp"
-            aria-label="SIPRAS Beranda"
-            title="SIPRAS"
+            aria-label={t.merek.nama}
+            title={t.merek.nama}
           >
             <LambangSipras ukuran={26} />
           </Link>

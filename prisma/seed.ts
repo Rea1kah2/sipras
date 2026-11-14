@@ -110,6 +110,24 @@ const ASET = [
     deskripsi: "Ruang laboratorium sains dan komputer dengan meja praktikum dan saluran listrik memadai.",
     foto: "/images/aset/ruang-laboratorium.jpeg",
   },
+  {
+    nama: "Perpustakaan",
+    tipe: "RUANG",
+    kategori: "Fasilitas Khusus",
+    kapasitas: 30,
+    lokasi: "Gedung C Lantai 2",
+    deskripsi: "Ruang perpustakaan sekolah yang tenang dengan koleksi buku literasi, meja baca, dan sudut baca ramah anak.",
+    foto: "/images/aset/perpustakaan.jpeg",
+  },
+  {
+    nama: "Ruang Kantor",
+    tipe: "RUANG",
+    kategori: "Kantor & Administrasi",
+    kapasitas: 20,
+    lokasi: "Gedung Administrasi",
+    deskripsi: "Ruang kantor tata usaha dan pimpinan sekolah untuk kegiatan administrasi dinas dan pertemuan tamu.",
+    foto: "/images/aset/ruang-kantor.jpeg",
+  },
   // ── Prasarana / Outdoor & Lapangan ───────────────────────────────────
   {
     nama: "Lapangan Badminton",
@@ -212,10 +230,37 @@ const ASET = [
     deskripsi: "Kotak pertolongan pertama pada kecelakaan berisi perban, antiseptik, dan obat darurat.",
     foto: "/images/aset/kotak-p3k.jpeg",
   },
+  {
+    nama: "Laptop",
+    tipe: "BARANG",
+    kategori: "Elektronik",
+    stok: 5,
+    lokasi: "Lab Komputer",
+    deskripsi: "Laptop operasional sekolah untuk menunjang kegiatan pembelajaran, asesmen ANBK, dan presentasi guru.",
+    foto: "/images/aset/laptop.jpeg",
+  },
+  {
+    nama: "Tenda Kemah",
+    tipe: "BARANG",
+    kategori: "Pramuka & Outdoor",
+    stok: 5,
+    lokasi: "Gudang Sarana",
+    deskripsi: "Tenda dome kapasitas 4-6 orang untuk kegiatan kepramukaan dan perkemahan sekolah.",
+    foto: "/images/aset/tenda-kemah.jpeg",
+  },
+  {
+    nama: "Proyektor",
+    tipe: "BARANG",
+    kategori: "Audio Visual",
+    stok: 2,
+    lokasi: "Ruang Sarpras",
+    deskripsi: "Proyektor InFocus resolusi tinggi dilengkapi kabel HDMI/VGA untuk presentasi kelas atau rapat dinas.",
+    foto: "/images/aset/proyektor.jpeg",
+  },
 ] as const;
 
 async function main() {
-  console.log("🌱 Menyiapkan data Fresh Slate SIPRAS (21 Aset Riil Tanpa Transaksi Lama)...");
+  console.log("🌱 Menyiapkan data Fresh Slate SIPRAS (26 Aset Riil Tanpa Transaksi Lama)...");
 
   // Bersihkan dulu seluruh data lama agar tabel benar-benar bersih
   await prisma.riwayatStatus.deleteMany();
@@ -229,10 +274,9 @@ async function main() {
   await prisma.aset.deleteMany();
   await prisma.user.deleteMany();
 
-  // ── 1. Buat Pengguna Inti ────────────────────────────────────────────
+  // ── 1. Buat Pengguna Inti (Hanya 1 Admin, Tanpa Peminjam Dummy) ─────
   const sandiAdmin = await hash("admin1234", 10);
-  const sandiPeminjam = await hash("peminjam1234", 10);
-  const emailAdmin = process.env.EMAIL_REPLY_TO?.trim() || "admin@sekolah.sch.id";
+  const emailAdmin = process.env.EMAIL_REPLY_TO?.trim() || "rabdillah760@gmail.com";
 
   const admin = await prisma.user.create({
     data: {
@@ -240,36 +284,9 @@ async function main() {
       email: emailAdmin,
       password: sandiAdmin,
       peran: "ADMIN",
-      whatsapp: process.env.NEXT_PUBLIC_WA_PETUGAS ?? "081234567890",
+      whatsapp: process.env.NEXT_PUBLIC_WA_PETUGAS ?? "082214669132",
       identitas: "198501022008011002",
-      unit: "Pengelola Sarpras",
-    },
-  });
-
-  if (emailAdmin !== "admin@kampus.ac.id") {
-    await prisma.user.create({
-      data: {
-        nama: "Admin Demo",
-        email: "admin@kampus.ac.id",
-        password: sandiAdmin,
-        peran: "ADMIN",
-        whatsapp: "081234567890",
-        identitas: "198501022008011001",
-        unit: "Pengelola Sarpras",
-      },
-    });
-  }
-
-  // Akun peminjam bersih untuk verifikasi login
-  await prisma.user.create({
-    data: {
-      nama: "Budi Setiawan",
-      email: "budi@kampus.ac.id",
-      password: sandiPeminjam,
-      peran: "PEMINJAM",
-      whatsapp: "081234567891",
-      identitas: "199201012015011001",
-      unit: "Guru Kelas 1",
+      unit: "Pengelola Sarpras Sekolah",
     },
   });
 
@@ -318,8 +335,8 @@ async function main() {
   console.log(`   • Aset     : ${jumlahAset} (100% berfoto)`);
   console.log(`   • Transaksi: ${jumlahPengajuan} (bersih total 0 pengajuan)`);
   console.log(`\n   Kredensial Login:`);
-  console.log(`   • Admin    : admin@kampus.ac.id / admin1234`);
-  console.log(`   • Peminjam : budi@kampus.ac.id / peminjam1234\n`);
+  console.log(`   • Admin    : ${emailAdmin} / admin1234`);
+  console.log(`   • Peminjam : Daftar mandiri lewat /daftar\n`);
 }
 
 main()

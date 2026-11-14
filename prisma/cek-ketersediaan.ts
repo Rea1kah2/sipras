@@ -32,15 +32,24 @@ function cek(nama: string, aktual: unknown, harapan: unknown) {
 
 const PENGAJUAN_UJI: string[] = [];
 const ASET_UJI: string[] = [];
+const USER_UJI: string[] = [];
 
 async function main() {
-  // Dicari lewat PERAN, bukan lewat email tertentu. Semula berupa email keras
-  // milik satu pengguna contoh, dan itu patah begitu data contoh berganti:
-  // findFirstOrThrow melempar di baris pertama sehingga keempat belas
-  // pemeriksaan di bawah tidak satu pun sempat berjalan, sementara laporannya
-  // tetap terlihat wajar karena cuma berbunyi "0 lolos, 0 gagal". Peran jauh
-  // lebih stabil daripada nama atau alamat surel siapa pun.
-  const peminjam = await prisma.user.findFirstOrThrow({ where: { peran: "PEMINJAM" } });
+  let peminjam = await prisma.user.findFirst({ where: { peran: "PEMINJAM" } });
+  if (!peminjam) {
+    peminjam = await prisma.user.create({
+      data: {
+        nama: "Peminjam Uji Ketersediaan",
+        email: `uji-ketersediaan-${Date.now()}@sekolah.sch.id`,
+        password: "hash-uji-ketersediaan",
+        peran: "PEMINJAM",
+        whatsapp: "081234567890",
+        identitas: "199001012015011001",
+        unit: "Uji Otomatis",
+      },
+    });
+    USER_UJI.push(peminjam.id);
+  }
 
   const buatAset = async (nama: string, tipe: "BARANG" | "RUANG", stok: number) => {
     const a = await prisma.aset.create({
@@ -160,6 +169,9 @@ async function bersihkan() {
   }
   if (ASET_UJI.length) {
     await prisma.aset.deleteMany({ where: { id: { in: ASET_UJI } } });
+  }
+  if (USER_UJI.length) {
+    await prisma.user.deleteMany({ where: { id: { in: USER_UJI } } });
   }
 }
 

@@ -96,6 +96,24 @@ const ASET = [
     deskripsi: "Ruang laboratorium sains dan komputer dengan meja praktikum dan saluran listrik memadai.",
     foto: "/images/aset/ruang-laboratorium.jpeg",
   },
+  {
+    nama: "Perpustakaan",
+    tipe: "RUANG",
+    kategori: "Fasilitas Khusus",
+    kapasitas: 30,
+    lokasi: "Gedung C Lantai 2",
+    deskripsi: "Ruang perpustakaan sekolah yang tenang dengan koleksi buku literasi, meja baca, dan sudut baca ramah anak.",
+    foto: "/images/aset/perpustakaan.jpeg",
+  },
+  {
+    nama: "Ruang Kantor",
+    tipe: "RUANG",
+    kategori: "Kantor & Administrasi",
+    kapasitas: 20,
+    lokasi: "Gedung Administrasi",
+    deskripsi: "Ruang kantor tata usaha dan pimpinan sekolah untuk kegiatan administrasi dinas dan pertemuan tamu.",
+    foto: "/images/aset/ruang-kantor.jpeg",
+  },
   // ── Prasarana / Outdoor & Lapangan ───────────────────────────────────
   {
     nama: "Lapangan Badminton",
@@ -198,6 +216,33 @@ const ASET = [
     deskripsi: "Kotak pertolongan pertama pada kecelakaan berisi perban, antiseptik, dan obat darurat.",
     foto: "/images/aset/kotak-p3k.jpeg",
   },
+  {
+    nama: "Laptop",
+    tipe: "BARANG",
+    kategori: "Elektronik",
+    stok: 5,
+    lokasi: "Lab Komputer",
+    deskripsi: "Laptop operasional sekolah untuk menunjang kegiatan pembelajaran, asesmen ANBK, dan presentasi guru.",
+    foto: "/images/aset/laptop.jpeg",
+  },
+  {
+    nama: "Tenda Kemah",
+    tipe: "BARANG",
+    kategori: "Pramuka & Outdoor",
+    stok: 5,
+    lokasi: "Gudang Sarana",
+    deskripsi: "Tenda dome kapasitas 4-6 orang untuk kegiatan kepramukaan dan perkemahan sekolah.",
+    foto: "/images/aset/tenda-kemah.jpeg",
+  },
+  {
+    nama: "Proyektor",
+    tipe: "BARANG",
+    kategori: "Audio Visual",
+    stok: 2,
+    lokasi: "Ruang Sarpras",
+    deskripsi: "Proyektor InFocus resolusi tinggi dilengkapi kabel HDMI/VGA untuk presentasi kelas atau rapat dinas.",
+    foto: "/images/aset/proyektor.jpeg",
+  },
 ] as const;
 
 async function jalankanSinkronisasi() {
@@ -211,56 +256,37 @@ async function jalankanSinkronisasi() {
   await prisma.penutupan.deleteMany();
   await prisma.pengaturan.deleteMany();
 
-  // 2. Siapkan pengguna inti
+  // 2. Siapkan pengguna inti (Hanya 1 Admin, Bersihkan User Dummy Lainnya)
   const sandiAdmin = await hash("admin1234", 10);
-  const sandiPeminjam = await hash("peminjam1234", 10);
-  const emailAdmin = process.env.EMAIL_REPLY_TO?.trim() || "admin@sekolah.sch.id";
+  const emailAdmin = process.env.EMAIL_REPLY_TO?.trim() || "rabdillah760@gmail.com";
+
+  await prisma.user.deleteMany({
+    where: {
+      email: { not: emailAdmin },
+    },
+  });
 
   const admin = await prisma.user.upsert({
     where: { email: emailAdmin },
-    update: { password: sandiAdmin, peran: "ADMIN", nama: "Administrator Sarpras" },
+    update: {
+      password: sandiAdmin,
+      peran: "ADMIN",
+      nama: "Administrator Sarpras",
+      whatsapp: process.env.NEXT_PUBLIC_WA_PETUGAS ?? "082214669132",
+      unit: "Pengelola Sarpras Sekolah",
+    },
     create: {
       nama: "Administrator Sarpras",
       email: emailAdmin,
       password: sandiAdmin,
       peran: "ADMIN",
-      whatsapp: process.env.NEXT_PUBLIC_WA_PETUGAS ?? "081234567890",
+      whatsapp: process.env.NEXT_PUBLIC_WA_PETUGAS ?? "082214669132",
       identitas: "198501022008011002",
-      unit: "Pengelola Sarpras",
+      unit: "Pengelola Sarpras Sekolah",
     },
   });
 
-  if (emailAdmin !== "admin@kampus.ac.id") {
-    await prisma.user.upsert({
-      where: { email: "admin@kampus.ac.id" },
-      update: { password: sandiAdmin, peran: "ADMIN", nama: "Admin Demo" },
-      create: {
-        nama: "Admin Demo",
-        email: "admin@kampus.ac.id",
-        password: sandiAdmin,
-        peran: "ADMIN",
-        whatsapp: "081234567890",
-        identitas: "198501022008011001",
-        unit: "Pengelola Sarpras",
-      },
-    });
-  }
-
-  await prisma.user.upsert({
-    where: { email: "budi@kampus.ac.id" },
-    update: { password: sandiPeminjam, peran: "PEMINJAM", nama: "Budi Setiawan" },
-    create: {
-      nama: "Budi Setiawan",
-      email: "budi@kampus.ac.id",
-      password: sandiPeminjam,
-      peran: "PEMINJAM",
-      whatsapp: "081234567891",
-      identitas: "199201012015011001",
-      unit: "Guru Kelas 1",
-    },
-  });
-
-  // 3. Sinkronkan 21 aset
+  // 3. Sinkronkan 26 aset
   let dibuat = 0;
   let diperbarui = 0;
   for (const a of ASET) {
@@ -285,7 +311,7 @@ async function jalankanSinkronisasi() {
     }
   }
 
-  // Bersihkan aset selain 21 aset resmi
+  // Bersihkan aset selain 26 aset resmi
   const namaResmi = ASET.map((a) => a.nama);
   const dibersihkan = await prisma.aset.deleteMany({
     where: { nama: { notIn: namaResmi } },
@@ -321,6 +347,7 @@ async function jalankanSinkronisasi() {
     dibuat,
     diperbarui,
     dihapus: dibersihkan.count,
+    adminEmail: emailAdmin,
     totalAset,
     totalUser,
     totalPengajuan,
@@ -458,13 +485,13 @@ export async function GET(req: Request): Promise<Response> {
       </svg>
     </div>
     <h1>Sinkronisasi Berhasil!</h1>
-    <p>Database produksi telah dibersihkan ke Fresh Slate dan 21 sarana prasarana berfoto riil telah terpasang sempurna.</p>
+    <p>Database produksi telah dibersihkan ke Fresh Slate dan 26 sarana prasarana berfoto riil telah terpasang sempurna.</p>
     
     <div class="ringkasan">
       <div class="baris"><span class="label">Total Aset Aktif:</span><span class="nilai">${hasil.totalAset} item (100% berfoto)</span></div>
       <div class="baris"><span class="label">Transaksi Lama:</span><span class="nilai">0 (bersih total)</span></div>
-      <div class="baris"><span class="label">Akun Admin:</span><span class="nilai">admin@kampus.ac.id / admin1234</span></div>
-      <div class="baris"><span class="label">Akun Peminjam:</span><span class="nilai">budi@kampus.ac.id / peminjam1234</span></div>
+      <div class="baris"><span class="label">Akun Admin:</span><span class="nilai">${hasil.adminEmail} / admin1234</span></div>
+      <div class="baris"><span class="label">Akun Peminjam:</span><span class="nilai">Daftar mandiri via /daftar</span></div>
     </div>
 
     <a href="/katalog" class="tombol">Buka Katalog SIPRAS</a>

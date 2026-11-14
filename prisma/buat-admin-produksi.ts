@@ -24,7 +24,7 @@ const argumen = process.argv.slice(2).filter((a) => a !== "--");
 const [nama, email, sandi] = argumen;
 if (!nama || !email || !sandi) {
   console.error(
-    'Pakai: npx tsx -r dotenv/config prisma/buat-admin-produksi.ts "Nama Admin" admin@sekolah.sch.id "kata-sandi"'
+    'Pakai: npx tsx -r dotenv/config prisma/buat-admin-produksi.ts "Administrator Sarpras" rabdillah760@gmail.com "admin1234"'
   );
   process.exit(1);
 }
